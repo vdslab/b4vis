@@ -1,217 +1,223 @@
-import * as d3 from "d3";
-import { useState, useEffect, useRef } from "react";
-import ZoomableSVG from "../components/ZoomableSVG";
+import { useEffect, useState } from "react";
+import { prefectureName } from "../data/prefecture";
 
-export default function Home() {
-  const [nodes, setNodes] = useState([]);
-  const [links, setLinks] = useState([]);
-  const [nodeCount, setNodeCount] = useState(1);
-  const [linkCount, setLinkCount] = useState(1);
-  const [linkLength, setLinkLength] = useState(400);
-  const [nodeSize, setNodeSize] = useState(40);
-  const [strength, setStrength] = useState(-800);
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(1);
-  const [selected, setSelected] = useState([]);
+const BASEBALL = 0;
+const DOUBLE = 1;
+const BRASSBAND = 2;
 
-  const contentWidth = 400;
-  const contentHeight = 400;
-  const strokeColor = "#888";
+const color = ["#70ffff", "#ba70ff", "#ff70ff"];
+
+const margin = {
+  top: 20,
+  bottom: 20,
+  left: 10,
+  right: 10,
+};
+const contentWidth = 800;
+const contentHeight = 200;
+
+const svgWidth = margin.left + margin.right + contentWidth;
+const svgHeight = margin.top + margin.bottom + contentHeight;
+
+//詳細情報の表示
+function Tooltip({ clientX, clientY, show, info }) {
+  return <div>{show && <div>{JSON.stringify(info)}</div>}</div>;
+}
+
+function Home() {
+  const [prefecture, setPretecture] = useState("神奈川");
+  const [showData, setShowData] = useState(null);
+  const [popup, setPopup] = useState(false);
+  const [clientX, setClientX] = useState(0);
+  const [clientY, setClientY] = useState(0);
+  const [info, setInfo] = useState();
+  const [representative, setRepresentative] = useState("false");
+  const [colLen, setColLen] = useState(null);
+  const [len, setLen] = useState(null);
 
   useEffect(() => {
-    const startSimulation = (nodes, links) => {
-      const simulation = d3
-        .forceSimulation()
-        .force(
-          "collide",
-          d3
-            .forceCollide()
-            .radius(function (d) {
-              return d.r;
-            })
-            .iterations(32) // 計算回数 default=1
-        )
-        .force(
-          "link",
-          d3
-            .forceLink()
-            .distance(() => linkLength)
-            .id((d) => d.id)
-            .iterations(1)
-        ) //stength:linkの強さ（元に戻る力 distance: linkの長さ iterations: 計算回数 default=1
-        .force("charge", d3.forceManyBody().strength(strength)) // 引き合う力を設定
-        .force("x", d3.forceX().x(200))
-        .force("y", d3.forceY().y(200))
-        .force("center", d3.forceCenter(200, 200)); // 描画するときの中心を設定
+    (async () => {
+      const brassbandRequest = await fetch("data/barassBand.json");
+      const brassbandData = await brassbandRequest.json();
 
-      // forceSimulationの影響下にnodesを置く
-      simulation.nodes(nodes).on("tick", ticked);
-      simulation.force("link").links(links);
+      const baseballRequest = await fetch("data/baseball.json");
+      const baseballData = await baseballRequest.json();
 
-      // 呼び出して新しい座標をsetStateする
-      function ticked() {
-        setNodes(nodes.slice());
-        setLinks(links.slice());
-      }
-    };
+      const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
 
-    const startLineChart = async () => {
-      const [nodes, links] = await (async () => {
-        const response = await fetch("./data.json");
-        const data = await response.json();
-        const nodes = [];
-        const links = [];
-
-        for (const item of data.nodes) {
-          if (item.value >= nodeCount) {
-            nodes.push({
-              id: item.id,
-              label: item.label,
-              r: nodeSize,
-              value: item.value,
-            });
-          }
-        }
-        for (const link of data.links) {
-          let isSource = false;
-          let isTarget = false;
-          for (const node of nodes) {
-            if (node.id === link.source) {
-              isSource = true;
-            }
-            if (node.id === link.target) {
-              isTarget = true;
-            }
-            if (isSource && isTarget) {
-              break;
-            }
-          }
-
-          // sourceとtargetのnodeが存在する かつ 共起回数が設定された値以上ならlinkを表示
-          if (isSource && isTarget && link.value >= linkCount) {
-            links.push({
-              source: link.source,
-              target: link.target,
-              value: link.value,
-            });
-          }
-        }
-        setMin(nodes.reduce((a, b) => (a.value < b.value ? a : b)).value);
-        setMax(nodes.reduce((a, b) => (a.value > b.value ? a : b)).value);
-
-        const tmp = [];
-        for (const node of nodes) {
-          for (const select of selected) {
-            if (node.id === select) {
-              tmp.push(select);
-              break;
-            }
-          }
-        }
-        setSelected(tmp);
-        return [nodes, links];
-      })();
-      startSimulation(nodes, links);
-    };
-
-    startLineChart();
-  }, [nodeCount, linkCount, linkLength, nodeSize, strength]);
-
-  const colorScale = d3.interpolateBlues;
-
-  const a = (link) => {
-    for (let i = 0; i < selected.length; i++) {
-      for (let j = i + 1; j < selected.length; j++) {
-        // console.log(selected[i], selected[j]);
+      //吹奏楽
+      for (let item of brassbandData) {
+        //都道府県大会以上進出
         if (
-          (selected[i] == link.target.id || selected[j] == link.source.id) &&
-          (selected[j] == link.target.id || selected[i] == link.source.id)
+          item["prefecture"].substr(0, item["prefecture"].length - 1) ===
+            prefecture &&
+          item["last"] !== "地区"
         ) {
-          return true;
+          if (representative === "false") {
+            //都道府県で金賞以外のものは除外
+            if (
+              item["last"] === "都道府県" &&
+              (item["prize"] === "銀賞" || item["prize"] === "銅賞")
+            ) {
+              continue;
+            }
+          } else {
+            //代表以外のものは除外
+            if (
+              item["last"] === "都道府県" &&
+              item["representative"] === false
+            ) {
+              continue;
+            }
+          }
+          item["club"] = BRASSBAND;
+          selectedData[item["year"]].push(item);
         }
       }
-    }
-    return false;
-  };
+
+      //野球
+      for (let item of baseballData) {
+        if (item["prefecture"] === prefecture) {
+          let find = false;
+          for (let showItem of selectedData[item["year"]]) {
+            //吹奏楽のデータがすでにある場合
+            if (showItem["name"] === item["fullName"]) {
+              showItem["club"] = DOUBLE;
+              showItem["nationalBest"] = item["nationalBest"];
+              showItem["regionalBest"] = item["regionalBest"];
+              find = true;
+              break;
+            }
+          }
+          if (!find) {
+            const data = {
+              name:
+                item["fullName"] !== "" ? item["fullName"] : item["shortName"],
+              nationalBest: item["nationalBest"],
+              regionalBest: item["regionalBest"],
+              club: BASEBALL,
+            };
+            selectedData[item["year"]].push(data);
+          }
+        }
+      }
+
+      //並び替え(野球/両方/吹奏楽)
+      for (let year of Object.keys(selectedData)) {
+        selectedData[year].sort((a, b) => a.club - b.club);
+      }
+
+      //セルの数決める
+      const colMax = Math.max(
+        ...Object.keys(selectedData).map((key) => selectedData[key].length)
+      );
+      setColLen(colMax);
+
+      //セルの１辺の長さ
+      const l = Math.min(contentHeight / 5, Math.floor(svgWidth / colMax));
+      setLen(l);
+
+      setShowData(selectedData);
+    })();
+  }, [prefecture, representative]);
+
+  function onHover(e) {
+    const clientX = e.pageX;
+    const clientY = e.pageY;
+    setPopup(true);
+    setClientX(clientX);
+    setClientY(clientY);
+  }
+
+  function changeInfo(item) {
+    setInfo(item);
+  }
+
+  if (!showData) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div>
-      <ZoomableSVG width={contentWidth} height={contentHeight}>
-        <g>
-          <g>
-            {links.map((link) => {
-              const www = a(link);
-              return (
-                <line
-                  key={link.source.id + "-" + link.target.id}
-                  stroke={
-                    // selected.length === 0
-                    //   ? "black"
-                    //   : selected.includes(link.source.id) ||
-                    //     selected.includes(link.target.id)
-                    //   ? "black"
-                    //   : "#f5f5f5"
-
-                    selected.length === 0
-                      ? "black"
-                      : selected.length === 1
-                      ? selected.includes(link.source.id) ||
-                        selected.includes(link.target.id)
-                        ? "black"
-                        : "#f5f5f5"
-                      : www
-                      ? "black"
-                      : "#f5f5f5"
-                  }
-                  // stroke={"black"}
-                  strokeWidth="1"
-                  className="link"
-                  x1={link.source.x}
-                  y1={link.source.y}
-                  x2={link.target.x}
-                  y2={link.target.y}
-                ></line>
-              );
-            })}
-          </g>
-          <g>
-            {nodes.map((node) => {
-              const normalizedValue = (node.value - min) / (max - min);
-              // console.log(normalizedValue);
-              return (
-                <g className="node" key={node.id}>
-                  <circle
-                    r={node.r}
-                    stroke="black"
-                    fill={
-                      selected && selected.length === 0
-                        ? colorScale(normalizedValue)
-                        : selected.includes(node.id)
-                        ? "#FF6600"
-                        : colorScale(normalizedValue)
-                    }
-                    cx={node.x}
-                    cy={node.y}
-                    onClick={() => handleSelect(node)}
-                  ></circle>
-                  <text
-                    className="node-label"
-                    textAnchor="middle"
-                    stroke="black"
-                    fill="white"
-                    fontSize={"20px"}
-                    onClick={() => handleSelect(node)}
-                    x={node.x}
-                    y={node.y}
-                  >
-                    {node.label}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-        </g>
-      </ZoomableSVG>
+      <select
+        value={prefecture}
+        onChange={(e) => setPretecture(e.target.value)}
+      >
+        {prefectureName.map((p, i) => {
+          {
+            return (
+              <option key={i} value={p.substr(0, p.length - 1)}>
+                {p}
+              </option>
+            );
+          }
+        })}
+      </select>
+      <div>
+        <label>
+          <input
+            type="radio"
+            value={"true"}
+            onChange={(e) => setRepresentative(e.target.value)}
+            checked={representative === "true"}
+          />
+          代表
+        </label>
+        <label>
+          <input
+            type="radio"
+            value={"false"}
+            onChange={(e) => setRepresentative(e.target.value)}
+            checked={representative === "false"}
+          />
+          金賞
+        </label>
+      </div>
+      <div style={{ width: "80%" }}>
+        <svg
+          viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
+        >
+          {Object.keys(showData).map((year, row) => {
+            return (
+              <g key={year}>
+                <text
+                  x={0}
+                  y={len * row + len / 2}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="13"
+                  style={{ userSelect: "none" }}
+                >
+                  {year}
+                </text>
+                {showData[year].map((item, col) => {
+                  return (
+                    <rect
+                      key={colLen * row + col}
+                      x={50 + len * col}
+                      y={len * row}
+                      width={len}
+                      height={len}
+                      stroke="lightgray"
+                      fill={color[item.club]}
+                      onMouseMove={(e) => {
+                        onHover(e);
+                        changeInfo(item);
+                      }}
+                      onMouseLeave={() => {
+                        setPopup(false);
+                      }}
+                    />
+                  );
+                })}
+              </g>
+            );
+          })}
+        </svg>
+        <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} />
+      </div>
     </div>
   );
 }
+
+export default Home;
