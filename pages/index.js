@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import JapanMap from "../components/JapanMap";
 import { prefectureName } from "../data/prefecture";
 
 const BASEBALL = 0;
@@ -139,6 +140,7 @@ function Home() {
 
   return (
     <div>
+      <JapanMap />
       <select
         value={prefecture}
         onChange={(e) => setPretecture(e.target.value)}
