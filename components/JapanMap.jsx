@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { geoMercator, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
 
-const JapanMap = () => {
+const JapanMap = (props) => {
   const [prefectures, setPrefectures] = useState([]);
-  const [selectedPrefecture, setSelectedPrefecture] = useState("神奈川県");
   const margin = {
     top: 10,
     bottom: 10,
@@ -35,22 +34,14 @@ const JapanMap = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(prefectures);
-  }, [prefectures]);
-
-  useEffect(() => {
-    console.log(selectedPrefecture);
-  }, [selectedPrefecture]);
-
   return (
     <svg width={svgWidth} height={svgHeight}>
       <g className="prefectures">
         {prefectures.map((prefecture, i) => {
-          const prefectureName = prefecture.properties.name_ja;
+          const prefectureName = prefecture.properties.name_ja.slice(0, -1);
           // 選択されていれば赤，そうでなければ灰
           const color =
-            prefectureName === selectedPrefecture ? "#FF0000" : "#808080";
+            prefectureName === props.selectedPrefecture ? "#FF0000" : "#808080";
           return (
             <path
               key={i}
@@ -58,9 +49,9 @@ const JapanMap = () => {
               d={path(prefecture)}
               fill={color}
               stroke="#000000"
-              strokeWidth={1}
+              strokeWidth={0.5}
               onClick={(e) => {
-                setSelectedPrefecture(e.target.className.baseVal);
+                props.changePrefecture(e.target.className.baseVal);
               }}
             />
           );

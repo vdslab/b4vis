@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import JapanMap from "../components/JapanMap";
+import BarGraph from "../components/BarGraph";
 import { prefectureName } from "../data/prefecture";
 
 const BASEBALL = 0;
@@ -26,7 +27,7 @@ function Tooltip({ clientX, clientY, show, info }) {
 }
 
 function Home() {
-  const [prefecture, setPretecture] = useState("神奈川");
+  const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [showData, setShowData] = useState(null);
   const [popup, setPopup] = useState(false);
   const [clientX, setClientX] = useState(0);
@@ -51,7 +52,7 @@ function Home() {
         //都道府県大会以上進出
         if (
           item["prefecture"].substr(0, item["prefecture"].length - 1) ===
-            prefecture &&
+            selectedPrefecture &&
           item["last"] !== "地区"
         ) {
           if (representative === "false") {
@@ -78,7 +79,7 @@ function Home() {
 
       //野球
       for (let item of baseballData) {
-        if (item["prefecture"] === prefecture) {
+        if (item["prefecture"] === selectedPrefecture) {
           let find = false;
           for (let showItem of selectedData[item["year"]]) {
             //吹奏楽のデータがすでにある場合
@@ -120,7 +121,7 @@ function Home() {
 
       setShowData(selectedData);
     })();
-  }, [prefecture, representative]);
+  }, [selectedPrefecture, representative]);
 
   function onHover(e) {
     const clientX = e.pageX;
@@ -138,12 +139,19 @@ function Home() {
     return <div>loading...</div>;
   }
 
+  const changePrefecture = (prefecture) => {
+    setSelectedPretecture(prefecture);
+  };
+
   return (
     <div>
-      <JapanMap />
+      <JapanMap
+        changePrefecture={changePrefecture}
+        selectedPrefecture={selectedPrefecture}
+      />
       <select
-        value={prefecture}
-        onChange={(e) => setPretecture(e.target.value)}
+        value={selectedPrefecture}
+        onChange={(e) => setSelectedPretecture(e.target.value)}
       >
         {prefectureName.map((p, i) => {
           {
