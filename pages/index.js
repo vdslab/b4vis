@@ -20,7 +20,7 @@ const contentHeight = 200;
 
 const svgWidth = margin.left + margin.right + contentWidth;
 const svgHeight = margin.top + margin.bottom + contentHeight;
-
+//
 //詳細情報の表示
 function Tooltip({ clientX, clientY, show, info }) {
   return <div>{show && <div>{JSON.stringify(info)}</div>}</div>;
