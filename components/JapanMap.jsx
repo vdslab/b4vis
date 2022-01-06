@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { geoMercator, geoPath } from "d3-geo";
-import { feature } from "topojson-client";
+import { feature } from "topojson";
 
 const JapanMap = (props) => {
   const [prefectures, setPrefectures] = useState([]);
