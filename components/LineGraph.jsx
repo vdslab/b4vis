@@ -63,8 +63,8 @@ const LineGraph = (props) => {
     })();
   }, [props.selectedSchool]);
 
-  if (baseballData === null && brassBandData === null) {
-    return <div>no data</div>;
+  if (baseballData.length === 0 && brassBandData.length === 0) {
+    return <div>データがありません</div>;
   }
 
   const wLen = (contentWidth - 50) / YEAR;
@@ -72,7 +72,6 @@ const LineGraph = (props) => {
   const chartHeight = hLen * 4;
   const p = 20;
   const chartWidth = p * 2 + wLen * (YEAR - 1);
-
 
   return (
     <div>
@@ -139,7 +138,7 @@ const LineGraph = (props) => {
           </g>
 
           <g>
-          {baseballData?.map((result, idx) => {
+            {baseballData?.map((result, idx) => {
               return (
                 <g key={result.name + result.year}>
                   {idx !== baseballData.length - 1 && (
