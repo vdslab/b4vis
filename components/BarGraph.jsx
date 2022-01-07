@@ -117,7 +117,7 @@ const BarGraph = (props) => {
 
       setShowData(selectedData);
     })();
-  }, [props.selectedPrefecture, representative]);
+  }, [props.selectedPrefecture, representative,svgWidth]);
 
   function onHover(e) {
     const clientX = e.pageX;
@@ -191,6 +191,7 @@ const BarGraph = (props) => {
                 {showData[year].map((item, col) => {
                   return (
                     <rect
+                      className={item.name}
                       key={colLen * row + col}
                       x={50 + len * col}
                       y={len * row}
@@ -198,12 +199,15 @@ const BarGraph = (props) => {
                       height={len}
                       stroke="lightgray"
                       fill={color[item.club]}
-                      onMouseMove={(e) => {
-                        onHover(e);
-                        changeInfo(item);
-                      }}
-                      onMouseLeave={() => {
-                        setPopup(false);
+                      // onMouseMove={(e) => {
+                      //   onHover(e);
+                      //   changeInfo(item);
+                      // }}
+                      // onMouseLeave={() => {
+                      //   setPopup(false);
+                      // }}
+                      onClick={() => {
+                        props.changeSchool(item.name);
                       }}
                     />
                   );
