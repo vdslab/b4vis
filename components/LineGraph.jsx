@@ -63,7 +63,10 @@ const LineGraph = (props) => {
     })();
   }, [props.selectedSchool]);
 
-  if (baseballData.length === 0 && brassBandData.length === 0) {
+  if (
+    (baseballData === null && brassBandData === null) ||
+    (baseballData?.length === 0 && brassBandData?.length === 0)
+  ) {
     return <div>データがありません</div>;
   }
 
