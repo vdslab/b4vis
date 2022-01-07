@@ -191,7 +191,6 @@ const BarGraph = (props) => {
                 {showData[year].map((item, col) => {
                   return (
                     <rect
-                      className={item.name}
                       key={colLen * row + col}
                       x={50 + len * col}
                       y={len * row}
