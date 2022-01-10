@@ -79,99 +79,95 @@ const LineGraph = (props) => {
   return (
     <div>
       {props.selectedSchool}
-      <div>
-        <svg
-          viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
-        >
-          <line
-            x1={0}
-            x2={0}
-            y1={0}
-            y2={chartHeight}
-            strokeWidth={1}
-            stroke={"black"}
-          />
-          <line
-            x1={chartWidth}
-            x2={chartWidth}
-            y1={0}
-            y2={chartHeight}
-            strokeWidth={1}
-            stroke={"black"}
-          />
-          <line
-            x1={0}
-            x2={chartWidth}
-            y1={chartHeight}
-            y2={chartHeight}
-            strokeWidth={1}
-            stroke={"black"}
-          />
+      <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
+        <line
+          x1={0}
+          x2={0}
+          y1={0}
+          y2={chartHeight}
+          strokeWidth={1}
+          stroke={"black"}
+        />
+        <line
+          x1={chartWidth}
+          x2={chartWidth}
+          y1={0}
+          y2={chartHeight}
+          strokeWidth={1}
+          stroke={"black"}
+        />
+        <line
+          x1={0}
+          x2={chartWidth}
+          y1={chartHeight}
+          y2={chartHeight}
+          strokeWidth={1}
+          stroke={"black"}
+        />
 
-          <g>
-            {brassBandData.map((result, idx) => {
-              return (
-                <g key={result.name + result.year}>
-                  {idx !== brassBandData.length - 1 && (
-                    <line
-                      x1={p + wLen * idx}
-                      x2={p + wLen * (idx + 1)}
-                      y1={chartHeight - result.rank * hLen}
-                      y2={chartHeight - brassBandData[idx + 1].rank * hLen}
-                      strokeWidth={1}
-                      stroke={"red"}
-                    />
-                  )}
-                </g>
-              );
-            })}
-            {brassBandData.map((result, idx) => {
-              return (
-                <g key={result.name + result.year}>
-                  <circle
-                    //TODO:完全に被るとわからなくなる
-                    cx={p + wLen * idx}
-                    cy={chartHeight - result.rank * hLen}
-                    r={10}
-                    fill={"pink"}
+        <g>
+          {brassBandData.map((result, idx) => {
+            return (
+              <g key={result.name + result.year}>
+                {idx !== brassBandData.length - 1 && (
+                  <line
+                    x1={p + wLen * idx}
+                    x2={p + wLen * (idx + 1)}
+                    y1={chartHeight - result.rank * hLen}
+                    y2={chartHeight - brassBandData[idx + 1].rank * hLen}
+                    strokeWidth={1}
+                    stroke={"red"}
                   />
-                </g>
-              );
-            })}
-          </g>
+                )}
+              </g>
+            );
+          })}
+          {brassBandData.map((result, idx) => {
+            return (
+              <g key={result.name + result.year}>
+                <circle
+                  //TODO:完全に被るとわからなくなる
+                  cx={p + wLen * idx}
+                  cy={chartHeight - result.rank * hLen}
+                  r={10}
+                  fill={"pink"}
+                />
+              </g>
+            );
+          })}
+        </g>
 
-          <g>
-            {baseballData?.map((result, idx) => {
-              return (
-                <g key={result.name + result.year}>
-                  {idx !== baseballData.length - 1 && (
-                    <line
-                      x1={p + wLen * idx}
-                      x2={p + wLen * (idx + 1)}
-                      y1={chartHeight - result.rank * hLen}
-                      y2={chartHeight - baseballData[idx + 1].rank * hLen}
-                      strokeWidth={1}
-                      stroke={"skyblue"}
-                    />
-                  )}
-                </g>
-              );
-            })}
-            {baseballData?.map((result, idx) => {
-              return (
-                <g key={result.name + result.year}>
-                  <circle
-                    cx={p + wLen * idx}
-                    cy={chartHeight - result.rank * hLen}
-                    r={10}
-                    fill={"blue"}
+        <g>
+          {baseballData?.map((result, idx) => {
+            return (
+              <g key={result.name + result.year}>
+                {idx !== baseballData.length - 1 && (
+                  <line
+                    x1={p + wLen * idx}
+                    x2={p + wLen * (idx + 1)}
+                    y1={chartHeight - result.rank * hLen}
+                    y2={chartHeight - baseballData[idx + 1].rank * hLen}
+                    strokeWidth={1}
+                    stroke={"skyblue"}
                   />
-                </g>
-              );
-            })}
-          </g>
-        </svg>
-      </div>
+                )}
+              </g>
+            );
+          })}
+          {baseballData?.map((result, idx) => {
+            return (
+              <g key={result.name + result.year}>
+                <circle
+                  cx={p + wLen * idx}
+                  cy={chartHeight - result.rank * hLen}
+                  r={10}
+                  fill={"blue"}
+                />
+              </g>
+            );
+          })}
+        </g>
+      </svg>
     </div>
   );
 };
