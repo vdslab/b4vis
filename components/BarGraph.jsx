@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { prefectureName } from "../data/prefecture";
+import Tooltip from "@mui/material/Tooltip";
 
-function Tooltip({ clientX, clientY, show, info }) {
-  return <div>{show && <div>{JSON.stringify(info)}</div>}</div>;
-}
+// function Tooltip({ clientX, clientY, show, info }) {
+//   return <div>{show && <div>{JSON.stringify(info)}</div>}</div>;
+// }
 
 const BarGraph = (props) => {
   const [showData, setShowData] = useState(null);
@@ -192,32 +193,34 @@ const BarGraph = (props) => {
                   </text>
                   {showData[year].map((item, col) => {
                     return (
-                      <rect
-                        key={colLen * row + col}
-                        x={50 + len * col}
-                        y={len * row}
-                        width={len}
-                        height={len}
-                        stroke="lightgray"
-                        fill={color[item.club]}
-                        // onMouseMove={(e) => {
-                        //   onHover(e);
-                        //   changeInfo(item);
-                        // }}
-                        // onMouseLeave={() => {
-                        //   setPopup(false);
-                        // }}
-                        onClick={() => {
-                          props.changeSchool(item.name);
-                        }}
-                      />
+                      <Tooltip title={item.name} arrow placement="bottom">
+                        <rect
+                          key={colLen * row + col}
+                          x={50 + len * col}
+                          y={len * row}
+                          width={len}
+                          height={len}
+                          stroke="lightgray"
+                          fill={color[item.club]}
+                          // onMouseMove={(e) => {
+                          //   onHover(e);
+                          //   changeInfo(item);
+                          // }}
+                          // onMouseLeave={() => {
+                          //   setPopup(false);
+                          // }}
+                          onClick={() => {
+                            props.changeSchool(item.name);
+                          }}
+                        />
+                      </Tooltip>
                     );
                   })}
                 </g>
               );
             })}
         </svg>
-        <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} />
+        {/* <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} /> */}
       </div>
     </>
   );
