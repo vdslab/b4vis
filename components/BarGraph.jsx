@@ -172,60 +172,56 @@ const BarGraph = (props) => {
           })}
         </select>
       </div>
-      <div style={{ width: "80%" }}>
-        <svg
-          viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
-        >
-          {Object.keys(showData)
-            .reverse()
-            .map((year, row) => {
-              return (
-                <g key={year}>
-                  <text
-                    x={0}
-                    y={len * row + len / 2}
-                    textAnchor="start"
-                    dominantBaseline="central"
-                    fontSize="13"
-                    style={{ userSelect: "none" }}
-                  >
-                    {year}
-                  </text>
-                  {showData[year].map((item, col) => {
-                    return (
-                      <Tooltip
-                        title={item.name}
-                        arrow
-                        placement="bottom"
-                        key={colLen * row + col}
-                      >
-                        <rect
-                          x={50 + len * col}
-                          y={len * row}
-                          width={len}
-                          height={len}
-                          stroke="lightgray"
-                          fill={color[item.club]}
-                          // onMouseMove={(e) => {
-                          //   onHover(e);
-                          //   changeInfo(item);
-                          // }}
-                          // onMouseLeave={() => {
-                          //   setPopup(false);
-                          // }}
-                          onClick={() => {
-                            props.changeSchool(item.name);
-                          }}
-                        />
-                      </Tooltip>
-                    );
-                  })}
-                </g>
-              );
-            })}
-        </svg>
-        {/* <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} /> */}
-      </div>
+      <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
+        {Object.keys(showData)
+          .reverse()
+          .map((year, row) => {
+            return (
+              <g key={year}>
+                <text
+                  x={0}
+                  y={len * row + len / 2}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="13"
+                  style={{ userSelect: "none" }}
+                >
+                  {year}
+                </text>
+                {showData[year].map((item, col) => {
+                  return (
+                    <Tooltip
+                      title={item.name}
+                      arrow
+                      placement="bottom"
+                      key={colLen * row + col}
+                    >
+                      <rect
+                        x={50 + len * col}
+                        y={len * row}
+                        width={len}
+                        height={len}
+                        stroke="lightgray"
+                        fill={color[item.club]}
+                        // onMouseMove={(e) => {
+                        //   onHover(e);
+                        //   changeInfo(item);
+                        // }}
+                        // onMouseLeave={() => {
+                        //   setPopup(false);
+                        // }}
+                        onClick={() => {
+                          props.changeSchool(item.name);
+                        }}
+                      />
+                    </Tooltip>
+                  );
+                })}
+              </g>
+            );
+          })}
+      </svg>
+      {/* <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} /> */}
     </>
   );
 };
