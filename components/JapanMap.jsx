@@ -11,14 +11,14 @@ const JapanMap = (props) => {
     right: 10,
   };
 
-  const contentWidth = 400;
-  const contentHeight = 500;
+  const contentWidth = 350;
+  const contentHeight = 350;
   const svgWidth = contentWidth + margin.left + margin.right;
   const svgHeight = contentHeight + margin.top + margin.bottom;
 
   const projection = geoMercator()
-    .center([135, 35])
-    .scale(1000)
+    .center([137, 38])
+    .scale(900)
     .translate([svgWidth / 2, svgHeight / 2]);
   const path = geoPath().projection(projection);
 
@@ -38,7 +38,10 @@ const JapanMap = (props) => {
     <svg width={svgWidth} height={svgHeight}>
       <g className="prefectures">
         {prefectures.map((prefecture, i) => {
-          const prefectureName = prefecture.properties.name_ja.slice(0, -1);
+          const prefectureName =
+            prefecture.properties.name_ja.slice(-1)[0] === "県"
+              ? prefecture.properties.name_ja.slice(0, -1)
+              : prefecture.properties.name_ja;
           // 選択されていれば赤，そうでなければ灰
           const color =
             prefectureName === props.selectedPrefecture ? "#FF0000" : "#808080";
