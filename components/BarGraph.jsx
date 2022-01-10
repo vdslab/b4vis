@@ -117,7 +117,7 @@ const BarGraph = (props) => {
 
       setShowData(selectedData);
     })();
-  }, [props.selectedPrefecture, representative,svgWidth]);
+  }, [props.selectedPrefecture, representative, svgWidth]);
 
   function onHover(e) {
     const clientX = e.pageX;
@@ -163,7 +163,7 @@ const BarGraph = (props) => {
           {prefectureName.map((p, i) => {
             {
               return (
-                <option key={i} value={p.substr(0, p.length - 1)}>
+                <option key={i} value={p.slice(0, -1)}>
                   {p}
                 </option>
               );
@@ -175,45 +175,47 @@ const BarGraph = (props) => {
         <svg
           viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
         >
-          {Object.keys(showData).map((year, row) => {
-            return (
-              <g key={year}>
-                <text
-                  x={0}
-                  y={len * row + len / 2}
-                  textAnchor="start"
-                  dominantBaseline="central"
-                  fontSize="13"
-                  style={{ userSelect: "none" }}
-                >
-                  {year}
-                </text>
-                {showData[year].map((item, col) => {
-                  return (
-                    <rect
-                      key={colLen * row + col}
-                      x={50 + len * col}
-                      y={len * row}
-                      width={len}
-                      height={len}
-                      stroke="lightgray"
-                      fill={color[item.club]}
-                      // onMouseMove={(e) => {
-                      //   onHover(e);
-                      //   changeInfo(item);
-                      // }}
-                      // onMouseLeave={() => {
-                      //   setPopup(false);
-                      // }}
-                      onClick={() => {
-                        props.changeSchool(item.name);
-                      }}
-                    />
-                  );
-                })}
-              </g>
-            );
-          })}
+          {Object.keys(showData)
+            .reverse()
+            .map((year, row) => {
+              return (
+                <g key={year}>
+                  <text
+                    x={0}
+                    y={len * row + len / 2}
+                    textAnchor="start"
+                    dominantBaseline="central"
+                    fontSize="13"
+                    style={{ userSelect: "none" }}
+                  >
+                    {year}
+                  </text>
+                  {showData[year].map((item, col) => {
+                    return (
+                      <rect
+                        key={colLen * row + col}
+                        x={50 + len * col}
+                        y={len * row}
+                        width={len}
+                        height={len}
+                        stroke="lightgray"
+                        fill={color[item.club]}
+                        // onMouseMove={(e) => {
+                        //   onHover(e);
+                        //   changeInfo(item);
+                        // }}
+                        // onMouseLeave={() => {
+                        //   setPopup(false);
+                        // }}
+                        onClick={() => {
+                          props.changeSchool(item.name);
+                        }}
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })}
         </svg>
         <Tooltip clientX={clientX} clientY={clientY} show={popup} info={info} />
       </div>
