@@ -193,9 +193,13 @@ const BarGraph = (props) => {
                   </text>
                   {showData[year].map((item, col) => {
                     return (
-                      <Tooltip title={item.name} arrow placement="bottom">
+                      <Tooltip
+                        title={item.name}
+                        arrow
+                        placement="bottom"
+                        key={colLen * row + col}
+                      >
                         <rect
-                          key={colLen * row + col}
                           x={50 + len * col}
                           y={len * row}
                           width={len}
