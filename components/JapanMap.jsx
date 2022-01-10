@@ -36,7 +36,7 @@ const JapanMap = (props) => {
   }, []);
 
   return (
-    <svg width={svgWidth} height={svgHeight}>
+    <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
       <g className="prefectures">
         {prefectures.map((prefecture, i) => {
           // 末尾が県なら取り除く
