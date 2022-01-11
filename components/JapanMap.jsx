@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { geoMercator, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
+
 import Tooltip from "@mui/material/Tooltip";
 
 const JapanMap = (props) => {
@@ -48,7 +49,12 @@ const JapanMap = (props) => {
           const color =
             prefectureName === props.selectedPrefecture ? "#FF0000" : "#808080";
           return (
-            <Tooltip title={prefectureName} placement="bottom-end" key={i}>
+            <Tooltip
+              title={prefectureName}
+              placement="bottom-end"
+              key={i}
+              disableInteractive
+            >
               <path
                 className={prefectureName}
                 d={path(prefecture)}
@@ -58,7 +64,7 @@ const JapanMap = (props) => {
                 onClick={(e) => {
                   props.changePrefecture(e.target.className.baseVal);
                 }}
-              ></path>
+              />
             </Tooltip>
           );
         })}

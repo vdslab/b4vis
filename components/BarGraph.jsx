@@ -195,6 +195,7 @@ const BarGraph = (props) => {
                       arrow
                       placement="bottom"
                       key={colLen * row + col}
+                      disableInteractive
                     >
                       <rect
                         x={50 + len * col}
