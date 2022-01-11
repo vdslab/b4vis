@@ -1,17 +1,15 @@
-import pgPromise from "pg-promise";
+const { Client } = require("pg");
 
-const pgp = pgPromise({});
-const config = {
-  db: {
-    // 設定項目: https://github.com/vitaly-t/pg-promise/wiki/Connection-Syntax
-    host: "127.0.0.1",
+export async function selectRows(sql, search) {
+  const client = new Client({
+    host: process.env.PGHOST,
     port: 5432,
-    database: "team2021_watamaru",
-    user: "team2021_watamaru",
-    password: "PASSWARD",
-    max: 10, // size of the connection pool
-    query_timeout: 60000, // 60sec
-  },
-};
-
-export const sqlExecuter = pgp(config.db);
+    database: process.env.PGDATABASE,
+    user: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+  });
+  await client.connect();
+  const result = await client.query(sql, search);
+  await client.end();
+  return result.rows;
+}
