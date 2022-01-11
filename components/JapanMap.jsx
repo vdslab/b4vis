@@ -42,7 +42,7 @@ const JapanMap = (props) => {
         {prefectures.map((prefecture, i) => {
           // 末尾が県なら取り除く
           const prefectureName =
-            prefecture.properties.name_ja.slice(-1)[0] === "県"
+            prefecture.properties.name_ja !== "北海道"
               ? prefecture.properties.name_ja.slice(0, -1)
               : prefecture.properties.name_ja;
           // 選択されていれば赤，そうでなければ灰
