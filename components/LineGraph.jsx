@@ -13,7 +13,7 @@ const LineGraph = (props) => {
   };
 
   const contentWidth = 400;
-  const contentHeight = 500;
+  const contentHeight = 200;
   const svgWidth = contentWidth + margin.left + margin.right;
   const svgHeight = contentHeight + margin.top + margin.bottom;
 
@@ -71,7 +71,7 @@ const LineGraph = (props) => {
   }
 
   const wLen = (contentWidth - 50) / YEAR;
-  const hLen = 50;
+  const hLen = 45;
   const chartHeight = hLen * 4;
   const p = 20;
   const chartWidth = p * 2 + wLen * (YEAR - 1);
