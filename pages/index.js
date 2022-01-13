@@ -1,5 +1,4 @@
 import { useState } from "react";
-import JapanMap from "../components/JapanMap";
 import BarGraph from "../components/BarGraph";
 import LineGraph from "../components/LineGraph";
 
@@ -22,15 +21,7 @@ function Home() {
   return (
     <Container>
       <Grid container rowSpacing={3} columnSpacing={3}>
-        <Grid item xs={3}>
-          <Paper elevation={5}>
-            <JapanMap
-              changePrefecture={changePrefecture}
-              selectedPrefecture={selectedPrefecture}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12}>
           <Paper elevation={5}>
             <BarGraph
               changePrefecture={changePrefecture}
