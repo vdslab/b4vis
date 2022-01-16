@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { prefectureName } from "../data/prefecture";
+import { prefectureName , hokkaidoChikuName} from "../data/prefecture";
 import Tooltip from "@mui/material/Tooltip";
 
 const BarGraph = (props) => {
@@ -21,7 +21,7 @@ const BarGraph = (props) => {
     right: 10,
   };
   const contentWidth = 1400;
-  const contentHeight = 1150;
+  const contentHeight = 1200;
 
   const svgWidth = margin.left + margin.right + contentWidth;
   const svgHeight = margin.top + margin.bottom + contentHeight;
@@ -35,6 +35,7 @@ const BarGraph = (props) => {
       const baseballData = await baseballRequest.json();
 
       const selectedData = {
+        北海道:{},
         青森: {},
         岩手: {},
         宮城: {},
@@ -45,6 +46,7 @@ const BarGraph = (props) => {
         茨城: {},
         千葉: {},
         神奈川: {},
+        東京:{},
         新潟: {},
         群馬: {},
         山梨: {},
@@ -97,10 +99,27 @@ const BarGraph = (props) => {
               continue;
           }
           // 重複が無いようにsetで持っておく
-          selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-            BRASSBAND;
-        } else {
-          // TODO 北海道と東京
+          selectedData[item["prefecture"].slice(0, -1)][item["name"]] = BRASSBAND;
+        } else if(hokkaidoChikuName.find((name)=>name===item["prefecture"]) && item["last"]!=="都道府県"){
+          //北海道
+          if (representative === "false") {
+            if (item["prize"] !== "金賞")
+              continue;
+          } else {
+            if (item["representative"] === false)
+              continue;
+          }
+          selectedData["北海道"][item["name"]] = BRASSBAND;
+        } else if (item["prefecture"] === "東京都" && item["last"]!=="都道府県") {
+          if (representative === "false") {
+            if (item["last"] === "都道府県" && item["prize"] !== "金賞")
+              continue;
+          } else {
+            if (item["last"] === "都道府県" && item["representative"] === false)
+              continue;
+          }
+          // 重複が無いようにsetで持っておく
+          selectedData[item["prefecture"].slice(0, -1)][item["name"]] = BRASSBAND;
         }
       }
 
@@ -122,8 +141,36 @@ const BarGraph = (props) => {
           } else {
             selectedData[item["prefecture"]][item["fullName"]] = BASEBALL;
           }
+        } else if(item["prefecture"] === "北北海道" || item["prefecture"] === "南北海道") {
+          if (Number(item["regionalBest"]) <= 4) {
+            if (
+              selectedData["北海道"].hasOwnProperty(item["fullName"])
+            ) {
+              if (
+                selectedData["北海道"][item["fullName"]] === BRASSBAND
+              )
+                selectedData["北海道"][item["fullName"]] = DOUBLE;
+            } else {
+              selectedData["北海道"][item["fullName"]] = BASEBALL;
+            }   
+          } 
+        } else if (item["prefecture"] === "東東京" || item["prefecture"] === "西東京") {
+          if (Number(item["regionalBest"]) <= 4) {
+            if (
+              selectedData["東京"].hasOwnProperty(item["fullName"])
+            ) {
+              if (
+                selectedData["東京"][item["fullName"]] === BRASSBAND
+              )
+                selectedData["東京"][item["fullName"]] = DOUBLE;
+            } else {
+              selectedData["東京"][item["fullName"]] = BASEBALL;
+            }   
+          } 
         }
       }
+
+      console.log("selected",selectedData);
 
       // 並べ替え
       for (const prefecture of Object.keys(selectedData)) {
@@ -292,6 +339,7 @@ const BarGraph = (props) => {
                     arrow
                     placement="bottom"
                     disableInteractive
+                    key={col}
                   >
                     <rect
                       x={50 + 26 * col}
