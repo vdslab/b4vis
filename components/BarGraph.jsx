@@ -170,8 +170,6 @@ const BarGraph = (props) => {
         }
       }
 
-      console.log("selected",selectedData);
-
       // 並べ替え
       for (const prefecture of Object.keys(selectedData)) {
         const tmp = [];
@@ -189,7 +187,7 @@ const BarGraph = (props) => {
   }, [representative]);
 
   useEffect(() => {
-    console.log(showData);
+    //console.log(showData);
   }, [showData]);
 
   // useEffect(() => {

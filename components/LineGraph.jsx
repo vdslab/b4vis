@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
+// todo 北海道東京
+const brassBandRank = { 地区: 0, 都道府県: 1, 支部: 2, 全国: 3 };
+const baseBallRank = { 地区ベスト8位下: 0, 地区ベスト8: 1, " ": 2, 甲子園: 3 };
 
 const LineGraph = (props) => {
   const [brassBandData, setBrasbandData] = useState(null);
@@ -8,11 +11,11 @@ const LineGraph = (props) => {
   const margin = {
     top: 10,
     bottom: 10,
-    left: 10,
-    right: 10,
+    left: 30,
+    right: 40,
   };
 
-  const contentWidth = 400;
+  const contentWidth = 350;
   const contentHeight = 200;
   const svgWidth = contentWidth + margin.left + margin.right;
   const svgHeight = contentHeight + margin.top + margin.bottom;
@@ -24,8 +27,6 @@ const LineGraph = (props) => {
 
       const baseballRequest = await fetch("data/baseball.json");
       const baseballData = await baseballRequest.json();
-
-      const brassBandRank = { 地区: 0, 都道府県: 1, 支部: 2, 全国: 3 };
 
       const selectedBrassBandData = [];
       const selectedBaseballData = [];
@@ -39,16 +40,26 @@ const LineGraph = (props) => {
       }
 
       //野球
-      for (let item of baseballData) {
-        if (item.fullName === props.selectedSchool) {
-          if (item.nationalBest !== "") {
-            item.rank = 3;
-          } else if (Number(item.regionalBest) <= 8) {
-            item.rank = 1;
-          } else {
-            item.rank = 0;
+      for (let year of YEAR_LIST) {
+        let find = false;
+        for (let item of baseballData) {
+          if (Number(item.year) === year) {
+            if (item.fullName === props.selectedSchool) {
+              if (item.nationalBest !== "") {
+                item.rank = 3;
+              } else if (Number(item.regionalBest) <= 8) {
+                item.rank = 1;
+              } else {
+                item.rank = 0;
+              }
+              selectedBaseballData.push(item);
+              find = true;
+              break;
+            }
           }
-          selectedBaseballData.push(item);
+        }
+        if (!find) {
+          selectedBaseballData.push({ year: year, rank: 0, name: "" });
         }
       }
 
@@ -70,40 +81,101 @@ const LineGraph = (props) => {
     return <div>データがありません</div>;
   }
 
-  const wLen = (contentWidth - 50) / YEAR;
-  const hLen = 45;
+  const wLen = 75; //contentWidth / YEAR;
+  const hLen = 20;
   const chartHeight = hLen * 4;
   const p = 20;
   const chartWidth = p * 2 + wLen * (YEAR - 1);
+  const r = 5;
+
+  console.log(baseballData);
 
   return (
     <div>
-      {props.selectedSchool}
+      <h1>{props.selectedSchool}</h1>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
-        <line
-          x1={0}
-          x2={0}
-          y1={0}
-          y2={chartHeight}
-          strokeWidth={1}
-          stroke={"black"}
-        />
-        <line
-          x1={chartWidth}
-          x2={chartWidth}
-          y1={0}
-          y2={chartHeight}
-          strokeWidth={1}
-          stroke={"black"}
-        />
-        <line
-          x1={0}
-          x2={chartWidth}
-          y1={chartHeight}
-          y2={chartHeight}
-          strokeWidth={1}
-          stroke={"black"}
-        />
+        <g>
+          <g>
+            <line
+              x1={0}
+              x2={0}
+              y1={0}
+              y2={chartHeight}
+              strokeWidth={0.5}
+              stroke={"black"}
+            />
+            {Object.keys(brassBandRank).map((rank, idx) => {
+              return (
+                <g key={rank}>
+                  <line
+                    x1={-5}
+                    x2={0}
+                    y1={chartHeight - idx * hLen}
+                    y2={chartHeight - idx * hLen}
+                    strokeWidth={0.5}
+                    stroke={"black"}
+                  ></line>
+                  <text
+                    x={-15}
+                    y={chartHeight - idx * hLen}
+                    stroke="none"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={7}
+                    fill="black"
+                  >
+                    {rank}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+
+          <g>
+            <line
+              x1={chartWidth}
+              x2={chartWidth}
+              y1={0}
+              y2={chartHeight}
+              strokeWidth={0.5}
+              stroke={"black"}
+            />
+            {Object.keys(baseBallRank).map((rank, idx) => {
+              return (
+                <g key={rank}>
+                  <line
+                    x1={chartWidth+5}
+                    x2={chartWidth}
+                    y1={chartHeight - idx * hLen}
+                    y2={chartHeight - idx * hLen}
+                    strokeWidth={0.5}
+                    stroke={"black"}
+                  ></line>
+                  <text
+                    x={chartWidth+20}
+                    y={chartHeight - idx * hLen}
+                    stroke="none"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={7}
+                    fill="black"
+                  >
+                    {rank}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+
+          <line
+            x1={0}
+            x2={chartWidth}
+            y1={chartHeight}
+            y2={chartHeight}
+            strokeWidth={0.5}
+            stroke={"black"}
+          />
+        </g>
 
         <g>
           {brassBandData.map((result, idx) => {
@@ -129,7 +201,7 @@ const LineGraph = (props) => {
                   //TODO:完全に被るとわからなくなる
                   cx={p + wLen * idx}
                   cy={chartHeight - result.rank * hLen}
-                  r={10}
+                  r={r}
                   fill={"pink"}
                 />
               </g>
@@ -155,12 +227,13 @@ const LineGraph = (props) => {
             );
           })}
           {baseballData?.map((result, idx) => {
+            console.log(result.rank);
             return (
               <g key={result.name + result.year}>
                 <circle
                   cx={p + wLen * idx}
                   cy={chartHeight - result.rank * hLen}
-                  r={10}
+                  r={r}
                   fill={"blue"}
                 />
               </g>
