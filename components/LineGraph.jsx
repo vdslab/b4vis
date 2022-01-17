@@ -4,6 +4,7 @@ const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
 // todo 北海道東京
 const brassBandRank = { 地区: 0, 都道府県: 1, 支部: 2, 全国: 3 };
 const baseBallRank = { 地区ベスト8位下: 0, 地区ベスト8: 1, " ": 2, 甲子園: 3 };
+const prizeColor = {金賞:"#e6b422",銀賞:"#B2BABA",銅賞:"#815a2b"}
 
 const LineGraph = (props) => {
   const [brassBandData, setBrasbandData] = useState(null);
@@ -11,7 +12,7 @@ const LineGraph = (props) => {
   const margin = {
     top: 10,
     bottom: 10,
-    left: 30,
+    left: 40,
     right: 40,
   };
 
@@ -89,7 +90,8 @@ const LineGraph = (props) => {
     })();
   }, [props.selectedSchool]);
 
-  console.log(baseballData);
+  // console.log(baseballData);
+  // console.log(brassBandData);
 
   if (
     (baseballData === null && brassBandData === null) ||
@@ -131,7 +133,7 @@ const LineGraph = (props) => {
                     stroke={"black"}
                   ></line>
                   <text
-                    x={-15}
+                    x={-22.5}
                     y={chartHeight - idx * hLen}
                     stroke="none"
                     textAnchor="middle"
@@ -167,7 +169,7 @@ const LineGraph = (props) => {
                     stroke={"black"}
                   ></line>
                   <text
-                    x={chartWidth + 20}
+                    x={chartWidth + 35}
                     y={chartHeight - idx * hLen}
                     stroke="none"
                     textAnchor="middle"
@@ -240,11 +242,12 @@ const LineGraph = (props) => {
             return (
               <g key={result.name + result.year}>
                 <circle
-                  //TODO:完全に被るとわからなくなる
+                  // TODO:完全に被るとわからなくなる
                   cx={p + wLen * idx}
                   cy={chartHeight - result.rank * hLen}
                   r={r}
-                  fill={"pink"}
+                  // TODO:データなしの色
+                  fill={prizeColor[result.prize]}
                 />
               </g>
             );
