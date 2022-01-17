@@ -75,11 +75,14 @@ const LineGraph = (props) => {
                 find = true;
                 break;
               }
+              selectedBaseballData.push(item);
+              find = true;
+              break;
             }
           }
-          if (!find) {
-            selectedBaseballData.push({ year: year, rank: 0, name: "" });
-          }
+        }
+        if (!find) {
+          selectedBaseballData.push({ year: year, rank: 0, name: "" });
         }
       }
 
@@ -266,6 +269,7 @@ const LineGraph = (props) => {
             );
           })}
           {baseballData?.map((result, idx) => {
+            console.log(result.rank);
             return (
               <g key={result.name + result.year}>
                 <circle
