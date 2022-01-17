@@ -28,24 +28,16 @@ const LineGraph = (props) => {
       });
       const brassBandData = await brassBandRequest.json();
 
-
-      const baseballRequest = await fetch(`../api/baseball/school`, {
-        method: "POST",
-        body: JSON.stringify(props.selectedSchool),
-      });
-      const baseballData = await baseballRequest.json();
-
       const selectedBrassBandData = [];
       const selectedBaseballData = [];
 
-    
       // 吹奏楽
       // データがひとつもないときは何も表示しない
       if (brassBandData.data.length !== 0) {
         for (let year of YEAR_LIST) {
           let find = false;
           for (let item of brassBandData.data) {
-            if (item.year===year && item.name === props.selectedSchool) {
+            if (item.year === year && item.name === props.selectedSchool) {
               item.rank = brassBandRank[item.last];
               selectedBrassBandData.push(item);
               find = true;
@@ -58,31 +50,27 @@ const LineGraph = (props) => {
         }
       }
 
-
-      // 野球
-      // データがひとつもないときは何も表示しない
-      if (baseballData.data.length!==0) {
-        for (let year of YEAR_LIST) {
-          let find = false;
-          for (let item of baseballData.data) {
-            if (item.year === year) {
-              if (item.name === props.selectedSchool) {
-                if (item.nationalbest !== "") {
-                  item.rank = 3;
-                } else if (item.regionalbest <= 8) {
-                  item.rank = 1;
-                } else {
-                  item.rank = 0;
-                }
-                selectedBaseballData.push(item);
-                find = true;
-                break;
+      //野球
+      for (let year of YEAR_LIST) {
+        let find = false;
+        for (let item of baseballData) {
+          if (Number(item.year) === year) {
+            if (item.fullName === props.selectedSchool) {
+              if (item.nationalBest !== "") {
+                item.rank = 3;
+              } else if (Number(item.regionalBest) <= 8) {
+                item.rank = 1;
+              } else {
+                item.rank = 0;
               }
+              selectedBaseballData.push(item);
+              find = true;
+              break;
             }
           }
-          if (!find) {
-            selectedBaseballData.push({ year: year, rank: 0, name: "" });
-          }
+        }
+        if (!find) {
+          selectedBaseballData.push({ year: year, rank: 0, name: "" });
         }
       }
 
@@ -111,6 +99,7 @@ const LineGraph = (props) => {
   const chartWidth = p * 2 + wLen * (YEAR - 1);
   const r = 5;
 
+  console.log(baseballData);
 
   return (
     <div>
@@ -166,7 +155,7 @@ const LineGraph = (props) => {
               return (
                 <g key={rank}>
                   <line
-                    x1={chartWidth+5}
+                    x1={chartWidth + 5}
                     x2={chartWidth}
                     y1={chartHeight - idx * hLen}
                     y2={chartHeight - idx * hLen}
@@ -174,7 +163,7 @@ const LineGraph = (props) => {
                     stroke={"black"}
                   ></line>
                   <text
-                    x={chartWidth+20}
+                    x={chartWidth + 20}
                     y={chartHeight - idx * hLen}
                     stroke="none"
                     textAnchor="middle"
@@ -249,6 +238,7 @@ const LineGraph = (props) => {
             );
           })}
           {baseballData?.map((result, idx) => {
+            console.log(result.rank);
             return (
               <g key={result.name + result.year}>
                 <circle
