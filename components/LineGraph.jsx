@@ -22,20 +22,31 @@ const LineGraph = (props) => {
 
   useEffect(() => {
     (async () => {
-      const brassbandRequest = await fetch("data/barassBand.json");
-      const brassbandData = await brassbandRequest.json();
-
-      const baseballRequest = await fetch("data/baseball.json");
-      const baseballData = await baseballRequest.json();
+      const brassBandRequest = await fetch(`../api/brassBand/school`, {
+        method: "POST",
+        body: JSON.stringify(props.selectedSchool),
+      });
+      const brassBandData = await brassBandRequest.json();
 
       const selectedBrassBandData = [];
       const selectedBaseballData = [];
 
-      //吹奏楽
-      for (let item of brassbandData) {
-        if (item.name === props.selectedSchool) {
-          item.rank = brassBandRank[item.last];
-          selectedBrassBandData.push(item);
+      // 吹奏楽
+      // データがひとつもないときは何も表示しない
+      if (brassBandData.data.length !== 0) {
+        for (let year of YEAR_LIST) {
+          let find = false;
+          for (let item of brassBandData.data) {
+            if (item.year === year && item.name === props.selectedSchool) {
+              item.rank = brassBandRank[item.last];
+              selectedBrassBandData.push(item);
+              find = true;
+              break;
+            }
+          }
+          if (!find) {
+            selectedBrassBandData.push({ year: year, rank: 0, name: "" });
+          }
         }
       }
 
@@ -144,7 +155,7 @@ const LineGraph = (props) => {
               return (
                 <g key={rank}>
                   <line
-                    x1={chartWidth+5}
+                    x1={chartWidth + 5}
                     x2={chartWidth}
                     y1={chartHeight - idx * hLen}
                     y2={chartHeight - idx * hLen}
@@ -152,7 +163,7 @@ const LineGraph = (props) => {
                     stroke={"black"}
                   ></line>
                   <text
-                    x={chartWidth+20}
+                    x={chartWidth + 20}
                     y={chartHeight - idx * hLen}
                     stroke="none"
                     textAnchor="middle"
