@@ -28,7 +28,6 @@ const LineGraph = (props) => {
       });
       const brassBandData = await brassBandRequest.json();
 
-
       const baseballRequest = await fetch(`../api/baseball/school`, {
         method: "POST",
         body: JSON.stringify(props.selectedSchool),
@@ -38,14 +37,13 @@ const LineGraph = (props) => {
       const selectedBrassBandData = [];
       const selectedBaseballData = [];
 
-    
       // 吹奏楽
       // データがひとつもないときは何も表示しない
       if (brassBandData.data.length !== 0) {
         for (let year of YEAR_LIST) {
           let find = false;
           for (let item of brassBandData.data) {
-            if (item.year===year && item.name === props.selectedSchool) {
+            if (item.year === year && item.name === props.selectedSchool) {
               item.rank = brassBandRank[item.last];
               selectedBrassBandData.push(item);
               find = true;
@@ -58,10 +56,9 @@ const LineGraph = (props) => {
         }
       }
 
-
       // 野球
       // データがひとつもないときは何も表示しない
-      if (baseballData.data.length!==0) {
+      if (baseballData.data.length !== 0) {
         for (let year of YEAR_LIST) {
           let find = false;
           for (let item of baseballData.data) {
@@ -86,14 +83,8 @@ const LineGraph = (props) => {
         }
       }
 
-      const sortedBrassBandData = selectedBrassBandData.sort(
-        (a, b) => Number(a.year) - Number(b.year)
-      );
-      const sortedBaseballData = selectedBaseballData.sort(
-        (a, b) => Number(a.year) - Number(b.year)
-      );
-      setBrasbandData(sortedBrassBandData);
-      setBaseballData(sortedBaseballData);
+      setBrasbandData(selectedBrassBandData);
+      setBaseballData(selectedBaseballData);
     })();
   }, [props.selectedSchool]);
 
@@ -107,14 +98,13 @@ const LineGraph = (props) => {
   const wLen = 75; //contentWidth / YEAR;
   const hLen = 20;
   const chartHeight = hLen * 4;
-  const p = 20;
+  const p = 0;
   const chartWidth = p * 2 + wLen * (YEAR - 1);
   const r = 5;
 
-
   return (
     <div>
-      <h1>{props.selectedSchool}</h1>
+      <h2>{props.selectedSchool}</h2>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         <g>
           <g>
@@ -166,7 +156,7 @@ const LineGraph = (props) => {
               return (
                 <g key={rank}>
                   <line
-                    x1={chartWidth+5}
+                    x1={chartWidth + 5}
                     x2={chartWidth}
                     y1={chartHeight - idx * hLen}
                     y2={chartHeight - idx * hLen}
@@ -174,7 +164,7 @@ const LineGraph = (props) => {
                     stroke={"black"}
                   ></line>
                   <text
-                    x={chartWidth+20}
+                    x={chartWidth + 20}
                     y={chartHeight - idx * hLen}
                     stroke="none"
                     textAnchor="middle"
@@ -189,14 +179,41 @@ const LineGraph = (props) => {
             })}
           </g>
 
-          <line
-            x1={0}
-            x2={chartWidth}
-            y1={chartHeight}
-            y2={chartHeight}
-            strokeWidth={0.5}
-            stroke={"black"}
-          />
+          <g>
+            <line
+              x1={0}
+              x2={chartWidth}
+              y1={chartHeight}
+              y2={chartHeight}
+              strokeWidth={0.5}
+              stroke={"black"}
+            />
+            {YEAR_LIST.map((year, idx) => {
+              return (
+                <g key={year}>
+                  <line
+                    x1={p + wLen * idx}
+                    x2={p + wLen * idx}
+                    y1={chartHeight }
+                    y2={chartHeight + 5}
+                    strokeWidth={0.5}
+                    stroke={"black"}
+                  ></line>
+                  <text
+                    x={p + wLen * idx}
+                    y={chartHeight + 10}
+                    stroke="none"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={7}
+                    fill="black"
+                  >
+                    {year}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
         </g>
 
         <g>
