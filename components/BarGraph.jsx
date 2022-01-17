@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
 import { prefectureName, hokkaidoChikuName } from "../data/prefecture";
-import Tooltip from "@mui/material/Tooltip";
+import {
+  Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const BarGraph = (props) => {
   const [showData, setShowData] = useState(null);
   const [representative, setRepresentative] = useState("false"); // 代表かどうか
+  const [arrangement, setArrangement] = useState("default");
+  const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
   const [colLen, setColLen] = useState(null);
   const [len, setLen] = useState(null);
 
   const DOUBLE = 0;
   const BASEBALL = 1;
   const BRASSBAND = 2;
+
+  const ARRANGEMENT = ["default", "昇順", "降順"];
 
   const color = ["#ba70ff", "#70ffff", "#ff70ff"];
 
@@ -175,20 +185,46 @@ const BarGraph = (props) => {
       }
 
       // 並べ替え
-      for (const prefecture of Object.keys(selectedData)) {
-        const tmp = [];
-        for (const name of Object.keys(selectedData[prefecture])) {
-          tmp.push({
-            name,
-            club: selectedData[prefecture][name],
-          });
+      if (arrangement === "default") {
+        for (const prefecture of Object.keys(selectedData)) {
+          const tmp = [];
+          for (const name of Object.keys(selectedData[prefecture])) {
+            tmp.push({
+              name,
+              club: selectedData[prefecture][name],
+            });
+          }
+          selectedData[prefecture] = tmp;
+          selectedData[prefecture].sort((a, b) => a.club - b.club); // 共通/甲子園/吹奏楽の順に並び替え
         }
-        selectedData[prefecture] = tmp;
-        selectedData[prefecture].sort((a, b) => a.club - b.club);
+        setArrangementPrefecture(prefectureName);
+      } else {
+        const aaa = [];
+        for (const prefecture of Object.keys(selectedData)) {
+          const tmp = [];
+          let cnt = 0;
+          for (const name of Object.keys(selectedData[prefecture])) {
+            if (selectedData[prefecture][name] === 0) ++cnt;
+            tmp.push({
+              name,
+              club: selectedData[prefecture][name],
+            });
+          }
+          aaa.push({ prefecture, cnt });
+          selectedData[prefecture] = tmp;
+          selectedData[prefecture].sort((a, b) => a.club - b.club); // 共通/甲子園/吹奏楽の順に並び替え
+        }
+        if (arrangement === "昇順") aaa.sort((a, b) => a.cnt - b.cnt);
+        else aaa.sort((a, b) => b.cnt - a.cnt);
+        const bbb = [];
+        aaa.map((a, i) => {
+          bbb.push(a.prefecture);
+        });
+        setArrangementPrefecture(bbb);
       }
       setShowData(selectedData);
     })();
-  }, [representative]);
+  }, [representative, arrangement]);
 
   useEffect(() => {
     console.log(showData);
@@ -286,42 +322,48 @@ const BarGraph = (props) => {
 
   return (
     <>
-      <div>
-        <label>
-          <input
-            type="radio"
-            value={"true"}
-            onChange={(e) => setRepresentative(e.target.value)}
-            checked={representative === "true"}
-          />
-          代表
-        </label>
-        <label>
-          <input
-            type="radio"
-            value={"false"}
-            onChange={(e) => setRepresentative(e.target.value)}
-            checked={representative === "false"}
-          />
-          金賞
-        </label>
-        <select
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
+        <Select
+          labelId="prefecture-select-label"
+          id="prefecture-select"
           value={props.selectedPrefecture}
+          label="Prefecture"
           onChange={(e) => props.changePrefecture(e.target.value)}
+          sx={{ fontSize: 12 }}
         >
           {prefectureName.map((p, i) => {
-            {
-              return (
-                <option key={i} value={p.slice(0, -1)}>
-                  {p}
-                </option>
-              );
-            }
+            const name = p;
+            return (
+              <MenuItem key={i} value={name}>
+                {name}
+              </MenuItem>
+            );
           })}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
+      <FormControl sx={{ m: 1, minWidth: 90 }}>
+        <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
+          Arrangement
+        </InputLabel>
+        <Select
+          labelId="prefecture-select-label"
+          id="prefecture-select"
+          value={arrangement}
+          label="Prefecture"
+          onChange={(e) => setArrangement(e.target.value)}
+          sx={{ fontSize: 12 }}
+        >
+          {ARRANGEMENT.map((p, i) => {
+            return (
+              <MenuItem key={i} value={p}>
+                {p}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
-        {Object.keys(showData).map((prefecture, row) => {
+        {arrangementPrefecture.map((prefecture, row) => {
           return (
             <g key={row}>
               <text
