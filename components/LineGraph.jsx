@@ -75,21 +75,21 @@ const LineGraph = (props) => {
                 find = true;
                 break;
               }
-              selectedBaseballData.push(item);
-              find = true;
-              break;
             }
           }
+          if (!find) {
+            selectedBaseballData.push({ year: year, rank: 0, name: "" });
+          }
         }
-        if (!find) {
-          selectedBaseballData.push({ year: year, rank: 0, name: "" });
-        }
+      
       }
 
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
     })();
   }, [props.selectedSchool]);
+
+  console.log(baseballData);
 
   if (
     (baseballData === null && brassBandData === null) ||
