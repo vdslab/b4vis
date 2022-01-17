@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { prefectureName , hokkaidoChikuName} from "../data/prefecture";
+import { prefectureName, hokkaidoChikuName } from "../data/prefecture";
 import Tooltip from "@mui/material/Tooltip";
 
 const BarGraph = (props) => {
@@ -35,52 +35,52 @@ const BarGraph = (props) => {
       const baseballData = await baseballRequest.json();
 
       const selectedData = {
-        北海道:{},
+        北海道: {},
         青森: {},
         岩手: {},
         宮城: {},
         秋田: {},
         山形: {},
         福島: {},
-        栃木: {},
         茨城: {},
-        千葉: {},
-        神奈川: {},
-        東京:{},
-        新潟: {},
+        栃木: {},
         群馬: {},
-        山梨: {},
         埼玉: {},
+        千葉: {},
+        東京: {},
+        神奈川: {},
+        新潟: {},
+        富山: {},
+        石川: {},
+        福井: {},
+        山梨: {},
+        長野: {},
+        岐阜: {},
+        静岡: {},
         愛知: {},
         三重: {},
-        岐阜: {},
-        長野: {},
-        静岡: {},
-        福井: {},
-        石川: {},
-        富山: {},
-        大阪: {},
-        京都: {},
-        兵庫: {},
         滋賀: {},
+        京都: {},
+        大阪: {},
+        兵庫: {},
         奈良: {},
         和歌山: {},
-        広島: {},
-        岡山: {},
-        山口: {},
         鳥取: {},
         島根: {},
-        香川: {},
-        高知: {},
-        愛媛: {},
+        岡山: {},
+        広島: {},
+        山口: {},
         徳島: {},
+        香川: {},
+        愛媛: {},
+        高知: {},
         福岡: {},
         佐賀: {},
         長崎: {},
         熊本: {},
-        鹿児島: {},
-        宮崎: {},
         大分: {},
+        宮崎: {},
+        鹿児島: {},
         沖縄: {},
       };
 
@@ -99,18 +99,23 @@ const BarGraph = (props) => {
               continue;
           }
           // 重複が無いようにsetで持っておく
-          selectedData[item["prefecture"].slice(0, -1)][item["name"]] = BRASSBAND;
-        } else if(hokkaidoChikuName.find((name)=>name===item["prefecture"]) && item["last"]!=="都道府県"){
+          selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
+            BRASSBAND;
+        } else if (
+          hokkaidoChikuName.find((name) => name === item["prefecture"]) &&
+          item["last"] !== "都道府県"
+        ) {
           //北海道
           if (representative === "false") {
-            if (item["prize"] !== "金賞")
-              continue;
+            if (item["prize"] !== "金賞") continue;
           } else {
-            if (item["representative"] === false)
-              continue;
+            if (item["representative"] === false) continue;
           }
           selectedData["北海道"][item["name"]] = BRASSBAND;
-        } else if (item["prefecture"] === "東京都" && item["last"]!=="都道府県") {
+        } else if (
+          item["prefecture"] === "東京都" &&
+          item["last"] !== "都道府県"
+        ) {
           if (representative === "false") {
             if (item["last"] === "都道府県" && item["prize"] !== "金賞")
               continue;
@@ -119,7 +124,8 @@ const BarGraph = (props) => {
               continue;
           }
           // 重複が無いようにsetで持っておく
-          selectedData[item["prefecture"].slice(0, -1)][item["name"]] = BRASSBAND;
+          selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
+            BRASSBAND;
         }
       }
 
@@ -141,32 +147,30 @@ const BarGraph = (props) => {
           } else {
             selectedData[item["prefecture"]][item["fullName"]] = BASEBALL;
           }
-        } else if(item["prefecture"] === "北北海道" || item["prefecture"] === "南北海道") {
+        } else if (
+          item["prefecture"] === "北北海道" ||
+          item["prefecture"] === "南北海道"
+        ) {
           if (Number(item["regionalBest"]) <= 4) {
-            if (
-              selectedData["北海道"].hasOwnProperty(item["fullName"])
-            ) {
-              if (
-                selectedData["北海道"][item["fullName"]] === BRASSBAND
-              )
+            if (selectedData["北海道"].hasOwnProperty(item["fullName"])) {
+              if (selectedData["北海道"][item["fullName"]] === BRASSBAND)
                 selectedData["北海道"][item["fullName"]] = DOUBLE;
             } else {
               selectedData["北海道"][item["fullName"]] = BASEBALL;
-            }   
-          } 
-        } else if (item["prefecture"] === "東東京" || item["prefecture"] === "西東京") {
+            }
+          }
+        } else if (
+          item["prefecture"] === "東東京" ||
+          item["prefecture"] === "西東京"
+        ) {
           if (Number(item["regionalBest"]) <= 4) {
-            if (
-              selectedData["東京"].hasOwnProperty(item["fullName"])
-            ) {
-              if (
-                selectedData["東京"][item["fullName"]] === BRASSBAND
-              )
+            if (selectedData["東京"].hasOwnProperty(item["fullName"])) {
+              if (selectedData["東京"][item["fullName"]] === BRASSBAND)
                 selectedData["東京"][item["fullName"]] = DOUBLE;
             } else {
               selectedData["東京"][item["fullName"]] = BASEBALL;
-            }   
-          } 
+            }
+          }
         }
       }
 
@@ -187,7 +191,7 @@ const BarGraph = (props) => {
   }, [representative]);
 
   useEffect(() => {
-    //console.log(showData);
+    console.log(showData);
   }, [showData]);
 
   // useEffect(() => {
