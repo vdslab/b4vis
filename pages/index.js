@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BarGraph from "../components/BarGraph";
 import LineGraph from "../components/LineGraph";
+import Header from "../components/Header";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -19,28 +20,32 @@ function Home() {
   };
 
   return (
-    <Container>
-      <Grid container rowSpacing={3} columnSpacing={3}>
-        <Grid item xs={12}>
-          <Paper elevation={5}>
-            <BarGraph
-              changePrefecture={changePrefecture}
-              selectedPrefecture={selectedPrefecture}
-              changeSchool={changeSchool}
-              selectedSchool={selectedSchool}
-            />
-          </Paper>
+    <div>
+      {" "}
+      <Header />
+      <Container>
+        <Grid container rowSpacing={3} columnSpacing={3}>
+          <Grid item xs={12}>
+            <Paper elevation={5}>
+              <BarGraph
+                changePrefecture={changePrefecture}
+                selectedPrefecture={selectedPrefecture}
+                changeSchool={changeSchool}
+                selectedSchool={selectedSchool}
+              />
+            </Paper>
+          </Grid>
+          <Grid item xs>
+            <Paper elevation={5}>
+              <LineGraph
+                changeSchool={changeSchool}
+                selectedSchool={selectedSchool}
+              />
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs>
-          <Paper elevation={5}>
-            <LineGraph
-              changeSchool={changeSchool}
-              selectedSchool={selectedSchool}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </div>
   );
 }
 
