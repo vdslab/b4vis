@@ -9,7 +9,10 @@ import {
 } from "@mui/material";
 
 const BarGraph = (props) => {
+  const [brassbandData, setBrassbandData] = useState(null);
+  const [baseballData, setBaseballData] = useState(null);
   const [showData, setShowData] = useState(null);
+  const [showYearData, setShowYearData] = useState(null);
   const [representative, setRepresentative] = useState("false"); // 代表かどうか
   const [arrangement, setArrangement] = useState("default");
   const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
@@ -37,13 +40,16 @@ const BarGraph = (props) => {
   const svgHeight = margin.top + margin.bottom + contentHeight;
 
   useEffect(() => {
-    (async () => {
-      const brassbandRequest = await fetch("data/barassBand.json");
-      const brassbandData = await brassbandRequest.json();
+    fetch("data/barassBand.json")
+      .then((res) => res.json())
+      .then((res) => setBrassbandData(res));
+    fetch("data/baseball.json")
+      .then((res) => res.json())
+      .then((res) => setBaseballData(res));
+  }, []);
 
-      const baseballRequest = await fetch("data/baseball.json");
-      const baseballData = await baseballRequest.json();
-
+  useEffect(() => {
+    if (baseballData && brassbandData) {
       const selectedData = {
         北海道: {},
         青森: {},
@@ -223,98 +229,88 @@ const BarGraph = (props) => {
         setArrangementPrefecture(bbb);
       }
       setShowData(selectedData);
-    })();
-  }, [representative, arrangement]);
+    }
+  }, [baseballData, brassbandData, arrangement]);
 
   useEffect(() => {
-    console.log(showData);
-  }, [showData]);
+    if (baseballData && brassbandData) {
+      const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const brassbandRequest = await fetch("data/barassBand.json");
-  //     const brassbandData = await brassbandRequest.json();
+      //吹奏楽
+      for (let item of brassbandData) {
+        //都道府県大会以上進出
+        if (
+          item["prefecture"].substr(0, item["prefecture"].length - 1) ===
+            props.selectedPrefecture &&
+          item["last"] !== "地区"
+        ) {
+          if (representative === "false") {
+            //都道府県で金賞以外のものは除外
+            if (
+              item["last"] === "都道府県" &&
+              (item["prize"] === "銀賞" || item["prize"] === "銅賞")
+            ) {
+              continue;
+            }
+          } else {
+            //代表以外のものは除外
+            if (
+              item["last"] === "都道府県" &&
+              item["representative"] === false
+            ) {
+              continue;
+            }
+          }
+          item["club"] = BRASSBAND;
+          selectedData[item["year"]].push(item);
+        }
+      }
 
-  //     const baseballRequest = await fetch("data/baseball.json");
-  //     const baseballData = await baseballRequest.json();
+      //野球
+      for (let item of baseballData) {
+        if (item["prefecture"] === props.selectedPrefecture) {
+          let find = false;
+          for (let showItem of selectedData[item["year"]]) {
+            //吹奏楽のデータがすでにある場合
+            if (showItem["name"] === item["fullName"]) {
+              showItem["club"] = DOUBLE;
+              showItem["nationalBest"] = item["nationalBest"];
+              showItem["regionalBest"] = item["regionalBest"];
+              find = true;
+              break;
+            }
+          }
+          if (!find) {
+            const data = {
+              name:
+                item["fullName"] !== "" ? item["fullName"] : item["shortName"],
+              nationalBest: item["nationalBest"],
+              regionalBest: item["regionalBest"],
+              club: BASEBALL,
+            };
+            selectedData[item["year"]].push(data);
+          }
+        }
+      }
 
-  //     const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
+      //並び替え(野球/両方/吹奏楽)
+      for (let year of Object.keys(selectedData)) {
+        selectedData[year].sort((a, b) => a.club - b.club);
+      }
 
-  //     //吹奏楽
-  //     for (let item of brassbandData) {
-  //       //都道府県大会以上進出
-  //       if (
-  //         item["prefecture"].substr(0, item["prefecture"].length - 1) ===
-  //           props.selectedPrefecture &&
-  //         item["last"] !== "地区"
-  //       ) {
-  //         if (representative === "false") {
-  //           //都道府県で金賞以外のものは除外
-  //           if (
-  //             item["last"] === "都道府県" &&
-  //             (item["prize"] === "銀賞" || item["prize"] === "銅賞")
-  //           ) {
-  //             continue;
-  //           }
-  //         } else {
-  //           //代表以外のものは除外
-  //           if (
-  //             item["last"] === "都道府県" &&
-  //             item["representative"] === false
-  //           ) {
-  //             continue;
-  //           }
-  //         }
-  //         item["club"] = BRASSBAND;
-  //         selectedData[item["year"]].push(item);
-  //       }
-  //     }
+      //セルの数決める
+      const colMax = Math.max(
+        ...Object.keys(selectedData).map((key) => selectedData[key].length)
+      );
+      setColLen(colMax);
 
-  //     //野球
-  //     for (let item of baseballData) {
-  //       if (item["prefecture"] === props.selectedPrefecture) {
-  //         let find = false;
-  //         for (let showItem of selectedData[item["year"]]) {
-  //           //吹奏楽のデータがすでにある場合
-  //           if (showItem["name"] === item["fullName"]) {
-  //             showItem["club"] = DOUBLE;
-  //             showItem["nationalBest"] = item["nationalBest"];
-  //             showItem["regionalBest"] = item["regionalBest"];
-  //             find = true;
-  //             break;
-  //           }
-  //         }
-  //         if (!find) {
-  //           const data = {
-  //             name:
-  //               item["fullName"] !== "" ? item["fullName"] : item["shortName"],
-  //             nationalBest: item["nationalBest"],
-  //             regionalBest: item["regionalBest"],
-  //             club: BASEBALL,
-  //           };
-  //           selectedData[item["year"]].push(data);
-  //         }
-  //       }
-  //     }
+      //セルの１辺の長さ
+      const l = Math.min(contentHeight / 6, Math.floor(svgWidth / colMax));
+      setLen(l);
 
-  //     //並び替え(野球/両方/吹奏楽)
-  //     for (let year of Object.keys(selectedData)) {
-  //       selectedData[year].sort((a, b) => a.club - b.club);
-  //     }
-
-  //     //セルの数決める
-  //     const colMax = Math.max(
-  //       ...Object.keys(selectedData).map((key) => selectedData[key].length)
-  //     );
-  //     setColLen(colMax);
-
-  //     //セルの１辺の長さ
-  //     const l = Math.min(contentHeight / 6, Math.floor(svgWidth / colMax));
-  //     setLen(l);
-
-  //     setShowData(selectedData);
-  //   })();
-  // }, [props.selectedPrefecture, representative, svgWidth]);
+      setShowYearData(selectedData);
+    }
+  }, [props.selectedPrefecture, baseballData, brassbandData, svgWidth]);
 
   if (!showData) {
     return <div>loading...</div>;
@@ -365,7 +361,7 @@ const BarGraph = (props) => {
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         {arrangementPrefecture.map((prefecture, row) => {
           return (
-            <g key={row}>
+            <g key={row} onClick={() => props.changePrefecture(prefecture)}>
               <text
                 x={0}
                 y={13 * row * 2 + 1}
@@ -402,7 +398,9 @@ const BarGraph = (props) => {
             </g>
           );
         })}
-        {/* {Object.keys(showData)
+      </svg>
+      <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
+        {Object.keys(showYearData)
           .reverse()
           .map((year, row) => {
             return (
@@ -417,7 +415,7 @@ const BarGraph = (props) => {
                 >
                   {year}
                 </text>
-                {showData[year].map((item, col) => {
+                {showYearData[year].map((item, col) => {
                   return (
                     <Tooltip
                       title={item.name}
@@ -442,7 +440,7 @@ const BarGraph = (props) => {
                 })}
               </g>
             );
-          })} */}
+          })}
       </svg>
     </>
   );
