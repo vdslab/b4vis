@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
-import { prefectureName, hokkaidoChikuName } from "../data/prefecture";
-import {
-  Tooltip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { prefectureName } from "../data/prefecture";
+import { Tooltip, FormControl, Select, MenuItem } from "@mui/material";
 
 const YearBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
@@ -19,8 +13,6 @@ const YearBarGraph = (props) => {
   const DOUBLE = 0;
   const BASEBALL = 1;
   const BRASSBAND = 2;
-
-  const ARRANGEMENT = ["default", "昇順", "降順"];
 
   const color = ["#ba70ff", "#70ffff", "#ff70ff"];
 
@@ -37,13 +29,9 @@ const YearBarGraph = (props) => {
   const svgHeight = margin.top + margin.bottom + contentHeight;
 
   useEffect(() => {
-    fetch("data/barassBand.json")
-      .then((res) => res.json())
-      .then((res) => setBrassbandData(res));
-    fetch("data/baseball.json")
-      .then((res) => res.json())
-      .then((res) => setBaseballData(res));
-  }, []);
+    setBrassbandData(props.data?.brassbandData);
+    setBaseballData(props.data?.baseballData);
+  }, [props]);
 
   useEffect(() => {
     if (baseballData && brassbandData) {

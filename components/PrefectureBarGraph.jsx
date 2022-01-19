@@ -39,13 +39,9 @@ const PrefectureBarGraph = (props) => {
   const svgHeight = margin.top + margin.bottom + contentHeight;
 
   useEffect(() => {
-    fetch("data/barassBand.json")
-      .then((res) => res.json())
-      .then((res) => setBrassbandData(res));
-    fetch("data/baseball.json")
-      .then((res) => res.json())
-      .then((res) => setBaseballData(res));
-  }, []);
+    setBrassbandData(props.data?.brassbandData);
+    setBaseballData(props.data?.baseballData);
+  }, [props]);
 
   useEffect(() => {
     if (baseballData && brassbandData) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PrefectureBarGraph from "../components/PrefectureBarGraph";
 import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import { Grid, Paper, Container } from "@mui/material";
 
 function Home() {
+  const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
 
@@ -18,6 +19,19 @@ function Home() {
     setSelectedSchool(school);
   };
 
+  // TODO DBからデータ取ってきてgetStaticProps使う
+  useEffect(() => {
+    (async () => {
+      const brassbandData = await fetch("data/barassBand.json").then((res) =>
+        res.json()
+      );
+      const baseballData = await fetch("data/baseball.json").then((res) =>
+        res.json()
+      );
+      setData({ brassbandData, baseballData });
+    })();
+  }, []);
+
   return (
     <div>
       <Header />
@@ -26,6 +40,7 @@ function Home() {
           <Grid item xs={8}>
             <Paper elevation={5}>
               <PrefectureBarGraph
+                data={data}
                 changePrefecture={changePrefecture}
                 selectedPrefecture={selectedPrefecture}
                 changeSchool={changeSchool}
@@ -37,6 +52,7 @@ function Home() {
             <Grid item xs>
               <Paper elevation={5}>
                 <YearBarGraph
+                  data={data}
                   changePrefecture={changePrefecture}
                   selectedPrefecture={selectedPrefecture}
                   changeSchool={changeSchool}
