@@ -16,7 +16,7 @@ const LineGraph = (props) => {
   const [baseballData, setBaseballData] = useState(null);
   const [sameRankYear, setSameYear] = useState(null);
   const margin = {
-    top: 10,
+    top: 30,
     bottom: 10,
     left: 40,
     right: 40,
@@ -107,6 +107,9 @@ const LineGraph = (props) => {
         }
       }
 
+      /**
+       * 吹奏楽と野球でランクが同じ年があるかどうかを返す
+       **/
       function getHasSameYear(itemYear, itemRank) {
         const hasSameYear = Object.keys(brassBandYear).some((year) => {
           if (
@@ -150,6 +153,129 @@ const LineGraph = (props) => {
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         <g>
           <g>
+            {/**吹奏楽レジェンド */}
+            <text
+              x={-10}
+              y={-22.5}
+              stroke="none"
+              textAnchor="start"
+              dominantBaseline="central"
+              fontSize={9}
+              fill="black"
+            >
+              吹奏楽受賞結果
+            </text>
+            {Object.keys(prizeColor).map((color, idx) => {
+              return (
+                <g key={color}>
+                  <circle
+                    cx={p + 15 + 30 * idx}
+                    cy={-10}
+                    r={r}
+                    stroke={"black"}
+                    strokeWidth={0.5}
+                    fill={prizeColor[color]}
+                  />
+                  <text
+                    x={p + 30 * idx}
+                    y={-10}
+                    stroke="none"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize={7}
+                    fill="black"
+                  >
+                    {color}:
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        </g>
+
+        <g>
+          <text
+            x={chartWidth-75+20}
+            y={-22.5}
+            stroke="none"
+            textAnchor="start"
+            dominantBaseline="central"
+            fontSize={9}
+            fill="black"
+          >
+            甲子園ランキング
+          </text>
+
+          <g>
+            <text
+              x={chartWidth-75+20}
+              y={-10}
+              stroke="none"
+              textAnchor="start"
+              dominantBaseline="central"
+              fontSize={7}
+              fill="black"
+            >
+              ランキング順位:
+            </text>
+            <circle
+              cx={chartWidth-17.5+20}
+              cy={-10}
+              r={r}
+              stroke={"black"}
+              strokeWidth={0.5}
+              fill={"white"}
+            />
+             <text
+              x={chartWidth-17.5+20}
+              y={-10}
+              stroke="none"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={7}
+              fill="black"
+            >
+              4
+            </text>
+          </g>
+
+          <g>
+            <text
+              x={chartWidth-10+20}
+              y={-10}
+              stroke="none"
+              textAnchor="start"
+              dominantBaseline="central"
+              fontSize={7}
+              fill="black"
+            >
+              順位不明:
+            </text>
+            <circle
+              cx={chartWidth+27+20}
+              cy={-10}
+              r={r}
+              stroke={"black"}
+              strokeWidth={0.5}
+              fill={"white"}
+            />
+             <text
+              x={chartWidth+27+20}
+              y={-10}
+              stroke="none"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={7}
+              fill="black"
+            >
+              ー
+            </text>
+          </g>
+        </g>
+
+        <g>
+          <g>
+            {/* 縦軸：吹奏楽 */}
             <line
               x1={0}
               x2={0}
@@ -186,6 +312,7 @@ const LineGraph = (props) => {
           </g>
 
           <g>
+            {/* 縦軸：野球 */}
             <line
               x1={chartWidth}
               x2={chartWidth}
@@ -222,6 +349,7 @@ const LineGraph = (props) => {
           </g>
 
           <g>
+            {/* 横軸 */}
             <line
               x1={0}
               x2={chartWidth}
