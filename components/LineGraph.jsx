@@ -4,11 +4,17 @@ const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
 // todo 北海道東京
 const brassBandRank = { 地区: 0, 都道府県: 1, 支部: 2, 全国: 3 };
 const baseBallRank = { 地区ベスト8位下: 0, 地区ベスト8: 1, " ": 2, 甲子園: 3 };
-const prizeColor = {金賞:"#e6b422",銀賞:"#B2BABA",銅賞:"#815a2b"}
+const prizeColor = {
+  金賞: "#e6b422",
+  銀賞: "#B2BABA",
+  銅賞: "#b59064",
+  不明: "#d6bfd6",
+};
 
 const LineGraph = (props) => {
   const [brassBandData, setBrasbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
+  const [sameRankYear, setSameYear] = useState(null);
   const margin = {
     top: 10,
     bottom: 10,
@@ -38,6 +44,9 @@ const LineGraph = (props) => {
       const selectedBrassBandData = [];
       const selectedBaseballData = [];
 
+      const brassBandYear = {};
+      const sameYear = [];
+
       // 吹奏楽
       // データがひとつもないときは何も表示しない
       if (brassBandData.data.length !== 0) {
@@ -47,11 +56,13 @@ const LineGraph = (props) => {
             if (item.year === year && item.name === props.selectedSchool) {
               item.rank = brassBandRank[item.last];
               selectedBrassBandData.push(item);
+              brassBandYear[item.year] = { rank: item.rank };
               find = true;
               break;
             }
           }
           if (!find) {
+            brassBandYear[year] = { rank: 0 };
             selectedBrassBandData.push({ year: year, rank: 0, name: "" });
           }
         }
@@ -65,7 +76,7 @@ const LineGraph = (props) => {
           for (let item of baseballData.data) {
             if (item.year === year) {
               if (item.name === props.selectedSchool) {
-                if (item.nationalbest !== "") {
+                if (item.nationalbest !== null) {
                   item.rank = 3;
                 } else if (item.regionalbest <= 8) {
                   item.rank = 1;
@@ -74,24 +85,50 @@ const LineGraph = (props) => {
                 }
                 selectedBaseballData.push(item);
                 find = true;
+
+                if (getHasSameYear(item.year, item.rank)) {
+                  sameYear.push(year);
+                }
                 break;
               }
             }
           }
           if (!find) {
-            selectedBaseballData.push({ year: year, rank: 0, name: "" });
+            selectedBaseballData.push({
+              year: year,
+              rank: 0,
+              name: "",
+              regionalbest: "-",
+            });
+            if (getHasSameYear(year, 0)) {
+              sameYear.push(year);
+            }
           }
         }
-      
+      }
+
+      function getHasSameYear(itemYear, itemRank) {
+        const hasSameYear = Object.keys(brassBandYear).some((year) => {
+          if (
+            Number(year) === itemYear &&
+            brassBandYear[year]["rank"] === itemRank
+          ) {
+            return true;
+          }
+          return false;
+        });
+        return hasSameYear;
       }
 
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
+      setSameYear(sameYear);
     })();
   }, [props.selectedSchool]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
+  //console.log("year", sameRankYear);
 
   if (
     (baseballData === null && brassBandData === null) ||
@@ -199,7 +236,7 @@ const LineGraph = (props) => {
                   <line
                     x1={p + wLen * idx}
                     x2={p + wLen * idx}
-                    y1={chartHeight }
+                    y1={chartHeight}
                     y2={chartHeight + 5}
                     strokeWidth={0.5}
                     stroke={"black"}
@@ -232,23 +269,9 @@ const LineGraph = (props) => {
                     y1={chartHeight - result.rank * hLen}
                     y2={chartHeight - brassBandData[idx + 1].rank * hLen}
                     strokeWidth={1}
-                    stroke={"red"}
+                    stroke={"#ff70ff"}
                   />
                 )}
-              </g>
-            );
-          })}
-          {brassBandData.map((result, idx) => {
-            return (
-              <g key={result.name + result.year}>
-                <circle
-                  // TODO:完全に被るとわからなくなる
-                  cx={p + wLen * idx}
-                  cy={chartHeight - result.rank * hLen}
-                  r={r}
-                  // TODO:データなしの色
-                  fill={prizeColor[result.prize]}
-                />
               </g>
             );
           })}
@@ -265,22 +288,61 @@ const LineGraph = (props) => {
                     y1={chartHeight - result.rank * hLen}
                     y2={chartHeight - baseballData[idx + 1].rank * hLen}
                     strokeWidth={1}
-                    stroke={"skyblue"}
+                    strokeOpacity={0.5}
+                    stroke={"#0EB9EC"}
                   />
                 )}
               </g>
             );
           })}
-          {baseballData?.map((result, idx) => {
-            console.log(result.rank);
+        </g>
+
+        <g>
+          {brassBandData.map((result, idx) => {
             return (
               <g key={result.name + result.year}>
                 <circle
                   cx={p + wLen * idx}
                   cy={chartHeight - result.rank * hLen}
                   r={r}
-                  fill={"blue"}
+                  stroke={"black"}
+                  strokeWidth={0.5}
+                  fill={prizeColor[result.prize ? result.prize : "不明"]}
                 />
+              </g>
+            );
+          })}
+        </g>
+
+        <g>
+          {baseballData?.map((result, idx) => {
+            return (
+              <g key={result.name + result.year}>
+                <circle
+                  cx={p + wLen * idx}
+                  cy={chartHeight - result.rank * hLen}
+                  r={r}
+                  stroke={"black"}
+                  strokeWidth={0.5}
+                  fill={
+                    sameRankYear.find((year) => year === result.year)
+                      ? "none"
+                      : "white"
+                  }
+                />
+                <text
+                  x={p + wLen * idx}
+                  y={chartHeight - result.rank * hLen}
+                  stroke="none"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={7}
+                  fill="black"
+                >
+                  {result.nationalbest
+                    ? result.nationalbest
+                    : result.regionalbest}
+                </text>
               </g>
             );
           })}
