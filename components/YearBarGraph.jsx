@@ -5,6 +5,7 @@ import { Tooltip, FormControl, Select, MenuItem } from "@mui/material";
 const YearBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
+  const [selectedSchool, setSelectedSchool] = useState(null);
   const [showData, setShowData] = useState(null);
   const [representative, setRepresentative] = useState("false"); // 代表かどうか
   const [colLen, setColLen] = useState(null);
@@ -111,7 +112,7 @@ const YearBarGraph = (props) => {
 
       setShowData(selectedData);
     }
-  }, [props.selectedPrefecture, baseballData, brassbandData, svgWidth]);
+  }, [props.selectedPrefecture, baseballData, brassbandData]);
 
   if (!showData) {
     return <div>loading...</div>;
@@ -170,10 +171,16 @@ const YearBarGraph = (props) => {
                         width={len}
                         height={len}
                         stroke="lightgray"
-                        fill={color[item.club]}
+                        fill={
+                          item.name === selectedSchool
+                            ? "red"
+                            : color[item.club]
+                        }
                         onClick={() => {
                           props.changeSchool(item.name);
                         }}
+                        onMouseOver={() => setSelectedSchool(item.name)}
+                        onMouseOut={() => setSelectedSchool(null)}
                       />
                     </Tooltip>
                   );
