@@ -1,11 +1,10 @@
 import { useState } from "react";
-import BarGraph from "../components/BarGraph";
+import PrefectureBarGraph from "../components/PrefectureBarGraph";
+import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
 
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
+import { Grid, Paper, Container } from "@mui/material";
 
 function Home() {
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
@@ -22,11 +21,11 @@ function Home() {
   return (
     <div>
       <Header />
-      <Container>
-        <Grid container rowSpacing={3} columnSpacing={3}>
+      <Container sx={{ mt: 1, mb: 1 }}>
+        <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid item xs={8}>
             <Paper elevation={5}>
-              <BarGraph
+              <PrefectureBarGraph
                 changePrefecture={changePrefecture}
                 selectedPrefecture={selectedPrefecture}
                 changeSchool={changeSchool}
@@ -35,9 +34,17 @@ function Home() {
             </Paper>
           </Grid>
           <Grid item xs={4}>
-            <Grid>
-              <Paper elevation={5}>年のやつ</Paper>
+            <Grid item xs>
+              <Paper elevation={5}>
+                <YearBarGraph
+                  changePrefecture={changePrefecture}
+                  selectedPrefecture={selectedPrefecture}
+                  changeSchool={changeSchool}
+                  selectedSchool={selectedSchool}
+                />
+              </Paper>
             </Grid>
+            {/* TODO: LineGraphのデータがないときにmarginがでないのをどうにかする */}
             <Grid item xs>
               <Paper elevation={5}>
                 <LineGraph
