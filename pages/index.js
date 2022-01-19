@@ -21,11 +21,10 @@ function Home() {
 
   return (
     <div>
-      {" "}
       <Header />
       <Container>
         <Grid container rowSpacing={3} columnSpacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={8}>
             <Paper elevation={5}>
               <BarGraph
                 changePrefecture={changePrefecture}
@@ -35,13 +34,18 @@ function Home() {
               />
             </Paper>
           </Grid>
-          <Grid item xs>
-            <Paper elevation={5}>
-              <LineGraph
-                changeSchool={changeSchool}
-                selectedSchool={selectedSchool}
-              />
-            </Paper>
+          <Grid item xs={4}>
+            <Grid>
+              <Paper elevation={5}>年のやつ</Paper>
+            </Grid>
+            <Grid item xs>
+              <Paper elevation={5}>
+                <LineGraph
+                  changeSchool={changeSchool}
+                  selectedSchool={selectedSchool}
+                />
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
       </Container>
