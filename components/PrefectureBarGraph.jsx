@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { prefectureName, hokkaidoChikuName } from "../data/prefecture";
+import { prefectureName } from "../data/prefecture";
 import {
   Tooltip,
   FormControl,
@@ -12,11 +12,8 @@ const PrefectureBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [showData, setShowData] = useState(null);
-  const [representative, setRepresentative] = useState("false"); // 代表かどうか
   const [arrangement, setArrangement] = useState("default");
   const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
-  // const [colLen, setColLen] = useState(null);
-  // const [len, setLen] = useState(null);
 
   const DOUBLE = 0;
   const BASEBALL = 1;
@@ -97,29 +94,28 @@ const PrefectureBarGraph = (props) => {
 
       // 吹奏楽
       for (const item of brassbandData) {
-        if (
-          item["last"] !== "地区" &&
-          item["prefecture"].slice(-2) !== "地区" &&
-          item["prefecture"] !== "東京都"
-        ) {
-          if (item["last"] === "都道府県" && item["prize"] !== "金賞") continue;
-          // 重複が無いようにsetで持っておく
-          selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-            BRASSBAND;
-        } else if (
-          item["last"] !== "地区" &&
-          item["prefecture"].slice(-2) === "地区"
-        ) {
-          //北海道
-          if (item["last"] === "都道府県") continue;
-          if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
-          selectedData["北海道"][item["name"]] = BRASSBAND;
-        } else if (item["last"] !== "地区" && item["prefecture"] === "東京都") {
-          if (item["last"] === "都道府県") continue;
-          if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
-          // 重複が無いようにsetで持っておく
-          selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-            BRASSBAND;
+        if (item["last"] !== "地区") {
+          if (
+            item["prefecture"].slice(-2) !== "地区" &&
+            item["prefecture"] !== "東京都"
+          ) {
+            if (item["last"] === "都道府県" && item["prize"] !== "金賞")
+              continue;
+            // 重複が無いようにsetで持っておく
+            selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
+              BRASSBAND;
+          } else if (item["prefecture"].slice(-2) === "地区") {
+            //北海道
+            if (item["last"] === "都道府県") continue;
+            if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
+            selectedData["北海道"][item["name"]] = BRASSBAND;
+          } else if (item["prefecture"] === "東京都") {
+            if (item["last"] === "都道府県") continue;
+            if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
+            // 重複が無いようにsetで持っておく
+            selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
+              BRASSBAND;
+          }
         }
       }
 
