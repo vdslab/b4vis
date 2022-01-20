@@ -98,42 +98,25 @@ const PrefectureBarGraph = (props) => {
       // 吹奏楽
       for (const item of brassbandData) {
         if (
+          item["last"] !== "地区" &&
           item["prefecture"].slice(-2) !== "地区" &&
-          item["prefecture"] !== "東京都" &&
-          item["last"] !== "地区"
+          item["prefecture"] !== "東京都"
         ) {
-          if (representative === "false") {
-            if (item["last"] === "都道府県" && item["prize"] !== "金賞")
-              continue;
-          } else {
-            if (item["last"] === "都道府県" && item["representative"] === false)
-              continue;
-          }
+          if (item["last"] === "都道府県" && item["prize"] !== "金賞") continue;
           // 重複が無いようにsetで持っておく
           selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
             BRASSBAND;
         } else if (
-          hokkaidoChikuName.find((name) => name === item["prefecture"]) &&
-          item["last"] !== "都道府県"
+          item["last"] !== "地区" &&
+          item["prefecture"].slice(-2) === "地区"
         ) {
           //北海道
-          if (representative === "false") {
-            if (item["prize"] !== "金賞") continue;
-          } else {
-            if (item["representative"] === false) continue;
-          }
+          if (item["last"] === "都道府県") continue;
+          if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
           selectedData["北海道"][item["name"]] = BRASSBAND;
-        } else if (
-          item["prefecture"] === "東京都" &&
-          item["last"] !== "都道府県"
-        ) {
-          if (representative === "false") {
-            if (item["last"] === "都道府県" && item["prize"] !== "金賞")
-              continue;
-          } else {
-            if (item["last"] === "都道府県" && item["representative"] === false)
-              continue;
-          }
+        } else if (item["last"] !== "地区" && item["prefecture"] === "東京都") {
+          if (item["last"] === "都道府県") continue;
+          if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
           // 重複が無いようにsetで持っておく
           selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
             BRASSBAND;

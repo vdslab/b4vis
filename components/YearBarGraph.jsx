@@ -7,7 +7,6 @@ const YearBarGraph = (props) => {
   const [baseballData, setBaseballData] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [showData, setShowData] = useState(null);
-  const [representative, setRepresentative] = useState("false"); // 代表かどうか
   const [colLen, setColLen] = useState(null);
   const [len, setLen] = useState(null);
 
@@ -39,29 +38,34 @@ const YearBarGraph = (props) => {
       const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
 
       //吹奏楽
-      for (let item of brassbandData) {
-        //都道府県大会以上進出
-        if (
-          item["prefecture"].substr(0, item["prefecture"].length - 1) ===
-            props.selectedPrefecture &&
-          item["last"] !== "地区"
-        ) {
-          if (representative === "false") {
-            //都道府県で金賞以外のものは除外
-            if (
-              item["last"] === "都道府県" &&
-              (item["prize"] === "銀賞" || item["prize"] === "銅賞")
-            ) {
-              continue;
+      for (const item of brassbandData) {
+        // 地区大会は除外
+        if (item["last"] !== "地区") {
+          if (item["prefecture"].slice(0, -1) === props.selectedPrefecture) {
+            // 北海道以外
+            if (props.selectedPrefecture !== "東京") {
+              // 東京以外
+              // 都道府県でも銀賞以下は除外
+              if (item["last"] === "都道府県" && item["prize"] !== "金賞")
+                continue;
+            } else {
+              // 東京
+              // 都道府県大会(他でいう地区大会)は除外
+              if (item["last"] === "都道府県") continue;
+              // 支部でも銀賞以下は除外
+              if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
             }
+          } else if (
+            item["prefecture"].slice(-2) === "地区" &&
+            props.selectedPrefecture === "北海道"
+          ) {
+            // 北海道
+            // 都道府県大会(他でいう地区大会)は除外
+            if (item["last"] === "都道府県") continue;
+            // 支部でも銀賞以下は除外
+            if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
           } else {
-            //代表以外のものは除外
-            if (
-              item["last"] === "都道府県" &&
-              item["representative"] === false
-            ) {
-              continue;
-            }
+            continue;
           }
           item["club"] = BRASSBAND;
           selectedData[item["year"]].push(item);
@@ -69,15 +73,17 @@ const YearBarGraph = (props) => {
       }
 
       //野球
-      for (let item of baseballData) {
-        if (item["prefecture"] === props.selectedPrefecture) {
+      for (const item of baseballData) {
+        if (
+          item["prefecture"] === props.selectedPrefecture ||
+          (props.selectedPrefecture === item["prefecture"].slice(1) &&
+            item["regionalBest"] <= 4)
+        ) {
           let find = false;
           for (let showItem of selectedData[item["year"]]) {
             //吹奏楽のデータがすでにある場合
             if (showItem["name"] === item["fullName"]) {
               showItem["club"] = DOUBLE;
-              showItem["nationalBest"] = item["nationalBest"];
-              showItem["regionalBest"] = item["regionalBest"];
               find = true;
               break;
             }
@@ -107,7 +113,7 @@ const YearBarGraph = (props) => {
       setColLen(colMax);
 
       //セルの１辺の長さ
-      const l = Math.min(contentHeight / 6, Math.floor(svgWidth / colMax));
+      const l = Math.min(contentHeight / 8, Math.floor(svgWidth / colMax));
       setLen(l);
 
       setShowData(selectedData);
