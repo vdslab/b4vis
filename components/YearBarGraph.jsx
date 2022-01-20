@@ -22,8 +22,8 @@ const YearBarGraph = (props) => {
     left: 10,
     right: 10,
   };
-  const contentWidth = 1400;
-  const contentHeight = 1200;
+  const contentWidth = 350;
+  const contentHeight = 200;
 
   const svgWidth = margin.left + margin.right + contentWidth;
   const svgHeight = margin.top + margin.bottom + contentHeight;
@@ -80,7 +80,7 @@ const YearBarGraph = (props) => {
             item["regionalBest"] <= 4)
         ) {
           let find = false;
-          for (let showItem of selectedData[item["year"]]) {
+          for (const showItem of selectedData[item["year"]]) {
             //吹奏楽のデータがすでにある場合
             if (showItem["name"] === item["fullName"]) {
               showItem["club"] = DOUBLE;
@@ -90,10 +90,7 @@ const YearBarGraph = (props) => {
           }
           if (!find) {
             const data = {
-              name:
-                item["fullName"] !== "" ? item["fullName"] : item["shortName"],
-              nationalBest: item["nationalBest"],
-              regionalBest: item["regionalBest"],
+              name: item["fullName"] || item["shortName"],
               club: BASEBALL,
             };
             selectedData[item["year"]].push(data);
@@ -102,18 +99,21 @@ const YearBarGraph = (props) => {
       }
 
       //並び替え(野球/両方/吹奏楽)
-      for (let year of Object.keys(selectedData)) {
+      for (const year of Object.keys(selectedData)) {
         selectedData[year].sort((a, b) => a.club - b.club);
       }
 
-      //セルの数決める
-      const colMax = Math.max(
-        ...Object.keys(selectedData).map((key) => selectedData[key].length)
-      );
-      setColLen(colMax);
+      // //セルの数決める
+      // const colMax = Math.ceil(
+      //   Math.max(
+      //     ...Object.keys(selectedData).map((key) => selectedData[key].length)
+      //   ) / 2
+      // );
+      // console.log(colMax);
+      // setColLen(colMax);
 
       //セルの１辺の長さ
-      const l = Math.min(contentHeight / 8, Math.floor(svgWidth / colMax));
+      const l = svgHeight / 12;
       setLen(l);
 
       setShowData(selectedData);
@@ -154,7 +154,7 @@ const YearBarGraph = (props) => {
               <g key={year}>
                 <text
                   x={0}
-                  y={len * row + len / 2}
+                  y={len * row * 2 + len + row * 5}
                   textAnchor="start"
                   dominantBaseline="central"
                   fontSize="13"
@@ -172,8 +172,8 @@ const YearBarGraph = (props) => {
                       disableInteractive
                     >
                       <rect
-                        x={50 + len * col}
-                        y={len * row}
+                        x={50 + len * Math.floor(col / 2)}
+                        y={len * row * 2 + (col % 2) * len + row * 5}
                         width={len}
                         height={len}
                         stroke="lightgray"
@@ -185,7 +185,9 @@ const YearBarGraph = (props) => {
                         onClick={() => {
                           props.changeSchool(item.name);
                         }}
-                        onMouseOver={() => setSelectedSchool(item.name)}
+                        onMouseOver={() => {
+                          setSelectedSchool(item.name);
+                        }}
                         onMouseOut={() => setSelectedSchool(null)}
                       />
                     </Tooltip>
