@@ -35,7 +35,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <Container sx={{ mt: 1, mb: 1 }}>
+      <Container sx={{ mt: 1, mb: 1 }} maxWidth="xl">
         <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid item xs={8}>
             <Paper elevation={5}>
