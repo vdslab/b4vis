@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Box } from "@mui/system";
+
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
 // todo 北海道東京
@@ -16,14 +18,14 @@ const LineGraph = (props) => {
   const [baseballData, setBaseballData] = useState(null);
   const [sameRankYear, setSameYear] = useState(null);
   const margin = {
-    top: 30,
+    top: 40,
     bottom: 10,
     left: 40,
-    right: 40,
+    right: 45,
   };
 
   const contentWidth = 350;
-  const contentHeight = 200;
+  const contentHeight = 100;
   const svgWidth = contentWidth + margin.left + margin.right;
   const svgHeight = contentHeight + margin.top + margin.bottom;
 
@@ -137,10 +139,17 @@ const LineGraph = (props) => {
     (baseballData === null && brassBandData === null) ||
     (baseballData?.length === 0 && brassBandData?.length === 0)
   ) {
-    return <div>データがありません</div>;
+    return (
+      <Box px={{ padding: "0.5rem", height: "112.5px" }}>
+        <div style={{ fontSize: "0.75rem" }}>
+          <div>データがありません</div>
+          <div>グラフのセルをクリックして学校を選択してください</div>
+        </div>
+      </Box>
+    );
   }
 
-  const wLen = 75; //contentWidth / YEAR;
+  const wLen = 82.5; //contentWidth / YEAR;
   const hLen = 20;
   const chartHeight = hLen * 4;
   const p = 0;
@@ -148,8 +157,8 @@ const LineGraph = (props) => {
   const r = 5;
 
   return (
-    <div>
-      <h2>{props.selectedSchool}</h2>
+    <Box px={{ padding: "0.5rem" }}>
+      <div style={{ fontSize: "1rem" }}>{props.selectedSchool}</div>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         <g>
           <g>
@@ -195,7 +204,7 @@ const LineGraph = (props) => {
 
         <g>
           <text
-            x={chartWidth-75+20}
+            x={chartWidth - 75 + 20}
             y={-22.5}
             stroke="none"
             textAnchor="start"
@@ -208,7 +217,7 @@ const LineGraph = (props) => {
 
           <g>
             <text
-              x={chartWidth-75+20}
+              x={chartWidth - 75 + 20}
               y={-10}
               stroke="none"
               textAnchor="start"
@@ -219,15 +228,15 @@ const LineGraph = (props) => {
               ランキング順位:
             </text>
             <circle
-              cx={chartWidth-17.5+20}
+              cx={chartWidth - 17.5 + 20}
               cy={-10}
               r={r}
               stroke={"black"}
               strokeWidth={0.5}
               fill={"white"}
             />
-             <text
-              x={chartWidth-17.5+20}
+            <text
+              x={chartWidth - 17.5 + 20}
               y={-10}
               stroke="none"
               textAnchor="middle"
@@ -241,7 +250,7 @@ const LineGraph = (props) => {
 
           <g>
             <text
-              x={chartWidth-10+20}
+              x={chartWidth - 10 + 20}
               y={-10}
               stroke="none"
               textAnchor="start"
@@ -252,15 +261,15 @@ const LineGraph = (props) => {
               順位不明:
             </text>
             <circle
-              cx={chartWidth+27+20}
+              cx={chartWidth + 27 + 20}
               cy={-10}
               r={r}
               stroke={"black"}
               strokeWidth={0.5}
               fill={"white"}
             />
-             <text
-              x={chartWidth+27+20}
+            <text
+              x={chartWidth + 27 + 20}
               y={-10}
               stroke="none"
               textAnchor="middle"
@@ -476,7 +485,7 @@ const LineGraph = (props) => {
           })}
         </g>
       </svg>
-    </div>
+    </Box>
   );
 };
 

@@ -37,7 +37,7 @@ function Home() {
       <Header />
       <Container sx={{ mt: 1, mb: 1 }} maxWidth="xl">
         <Grid container rowSpacing={2} columnSpacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={12} md={8}>
             <Paper elevation={5}>
               <PrefectureBarGraph
                 data={data}
@@ -48,7 +48,7 @@ function Home() {
               />
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Grid container rowSpacing={2} columnSpacing={2}>
               <Grid item xs={12}>
                 <Paper elevation={5}>
