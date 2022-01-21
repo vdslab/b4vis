@@ -17,8 +17,8 @@ const YearBarGraph = (props) => {
   const color = ["#ba70ff", "#70ffff", "#ff70ff"];
 
   const margin = {
-    top: 20,
-    bottom: 20,
+    top: 10,
+    bottom: 10,
     left: 10,
     right: 10,
   };
@@ -125,7 +125,7 @@ const YearBarGraph = (props) => {
   }
 
   return (
-    <Box px={{ padding: "0.5rem" }}>
+    <Box px={{ padding: "0.5rem" , maxWidth:"450px"}}>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
         <Select
           labelId="prefecture-select-label"
@@ -196,7 +196,7 @@ const YearBarGraph = (props) => {
               </g>
             );
           })}
-      </svg>
+        </svg>
     </Box>
   );
 };

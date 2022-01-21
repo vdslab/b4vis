@@ -158,7 +158,9 @@ const LineGraph = (props) => {
 
   return (
     <Box px={{ padding: "0.5rem" }}>
-      <div style={{ fontSize: "1rem" }}>{props.selectedSchool}</div>
+      <div style={{ fontSize: "1rem", fontWeight: "bolder" }}>
+        {props.selectedSchool}
+      </div>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         <g>
           <g>
