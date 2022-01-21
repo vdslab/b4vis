@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
+import styles from "./HelpPopup.module.css";
 
 export function HelpPopup() {
   const [open, setOpen] = useState(false);
@@ -42,11 +43,11 @@ export function HelpPopup() {
               b4visでは吹奏楽コンクールと夏の甲子園で上位大会に進んだ高校を可視化します。
             </div>
 
-            <div style={{padding:"1.5rem 0 1.5rem 0"}}>
+            <div style={{ padding: "1.5rem 0 1.5rem 0" }}>
               <div>
                 左の①のビューでは、2013~2017年で以下のどちらか、または両方の結果を残した高校を表示しています。
                 左上のボタンから吹奏楽・野球ともに上位大会に進んだ学校が多い/少ない県順に並び替えることができます。
-                <ul style={{margin:"0.5rem 0 0.5rem 0"}}>
+                <ul style={{ margin: "0.5rem 0 0.5rem 0" }}>
                   <li>
                     吹奏楽コンクールで都道府県大会以上(東京・北海道は支部大会以上)の成績
                   </li>
@@ -55,7 +56,7 @@ export function HelpPopup() {
                   </li>
                 </ul>
               </div>
-              <div style={{padding:"1rem 0 1rem 0"}}>
+              <div style={{ padding: "1rem 0 1rem 0" }}>
                 グラフのセルをクリックすることでその学校のある都道府県の2013~2017年の詳細(ビュー②)とその学校の詳細(ビュー③)を見ることができます。
               </div>
               <div>
@@ -75,6 +76,7 @@ export function HelpPopup() {
               <div>
                 吹奏楽：
                 <a
+                  className={styles.link}
                   href="https://www.musicabella.jp/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -85,7 +87,12 @@ export function HelpPopup() {
               {/* TODO:まるくんに聞く */}
               <div>
                 甲子園：
-                <a href="" target="_blank" rel="noopener noreferrer">
+                <a
+                  className={styles.link}
+                  href=""
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   甲子園
                 </a>
               </div>
