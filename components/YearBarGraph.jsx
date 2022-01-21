@@ -22,8 +22,8 @@ const YearBarGraph = (props) => {
     left: 10,
     right: 10,
   };
-  const contentWidth = 350;
-  const contentHeight = 200;
+  const contentWidth = 500;
+  const contentHeight = 340;
 
   const svgWidth = margin.left + margin.right + contentWidth;
   const svgHeight = margin.top + margin.bottom + contentHeight;
@@ -113,12 +113,12 @@ const YearBarGraph = (props) => {
       // setColLen(colMax);
 
       //セルの１辺の長さ
-      const l = svgHeight / 12;
+      const l = svgWidth / 16;
       setLen(l);
 
       setShowData(selectedData);
     }
-  }, [props.selectedPrefecture, baseballData, brassbandData, svgHeight]);
+  }, [props.selectedPrefecture, baseballData, brassbandData]);
 
   if (!showData) {
     return (
@@ -131,7 +131,7 @@ const YearBarGraph = (props) => {
   }
 
   return (
-    <Box px={{ padding: "0.5rem", maxWidth: "350px" }}>
+    <Box px={{ padding: "0.5rem" }}>
       <div style={{ display: "flex" }}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
           <Select
@@ -152,7 +152,7 @@ const YearBarGraph = (props) => {
             })}
           </Select>
         </FormControl>
-        <div style={{ display: "flex", alignItems:"center" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "0.75rem" }}>の2013〜2017年の結果</div>
         </div>
       </div>
