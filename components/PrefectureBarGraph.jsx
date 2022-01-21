@@ -6,6 +6,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Box,
+  Grid,
 } from "@mui/material";
 
 const PrefectureBarGraph = (props) => {
@@ -211,28 +213,96 @@ const PrefectureBarGraph = (props) => {
   }
 
   return (
-    <>
-      <FormControl sx={{ m: 1, minWidth: 90 }}>
-        <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
-          Arrangement
-        </InputLabel>
-        <Select
-          labelId="prefecture-select-label"
-          id="prefecture-select"
-          value={arrangement}
-          label="Prefecture"
-          onChange={(e) => setArrangement(e.target.value)}
-          sx={{ fontSize: 12 }}
-        >
-          {ARRANGEMENT.map((p, i) => {
-            return (
-              <MenuItem key={i} value={p}>
-                {p}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+    <Box px={{ padding: "0.5rem" }}>
+      <div style={{display:"flex"}}>
+        <FormControl sx={{ m: 1, minWidth: 90 }}>
+          <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
+            Arrangement
+          </InputLabel>
+          <Select
+            labelId="prefecture-select-label"
+            id="prefecture-select"
+            value={arrangement}
+            label="Prefecture"
+            onChange={(e) => setArrangement(e.target.value)}
+            sx={{ fontSize: 12 }}
+          >
+            {ARRANGEMENT.map((p, i) => {
+              return (
+                <MenuItem key={i} value={p}>
+                  {p}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+
+        <svg viewBox={`${0} ${-15} ${800} ${120}`}>
+          <g >
+            <g>
+              <rect
+                x={0}
+                y={0}
+                width={20}
+                height={20}
+                stroke="lightgray"
+                fill={color[2]}
+              />
+              <text
+                x={25}
+                y={10}
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize="22.5"
+                style={{ userSelect: "none" }}
+              >
+                夏の甲子園で地区大会ベスト8以上の結果を出した高校
+              </text>
+            </g>
+            <g>
+              <rect
+                x={0}
+                y={30}
+                width={20}
+                height={20}
+                stroke="lightgray"
+                fill={color[1]}
+              />
+              <text
+                x={25}
+                y={40}
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize="22.5"
+                style={{ userSelect: "none" }}
+              >
+                吹奏楽コンクールで「都道府県大会：金賞」以上の結果を出した高校
+              </text>
+            </g>
+            <g>
+              <rect
+                x={0}
+                y={60}
+                width={20}
+                height={20}
+                stroke="lightgray"
+                fill={color[0]}
+              />
+              <text
+                x={25}
+                y={70}
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize="22.5"
+                style={{ userSelect: "none" }}
+              >
+                上記2つを満たしている高校
+              </text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         {arrangementPrefecture.map((prefecture, row) => {
           return (
@@ -274,7 +344,7 @@ const PrefectureBarGraph = (props) => {
           );
         })}
       </svg>
-    </>
+    </Box>
   );
 };
 
