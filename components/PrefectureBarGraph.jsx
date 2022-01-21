@@ -209,12 +209,18 @@ const PrefectureBarGraph = (props) => {
   }, [baseballData, brassbandData, arrangement]);
 
   if (!showData) {
-    return <div>loading...</div>;
+    return (
+      <Box px={{ padding: "0.5rem", height: "245px" }}>
+        <div style={{ fontSize: "0.75rem" }}>
+          <div>loading...</div>
+        </div>
+      </Box>
+    );
   }
 
   return (
     <Box px={{ padding: "0.5rem" }}>
-      <div style={{display:"flex"}}>
+      <div style={{ display: "flex", height: "75px" }}>
         <FormControl sx={{ m: 1, minWidth: 90 }}>
           <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
             Arrangement
@@ -238,7 +244,7 @@ const PrefectureBarGraph = (props) => {
         </FormControl>
 
         <svg viewBox={`${0} ${-15} ${800} ${120}`}>
-          <g >
+          <g>
             <g>
               <rect
                 x={0}
@@ -253,10 +259,20 @@ const PrefectureBarGraph = (props) => {
                 y={10}
                 textAnchor="start"
                 dominantBaseline="central"
-                fontSize="22.5"
+                fontSize="20"
                 style={{ userSelect: "none" }}
               >
                 夏の甲子園で地区大会ベスト8以上の結果を出した高校
+              </text>
+              <text
+                x={530}
+                y={10}
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize="17.5"
+                style={{ userSelect: "none" }}
+              >
+                ※東京・北海道はベスト4以内
               </text>
             </g>
             <g>
@@ -277,6 +293,16 @@ const PrefectureBarGraph = (props) => {
                 style={{ userSelect: "none" }}
               >
                 吹奏楽コンクールで「都道府県大会：金賞」以上の結果を出した高校
+              </text>
+              <text
+                x={440}
+                y={67.5}
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize="17.5"
+                style={{ userSelect: "none" }}
+              >
+                ※東京・北海道は「支部大会：金賞」以上
               </text>
             </g>
             <g>
