@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { prefectureName } from "../data/prefecture";
-import { Tooltip, FormControl, Select, MenuItem } from "@mui/material";
+import { Tooltip, FormControl, Select, MenuItem,Box } from "@mui/material";
 
 const YearBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
@@ -118,14 +118,14 @@ const YearBarGraph = (props) => {
 
       setShowData(selectedData);
     }
-  }, [props.selectedPrefecture, baseballData, brassbandData]);
+  }, [props.selectedPrefecture, baseballData, brassbandData,svgHeight]);
 
   if (!showData) {
     return <div>loading...</div>;
   }
 
   return (
-    <>
+    <Box px={{ padding: "0.5rem" }}>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
         <Select
           labelId="prefecture-select-label"
@@ -197,7 +197,7 @@ const YearBarGraph = (props) => {
             );
           })}
       </svg>
-    </>
+    </Box>
   );
 };
 
