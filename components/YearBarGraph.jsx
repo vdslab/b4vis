@@ -177,7 +177,7 @@ const YearBarGraph = (props) => {
                         stroke="lightgray"
                         fill={
                           item.name === selectedSchool
-                            ? "red"
+                            ? "#ff4545"
                             : color[item.club]
                         }
                         onClick={() => {
