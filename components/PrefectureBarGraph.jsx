@@ -167,36 +167,50 @@ const PrefectureBarGraph = (props) => {
 
       // 並べ替え
       if (arrangement === "default") {
-        for (const prefecture of Object.keys(selectedData)) {
+        for (const [prefecture, data] of Object.entries(selectedData)) {
           const tmp = [];
-          for (const name of Object.keys(selectedData[prefecture])) {
+          for (const [name, club] of Object.entries(data)) {
             tmp.push({
               name,
-              club: selectedData[prefecture][name],
+              club,
             });
           }
-          selectedData[prefecture] = tmp;
-          selectedData[prefecture].sort((a, b) => a.club - b.club); // 共通/甲子園/吹奏楽の順に並び替え
+          // 共通/甲子園/吹奏楽の順に並び替え
+          selectedData[prefecture] = tmp.sort((a, b) => a.club - b.club);
         }
         setArrangementPrefecture(prefectureName);
       } else {
         const aaa = [];
-        for (const prefecture of Object.keys(selectedData)) {
+        for (const [prefecture, data] of Object.entries(selectedData)) {
           const tmp = [];
-          let cnt = 0;
-          for (const name of Object.keys(selectedData[prefecture])) {
-            if (selectedData[prefecture][name] === 0) ++cnt;
+          let doubleCnt = 0;
+          let schoolCnt = 0;
+          for (const [name, club] of Object.entries(data)) {
+            if (club === 0) ++doubleCnt;
             tmp.push({
               name,
-              club: selectedData[prefecture][name],
+              club,
             });
+            ++schoolCnt;
           }
-          aaa.push({ prefecture, cnt });
-          selectedData[prefecture] = tmp;
-          selectedData[prefecture].sort((a, b) => a.club - b.club); // 共通/甲子園/吹奏楽の順に並び替え
+          aaa.push({ prefecture, doubleCnt, schoolCnt });
+          // 共通/甲子園/吹奏楽の順に並び替え
+          selectedData[prefecture] = tmp.sort((a, b) => a.club - b.club);
         }
-        if (arrangement === "昇順") aaa.sort((a, b) => a.cnt - b.cnt);
-        else aaa.sort((a, b) => b.cnt - a.cnt);
+        if (arrangement === "昇順")
+          aaa.sort((a, b) => {
+            if (a.doubleCnt > b.doubleCnt) return 1;
+            if (a.doubleCnt < b.doubleCnt) return -1;
+            if (a.schoolCnt < b.schoolCnt) return 1;
+            if (a.schoolCnt > b.schoolCnt) return -1;
+          });
+        else
+          aaa.sort((a, b) => {
+            if (a.doubleCnt < b.doubleCnt) return 1;
+            if (a.doubleCnt > b.doubleCnt) return -1;
+            if (a.schoolCnt > b.schoolCnt) return 1;
+            if (a.schoolCnt < b.schoolCnt) return -1;
+          });
         const bbb = [];
         aaa.map((a, i) => {
           bbb.push(a.prefecture);
@@ -206,6 +220,10 @@ const PrefectureBarGraph = (props) => {
       setShowData(selectedData);
     }
   }, [baseballData, brassbandData, arrangement]);
+
+  // useEffect(() => {
+  //   if (showData) console.log(showData);
+  // }, [arrangement]);
 
   if (!showData) {
     return (
