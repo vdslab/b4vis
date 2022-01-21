@@ -7,7 +7,6 @@ import {
   Select,
   MenuItem,
   Box,
-  Grid,
 } from "@mui/material";
 
 const PrefectureBarGraph = (props) => {

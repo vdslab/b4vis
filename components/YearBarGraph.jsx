@@ -7,7 +7,6 @@ const YearBarGraph = (props) => {
   const [baseballData, setBaseballData] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [showData, setShowData] = useState(null);
-  const [colLen, setColLen] = useState(null);
   const [len, setLen] = useState(null);
 
   const DOUBLE = 0;
@@ -103,15 +102,6 @@ const YearBarGraph = (props) => {
         selectedData[year].sort((a, b) => a.club - b.club);
       }
 
-      // //セルの数決める
-      // const colMax = Math.ceil(
-      //   Math.max(
-      //     ...Object.keys(selectedData).map((key) => selectedData[key].length)
-      //   ) / 2
-      // );
-      // console.log(colMax);
-      // setColLen(colMax);
-
       //セルの１辺の長さ
       const l = svgWidth / 16;
       setLen(l);
@@ -179,7 +169,7 @@ const YearBarGraph = (props) => {
                       title={item.name}
                       arrow
                       placement="bottom"
-                      key={colLen * row + col}
+                      key={col}
                       disableInteractive
                     >
                       <rect
