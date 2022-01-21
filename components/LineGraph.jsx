@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
-// todo 北海道東京
+
 const brassBandRank = { 地区: 0, 都道府県: 1, 支部: 2, 全国: 3 };
 const baseBallRank = { 地区ベスト8位下: 0, 地区ベスト8: 1, " ": 2, 甲子園: 3 };
 const prizeColor = {
@@ -158,7 +158,7 @@ const LineGraph = (props) => {
 
   return (
     <Box px={{ padding: "0.5rem" }}>
-      <div style={{ fontSize: "1rem", fontWeight: "bolder" }}>
+      <div style={{ fontSize: "1rem", fontWeight: "bolder",padding:"0.5rem 0 0 0.5rem" }}>
         {props.selectedSchool}
       </div>
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>

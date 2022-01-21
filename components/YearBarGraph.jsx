@@ -7,7 +7,6 @@ const YearBarGraph = (props) => {
   const [baseballData, setBaseballData] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [showData, setShowData] = useState(null);
-  const [len, setLen] = useState(null);
 
   const DOUBLE = 0;
   const BASEBALL = 1;
@@ -26,6 +25,8 @@ const YearBarGraph = (props) => {
 
   const svgWidth = margin.left + margin.right + contentWidth;
   const svgHeight = margin.top + margin.bottom + contentHeight;
+
+  const len = svgWidth / 16;
 
   useEffect(() => {
     setBrassbandData(props.data?.brassbandData);
@@ -102,10 +103,6 @@ const YearBarGraph = (props) => {
         selectedData[year].sort((a, b) => a.club - b.club);
       }
 
-      //セルの１辺の長さ
-      const l = svgWidth / 16;
-      setLen(l);
-
       setShowData(selectedData);
     }
   }, [props.selectedPrefecture, baseballData, brassbandData]);
@@ -121,7 +118,7 @@ const YearBarGraph = (props) => {
   }
 
   return (
-    <Box px={{ padding: "0.5rem" }}>
+    <Box px={{ padding: "0.5rem", maxWidth: "400px" }}>
       <div style={{ display: "flex" }}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
           <Select

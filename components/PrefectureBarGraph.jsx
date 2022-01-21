@@ -237,6 +237,7 @@ const PrefectureBarGraph = (props) => {
 
   return (
     <Box px={{ padding: "0.5rem" }}>
+      <div style={{fontSize:"1.25rem",fontWeight:"bolder",padding:"0.25rem"}}>2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校</div>
       <div style={{ display: "flex", height: "75px" }}>
         <FormControl sx={{ m: 1, minWidth: 90 }}>
           <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
@@ -306,7 +307,7 @@ const PrefectureBarGraph = (props) => {
                 y={40}
                 textAnchor="start"
                 dominantBaseline="central"
-                fontSize="22.5"
+                fontSize="20"
                 style={{ userSelect: "none" }}
               >
                 吹奏楽コンクールで「都道府県大会：金賞」以上の結果を出した高校
@@ -336,7 +337,7 @@ const PrefectureBarGraph = (props) => {
                 y={70}
                 textAnchor="start"
                 dominantBaseline="central"
-                fontSize="22.5"
+                fontSize="20"
                 style={{ userSelect: "none" }}
               >
                 上記2つを満たしている高校
