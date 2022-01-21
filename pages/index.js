@@ -49,25 +49,26 @@ function Home() {
             </Paper>
           </Grid>
           <Grid item xs={4}>
-            <Grid item xs>
-              <Paper elevation={5}>
-                <YearBarGraph
-                  data={data}
-                  changePrefecture={changePrefecture}
-                  selectedPrefecture={selectedPrefecture}
-                  changeSchool={changeSchool}
-                  selectedSchool={selectedSchool}
-                />
-              </Paper>
-            </Grid>
-            {/* TODO: LineGraphのデータがないときにmarginがでないのをどうにかする */}
-            <Grid item xs>
-              <Paper elevation={5}>
-                <LineGraph
-                  changeSchool={changeSchool}
-                  selectedSchool={selectedSchool}
-                />
-              </Paper>
+            <Grid container rowSpacing={2} columnSpacing={2}>
+              <Grid item xs={12}>
+                <Paper elevation={5}>
+                  <YearBarGraph
+                    data={data}
+                    changePrefecture={changePrefecture}
+                    selectedPrefecture={selectedPrefecture}
+                    changeSchool={changeSchool}
+                    selectedSchool={selectedSchool}
+                  />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper elevation={5}>
+                  <LineGraph
+                    changeSchool={changeSchool}
+                    selectedSchool={selectedSchool}
+                  />
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
