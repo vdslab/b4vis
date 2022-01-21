@@ -121,30 +121,41 @@ const YearBarGraph = (props) => {
   }, [props.selectedPrefecture, baseballData, brassbandData, svgHeight]);
 
   if (!showData) {
-    return <div>loading...</div>;
+    return (
+      <Box px={{ padding: "0.5rem", height: "112.5px" }}>
+        <div style={{ fontSize: "0.75rem" }}>
+          <div>loading...</div>
+        </div>
+      </Box>
+    );
   }
 
   return (
-    <Box px={{ padding: "0.5rem" , maxWidth:"450px"}}>
-      <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
-        <Select
-          labelId="prefecture-select-label"
-          id="prefecture-select"
-          value={props.selectedPrefecture}
-          label="Prefecture"
-          onChange={(e) => props.changePrefecture(e.target.value)}
-          sx={{ fontSize: 12 }}
-        >
-          {prefectureName.map((p, i) => {
-            const name = p;
-            return (
-              <MenuItem key={i} value={name}>
-                {name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+    <Box px={{ padding: "0.5rem", maxWidth: "350px" }}>
+      <div style={{ display: "flex" }}>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
+          <Select
+            labelId="prefecture-select-label"
+            id="prefecture-select"
+            value={props.selectedPrefecture}
+            label="Prefecture"
+            onChange={(e) => props.changePrefecture(e.target.value)}
+            sx={{ fontSize: 12 }}
+          >
+            {prefectureName.map((p, i) => {
+              const name = p;
+              return (
+                <MenuItem key={i} value={name}>
+                  {name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <div style={{ display: "flex", alignItems:"center" }}>
+          <div style={{ fontSize: "0.75rem" }}>の2013〜2017年の結果</div>
+        </div>
+      </div>
 
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         {Object.keys(showData)
@@ -196,7 +207,7 @@ const YearBarGraph = (props) => {
               </g>
             );
           })}
-        </svg>
+      </svg>
     </Box>
   );
 };

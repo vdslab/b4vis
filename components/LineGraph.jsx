@@ -10,7 +10,7 @@ const prizeColor = {
   金賞: "#e6b422",
   銀賞: "#B2BABA",
   銅賞: "#b59064",
-  不明: "#d6bfd6",
+  不明: "#f2d5f2",
 };
 
 const LineGraph = (props) => {
