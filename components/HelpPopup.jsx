@@ -89,7 +89,7 @@ export function HelpPopup() {
                 甲子園：
                 <a
                   className={styles.link}
-                  href=""
+                  href="https://www.hb-nippon.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
