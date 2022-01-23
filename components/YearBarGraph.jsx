@@ -75,14 +75,14 @@ const YearBarGraph = (props) => {
       //野球
       for (const item of baseballData) {
         if (
-          item["prefecture"] === props.selectedPrefecture ||
+          item["prefecture"].slice(0, -1) === props.selectedPrefecture ||
           (props.selectedPrefecture === item["prefecture"].slice(1) &&
-            item["regionalBest"] <= 4)
+            item["regionalbest"] <= 4)
         ) {
           let find = false;
           for (const showItem of selectedData[item["year"]]) {
             //吹奏楽のデータがすでにある場合
-            if (showItem["name"] === item["fullName"]) {
+            if (showItem["name"] === item["name"]) {
               showItem["club"] = DOUBLE;
               find = true;
               break;
@@ -90,7 +90,7 @@ const YearBarGraph = (props) => {
           }
           if (!find) {
             const data = {
-              name: item["fullName"] || item["shortName"],
+              name: item["name"],
               club: BASEBALL,
             };
             selectedData[item["year"]].push(data);

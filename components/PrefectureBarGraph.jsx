@@ -122,44 +122,39 @@ const PrefectureBarGraph = (props) => {
 
       // 甲子園
       for (const item of baseballData) {
+        const prefecture =
+          item["prefecture"].slice(1) === "北海道" ||
+          item["prefecture"].slice(1) === "東京"
+            ? item["prefecture"]
+            : item["prefecture"].slice(0, -1);
         if (
-          item["prefecture"] !== "北北海道" &&
-          item["prefecture"] !== "南北海道" &&
-          item["prefecture"] !== "東東京" &&
-          item["prefecture"] !== "西東京"
+          prefecture !== "北北海道" &&
+          prefecture !== "南北海道" &&
+          prefecture !== "東東京" &&
+          prefecture !== "西東京"
         ) {
-          if (
-            selectedData[item["prefecture"]].hasOwnProperty(item["fullName"])
-          ) {
-            if (
-              selectedData[item["prefecture"]][item["fullName"]] === BRASSBAND
-            )
-              selectedData[item["prefecture"]][item["fullName"]] = DOUBLE;
+          if (selectedData[prefecture].hasOwnProperty(item["name"])) {
+            if (selectedData[prefecture][item["name"]] === BRASSBAND)
+              selectedData[prefecture][item["name"]] = DOUBLE;
           } else {
-            selectedData[item["prefecture"]][item["fullName"]] = BASEBALL;
+            selectedData[prefecture][item["name"]] = BASEBALL;
           }
-        } else if (
-          item["prefecture"] === "北北海道" ||
-          item["prefecture"] === "南北海道"
-        ) {
-          if (Number(item["regionalBest"]) <= 4) {
-            if (selectedData["北海道"].hasOwnProperty(item["fullName"])) {
-              if (selectedData["北海道"][item["fullName"]] === BRASSBAND)
-                selectedData["北海道"][item["fullName"]] = DOUBLE;
+        } else if (prefecture === "北北海道" || prefecture === "南北海道") {
+          if (Number(item["regionalbest"]) <= 4) {
+            if (selectedData["北海道"].hasOwnProperty(item["name"])) {
+              if (selectedData["北海道"][item["name"]] === BRASSBAND)
+                selectedData["北海道"][item["name"]] = DOUBLE;
             } else {
-              selectedData["北海道"][item["fullName"]] = BASEBALL;
+              selectedData["北海道"][item["name"]] = BASEBALL;
             }
           }
-        } else if (
-          item["prefecture"] === "東東京" ||
-          item["prefecture"] === "西東京"
-        ) {
-          if (Number(item["regionalBest"]) <= 4) {
-            if (selectedData["東京"].hasOwnProperty(item["fullName"])) {
-              if (selectedData["東京"][item["fullName"]] === BRASSBAND)
-                selectedData["東京"][item["fullName"]] = DOUBLE;
+        } else if (prefecture === "東東京" || prefecture === "西東京") {
+          if (Number(item["regionalbest"]) <= 4) {
+            if (selectedData["東京"].hasOwnProperty(item["name"])) {
+              if (selectedData["東京"][item["name"]] === BRASSBAND)
+                selectedData["東京"][item["name"]] = DOUBLE;
             } else {
-              selectedData["東京"][item["fullName"]] = BASEBALL;
+              selectedData["東京"][item["name"]] = BASEBALL;
             }
           }
         }

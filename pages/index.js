@@ -3,10 +3,15 @@ import PrefectureBarGraph from "../components/PrefectureBarGraph";
 import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
+// const { Client } = require("pg");
 
 import { Grid, Paper, Container } from "@mui/material";
 
-function Home() {
+function Home(props) {
+  // const data = {
+  //   baseballData: props.baseballData,
+  //   brassbandData: props.brassbandData,
+  // };
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
@@ -22,13 +27,16 @@ function Home() {
   // TODO DBからデータ取ってきてgetStaticProps使う
   useEffect(() => {
     (async () => {
-      const brassbandData = await fetch("data/barassBand.json").then((res) =>
-        res.json()
+      const brassbandData = await fetch("../api/brassBand/getAllSchool").then(
+        (res) => res.json()
       );
-      const baseballData = await fetch("data/baseball.json").then((res) =>
-        res.json()
+      const baseballData = await fetch("../api/baseball/getAllSchool").then(
+        (res) => res.json()
       );
-      setData({ brassbandData, baseballData });
+      setData({
+        brassbandData: brassbandData.data,
+        baseballData: baseballData.data,
+      });
     })();
   }, []);
 
@@ -76,5 +84,29 @@ function Home() {
     </div>
   );
 }
+
+// export async function getStaticProps() {
+//   const client = new Client({
+//     host: process.env.PGHOST,
+//     port: 5432,
+//     database: process.env.PGDATABASE,
+//     user: process.env.PGUSER,
+//     password: process.env.PGPASSWORD,
+//   });
+//   const baseballQuery =
+//     "SELECT s.name, p.name as prefecture, b.year, b.regionalbest, b.nationalbest FROM baseball b, schools s, prefecture p WHERE b.schoolid = s.id AND b.prefectureid = p.id";
+//   const brassbandQuery =
+//     "SELECT s.name, p.name as prefecture, b.year, b.prize, b.last FROM brassband b, schools s, prefecture p WHERE b.schoolid = s.id AND b.prefectureid = p.id";
+//   await client.connect();
+//   const baseballResult = await client.query(baseballQuery);
+//   const brassbandResult = await client.query(brassbandQuery);
+//   await client.end();
+//   return {
+//     props: {
+//       baseballData: baseballResult.rows,
+//       brassbandData: brassbandResult.rows,
+//     },
+//   };
+// }
 
 export default Home;
