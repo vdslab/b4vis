@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { prefectureName } from "../data/prefecture";
-import { Tooltip, FormControl, Select, MenuItem, Box, InputLabel } from "@mui/material";
+import {
+  Tooltip,
+  FormControl,
+  Select,
+  MenuItem,
+  Box,
+  InputLabel,
+} from "@mui/material";
+import styles from "./Common.module.css";
 
 const YearBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
@@ -109,7 +117,7 @@ const YearBarGraph = (props) => {
 
   if (!showData) {
     return (
-      <Box px={{ padding: "0.5rem", height: "112.5px" }}>
+      <Box px={{ padding: "0.5rem", height: "100%" }}>
         <div style={{ fontSize: "0.75rem" }}>
           <div>loading...</div>
         </div>
@@ -118,86 +126,91 @@ const YearBarGraph = (props) => {
   }
 
   return (
-    <Box px={{ padding: "0.5rem", maxWidth: "400px" }}>
-      <div style={{ display: "flex" }}>
-        <FormControl variant="outlined" sx={{ m: 1, minWidth: 90 }}>
-        <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
-            Prefecture
-          </InputLabel>
-          <Select
-            labelId="prefecture-select-label"
-            id="prefecture-select"
-            value={props.selectedPrefecture}
-            label="Prefecture"
-            onChange={(e) => props.changePrefecture(e.target.value)}
-            sx={{ fontSize: 12 }}
+    <Box px={{ padding: "0.5rem", maxWidth: "375px", height: "100%" }}>
+      <div className={styles.centering_brock}>
+        <div style={{ display: "flex" }}>
+          <FormControl variant="outlined" sx={{ m: 1, minWidth: 90 }}>
+            <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
+              Prefecture
+            </InputLabel>
+            <Select
+              labelId="prefecture-select-label"
+              id="prefecture-select"
+              value={props.selectedPrefecture}
+              label="Prefecture"
+              onChange={(e) => props.changePrefecture(e.target.value)}
+              sx={{ fontSize: 12 }}
+            >
+              {prefectureName.map((p, i) => {
+                const name = p;
+                return (
+                  <MenuItem key={i} value={name}>
+                    {name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ fontSize: "1rem" }}>の2013〜2017年の結果</div>
+          </div>
+        </div>
+        <div>
+          <svg
+            viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
           >
-            {prefectureName.map((p, i) => {
-              const name = p;
-              return (
-                <MenuItem key={i} value={name}>
-                  {name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ fontSize: "1rem" }}>の2013〜2017年の結果</div>
+            {Object.keys(showData)
+              .reverse()
+              .map((year, row) => {
+                return (
+                  <g key={year}>
+                    <text
+                      x={0}
+                      y={len * row * 2 + len + row * 5}
+                      textAnchor="start"
+                      dominantBaseline="central"
+                      fontSize="13"
+                      style={{ userSelect: "none" }}
+                    >
+                      {year}
+                    </text>
+                    {showData[year].map((item, col) => {
+                      return (
+                        <Tooltip
+                          title={item.name}
+                          arrow
+                          placement="bottom"
+                          key={col}
+                          disableInteractive
+                        >
+                          <rect
+                            x={50 + len * Math.floor(col / 2)}
+                            y={len * row * 2 + (col % 2) * len + row * 5}
+                            width={len}
+                            height={len}
+                            stroke="lightgray"
+                            fill={
+                              item.name === selectedSchool
+                                ? "#ff4545"
+                                : color[item.club]
+                            }
+                            onClick={() => {
+                              props.changeSchool(item.name);
+                            }}
+                            onMouseOver={() => {
+                              setSelectedSchool(item.name);
+                            }}
+                            onMouseOut={() => setSelectedSchool(null)}
+                          />
+                        </Tooltip>
+                      );
+                    })}
+                  </g>
+                );
+              })}
+          </svg>
         </div>
       </div>
-
-      <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
-        {Object.keys(showData)
-          .reverse()
-          .map((year, row) => {
-            return (
-              <g key={year}>
-                <text
-                  x={0}
-                  y={len * row * 2 + len + row * 5}
-                  textAnchor="start"
-                  dominantBaseline="central"
-                  fontSize="13"
-                  style={{ userSelect: "none" }}
-                >
-                  {year}
-                </text>
-                {showData[year].map((item, col) => {
-                  return (
-                    <Tooltip
-                      title={item.name}
-                      arrow
-                      placement="bottom"
-                      key={col}
-                      disableInteractive
-                    >
-                      <rect
-                        x={50 + len * Math.floor(col / 2)}
-                        y={len * row * 2 + (col % 2) * len + row * 5}
-                        width={len}
-                        height={len}
-                        stroke="lightgray"
-                        fill={
-                          item.name === selectedSchool
-                            ? "#ff4545"
-                            : color[item.club]
-                        }
-                        onClick={() => {
-                          props.changeSchool(item.name);
-                        }}
-                        onMouseOver={() => {
-                          setSelectedSchool(item.name);
-                        }}
-                        onMouseOut={() => setSelectedSchool(null)}
-                      />
-                    </Tooltip>
-                  );
-                })}
-              </g>
-            );
-          })}
-      </svg>
     </Box>
   );
 };

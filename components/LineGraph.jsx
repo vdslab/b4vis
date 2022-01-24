@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/system";
+import styles from "./Common.module.css";
 
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
@@ -157,336 +158,348 @@ const LineGraph = (props) => {
   const r = 5;
 
   return (
-    <Box px={{ padding: "0.5rem" }}>
-      <div style={{ fontSize: "1rem", fontWeight: "bolder",padding:"0.5rem 0 0 0.5rem" }}>
-        {props.selectedSchool}
-      </div>
-      <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
-        <g>
-          <g>
-            {/**吹奏楽レジェンド */}
-            <text
-              x={-10}
-              y={-22.5}
-              stroke="none"
-              textAnchor="start"
-              dominantBaseline="central"
-              fontSize={9}
-              fill="black"
-            >
-              吹奏楽受賞結果
-            </text>
-            {Object.keys(prizeColor).map((color, idx) => {
-              return (
-                <g key={color}>
-                  <circle
-                    cx={p + 15 + 30 * idx}
-                    cy={-10}
-                    r={r}
-                    stroke={"black"}
-                    strokeWidth={0.5}
-                    fill={prizeColor[color]}
-                  />
-                  <text
-                    x={p + 30 * idx}
-                    y={-10}
-                    stroke="none"
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={7}
-                    fill="black"
-                  >
-                    {color}:
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-        </g>
-
-        <g>
-          <text
-            x={chartWidth - 75 + 20}
-            y={-22.5}
-            stroke="none"
-            textAnchor="start"
-            dominantBaseline="central"
-            fontSize={9}
-            fill="black"
+    <Box px={{ padding: "0.5rem", height:"100%" }}>
+      <div className={styles.centering_brock} style={{justifyContent: "space-around"}}>
+        <div
+          style={{
+            fontSize: "1rem",
+            fontWeight: "bolder",
+            padding: "0 0 0 0.5rem",
+          }}
+        >
+          {props.selectedSchool}
+        </div>
+        <div>
+          <svg
+            viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
           >
-            甲子園ランキング
-          </text>
-
-          <g>
-            <text
-              x={chartWidth - 75 + 20}
-              y={-10}
-              stroke="none"
-              textAnchor="start"
-              dominantBaseline="central"
-              fontSize={7}
-              fill="black"
-            >
-              ランキング順位:
-            </text>
-            <circle
-              cx={chartWidth - 17.5 + 20}
-              cy={-10}
-              r={r}
-              stroke={"black"}
-              strokeWidth={0.5}
-              fill={"white"}
-            />
-            <text
-              x={chartWidth - 17.5 + 20}
-              y={-10}
-              stroke="none"
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize={7}
-              fill="black"
-            >
-              4
-            </text>
-          </g>
-
-          <g>
-            <text
-              x={chartWidth - 10 + 20}
-              y={-10}
-              stroke="none"
-              textAnchor="start"
-              dominantBaseline="central"
-              fontSize={7}
-              fill="black"
-            >
-              順位不明:
-            </text>
-            <circle
-              cx={chartWidth + 27 + 20}
-              cy={-10}
-              r={r}
-              stroke={"black"}
-              strokeWidth={0.5}
-              fill={"white"}
-            />
-            <text
-              x={chartWidth + 27 + 20}
-              y={-10}
-              stroke="none"
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize={7}
-              fill="black"
-            >
-              ー
-            </text>
-          </g>
-        </g>
-
-        <g>
-          <g>
-            {/* 縦軸：吹奏楽 */}
-            <line
-              x1={0}
-              x2={0}
-              y1={0}
-              y2={chartHeight}
-              strokeWidth={0.5}
-              stroke={"black"}
-            />
-            {Object.keys(brassBandRank).map((rank, idx) => {
-              return (
-                <g key={rank}>
-                  <line
-                    x1={-5}
-                    x2={0}
-                    y1={chartHeight - idx * hLen}
-                    y2={chartHeight - idx * hLen}
-                    strokeWidth={0.5}
-                    stroke={"black"}
-                  ></line>
-                  <text
-                    x={-22.5}
-                    y={chartHeight - idx * hLen}
-                    stroke="none"
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={7}
-                    fill="black"
-                  >
-                    {rank}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-
-          <g>
-            {/* 縦軸：野球 */}
-            <line
-              x1={chartWidth}
-              x2={chartWidth}
-              y1={0}
-              y2={chartHeight}
-              strokeWidth={0.5}
-              stroke={"black"}
-            />
-            {Object.keys(baseBallRank).map((rank, idx) => {
-              return (
-                <g key={rank}>
-                  <line
-                    x1={chartWidth + 5}
-                    x2={chartWidth}
-                    y1={chartHeight - idx * hLen}
-                    y2={chartHeight - idx * hLen}
-                    strokeWidth={0.5}
-                    stroke={"black"}
-                  ></line>
-                  <text
-                    x={chartWidth + 35}
-                    y={chartHeight - idx * hLen}
-                    stroke="none"
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={7}
-                    fill="black"
-                  >
-                    {rank}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-
-          <g>
-            {/* 横軸 */}
-            <line
-              x1={0}
-              x2={chartWidth}
-              y1={chartHeight}
-              y2={chartHeight}
-              strokeWidth={0.5}
-              stroke={"black"}
-            />
-            {YEAR_LIST.map((year, idx) => {
-              return (
-                <g key={year}>
-                  <line
-                    x1={p + wLen * idx}
-                    x2={p + wLen * idx}
-                    y1={chartHeight}
-                    y2={chartHeight + 5}
-                    strokeWidth={0.5}
-                    stroke={"black"}
-                  ></line>
-                  <text
-                    x={p + wLen * idx}
-                    y={chartHeight + 10}
-                    stroke="none"
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize={7}
-                    fill="black"
-                  >
-                    {year}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-        </g>
-
-        <g>
-          {brassBandData.map((result, idx) => {
-            return (
-              <g key={result.name + result.year}>
-                {idx !== brassBandData.length - 1 && (
-                  <line
-                    x1={p + wLen * idx}
-                    x2={p + wLen * (idx + 1)}
-                    y1={chartHeight - result.rank * hLen}
-                    y2={chartHeight - brassBandData[idx + 1].rank * hLen}
-                    strokeWidth={1}
-                    stroke={"#ff70ff"}
-                  />
-                )}
+            <g>
+              <g>
+                {/**吹奏楽レジェンド */}
+                <text
+                  x={-10}
+                  y={-22.5}
+                  stroke="none"
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize={9}
+                  fill="black"
+                >
+                  吹奏楽受賞結果
+                </text>
+                {Object.keys(prizeColor).map((color, idx) => {
+                  return (
+                    <g key={color}>
+                      <circle
+                        cx={p + 15 + 30 * idx}
+                        cy={-10}
+                        r={r}
+                        stroke={"black"}
+                        strokeWidth={0.5}
+                        fill={prizeColor[color]}
+                      />
+                      <text
+                        x={p + 30 * idx}
+                        y={-10}
+                        stroke="none"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={7}
+                        fill="black"
+                      >
+                        {color}:
+                      </text>
+                    </g>
+                  );
+                })}
               </g>
-            );
-          })}
-        </g>
+            </g>
 
-        <g>
-          {baseballData?.map((result, idx) => {
-            return (
-              <g key={result.name + result.year}>
-                {idx !== baseballData.length - 1 && (
-                  <line
-                    x1={p + wLen * idx}
-                    x2={p + wLen * (idx + 1)}
-                    y1={chartHeight - result.rank * hLen}
-                    y2={chartHeight - baseballData[idx + 1].rank * hLen}
-                    strokeWidth={1}
-                    strokeOpacity={0.5}
-                    stroke={"#0EB9EC"}
-                  />
-                )}
-              </g>
-            );
-          })}
-        </g>
+            <g>
+              <text
+                x={chartWidth - 75 + 20}
+                y={-22.5}
+                stroke="none"
+                textAnchor="start"
+                dominantBaseline="central"
+                fontSize={9}
+                fill="black"
+              >
+                甲子園ランキング
+              </text>
 
-        <g>
-          {brassBandData.map((result, idx) => {
-            return (
-              <g key={result.name + result.year}>
+              <g>
+                <text
+                  x={chartWidth - 75 + 20}
+                  y={-10}
+                  stroke="none"
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize={7}
+                  fill="black"
+                >
+                  ランキング順位:
+                </text>
                 <circle
-                  cx={p + wLen * idx}
-                  cy={chartHeight - result.rank * hLen}
+                  cx={chartWidth - 17.5 + 20}
+                  cy={-10}
                   r={r}
                   stroke={"black"}
                   strokeWidth={0.5}
-                  fill={prizeColor[result.prize ? result.prize : "不明"]}
-                />
-              </g>
-            );
-          })}
-        </g>
-
-        <g>
-          {baseballData?.map((result, idx) => {
-            return (
-              <g key={result.name + result.year}>
-                <circle
-                  cx={p + wLen * idx}
-                  cy={chartHeight - result.rank * hLen}
-                  r={r}
-                  stroke={"black"}
-                  strokeWidth={0.5}
-                  fill={
-                    sameRankYear.find((year) => year === result.year)
-                      ? "none"
-                      : "white"
-                  }
+                  fill={"white"}
                 />
                 <text
-                  x={p + wLen * idx}
-                  y={chartHeight - result.rank * hLen}
+                  x={chartWidth - 17.5 + 20}
+                  y={-10}
                   stroke="none"
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize={7}
                   fill="black"
                 >
-                  {result.nationalbest
-                    ? result.nationalbest
-                    : result.regionalbest}
+                  4
                 </text>
               </g>
-            );
-          })}
-        </g>
-      </svg>
+
+              <g>
+                <text
+                  x={chartWidth - 10 + 20}
+                  y={-10}
+                  stroke="none"
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize={7}
+                  fill="black"
+                >
+                  順位不明:
+                </text>
+                <circle
+                  cx={chartWidth + 27 + 20}
+                  cy={-10}
+                  r={r}
+                  stroke={"black"}
+                  strokeWidth={0.5}
+                  fill={"white"}
+                />
+                <text
+                  x={chartWidth + 27 + 20}
+                  y={-10}
+                  stroke="none"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={7}
+                  fill="black"
+                >
+                  ー
+                </text>
+              </g>
+            </g>
+
+            <g>
+              <g>
+                {/* 縦軸：吹奏楽 */}
+                <line
+                  x1={0}
+                  x2={0}
+                  y1={0}
+                  y2={chartHeight}
+                  strokeWidth={0.5}
+                  stroke={"black"}
+                />
+                {Object.keys(brassBandRank).map((rank, idx) => {
+                  return (
+                    <g key={rank}>
+                      <line
+                        x1={-5}
+                        x2={0}
+                        y1={chartHeight - idx * hLen}
+                        y2={chartHeight - idx * hLen}
+                        strokeWidth={0.5}
+                        stroke={"black"}
+                      ></line>
+                      <text
+                        x={-22.5}
+                        y={chartHeight - idx * hLen}
+                        stroke="none"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={7}
+                        fill="black"
+                      >
+                        {rank}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+
+              <g>
+                {/* 縦軸：野球 */}
+                <line
+                  x1={chartWidth}
+                  x2={chartWidth}
+                  y1={0}
+                  y2={chartHeight}
+                  strokeWidth={0.5}
+                  stroke={"black"}
+                />
+                {Object.keys(baseBallRank).map((rank, idx) => {
+                  return (
+                    <g key={rank}>
+                      <line
+                        x1={chartWidth + 5}
+                        x2={chartWidth}
+                        y1={chartHeight - idx * hLen}
+                        y2={chartHeight - idx * hLen}
+                        strokeWidth={0.5}
+                        stroke={"black"}
+                      ></line>
+                      <text
+                        x={chartWidth + 35}
+                        y={chartHeight - idx * hLen}
+                        stroke="none"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={7}
+                        fill="black"
+                      >
+                        {rank}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+
+              <g>
+                {/* 横軸 */}
+                <line
+                  x1={0}
+                  x2={chartWidth}
+                  y1={chartHeight}
+                  y2={chartHeight}
+                  strokeWidth={0.5}
+                  stroke={"black"}
+                />
+                {YEAR_LIST.map((year, idx) => {
+                  return (
+                    <g key={year}>
+                      <line
+                        x1={p + wLen * idx}
+                        x2={p + wLen * idx}
+                        y1={chartHeight}
+                        y2={chartHeight + 5}
+                        strokeWidth={0.5}
+                        stroke={"black"}
+                      ></line>
+                      <text
+                        x={p + wLen * idx}
+                        y={chartHeight + 10}
+                        stroke="none"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={7}
+                        fill="black"
+                      >
+                        {year}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            </g>
+
+            <g>
+              {brassBandData.map((result, idx) => {
+                return (
+                  <g key={result.name + result.year}>
+                    {idx !== brassBandData.length - 1 && (
+                      <line
+                        x1={p + wLen * idx}
+                        x2={p + wLen * (idx + 1)}
+                        y1={chartHeight - result.rank * hLen}
+                        y2={chartHeight - brassBandData[idx + 1].rank * hLen}
+                        strokeWidth={1}
+                        stroke={"#ff70ff"}
+                      />
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+
+            <g>
+              {baseballData?.map((result, idx) => {
+                return (
+                  <g key={result.name + result.year}>
+                    {idx !== baseballData.length - 1 && (
+                      <line
+                        x1={p + wLen * idx}
+                        x2={p + wLen * (idx + 1)}
+                        y1={chartHeight - result.rank * hLen}
+                        y2={chartHeight - baseballData[idx + 1].rank * hLen}
+                        strokeWidth={1}
+                        strokeOpacity={0.5}
+                        stroke={"#0EB9EC"}
+                      />
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+
+            <g>
+              {brassBandData.map((result, idx) => {
+                return (
+                  <g key={result.name + result.year}>
+                    <circle
+                      cx={p + wLen * idx}
+                      cy={chartHeight - result.rank * hLen}
+                      r={r}
+                      stroke={"black"}
+                      strokeWidth={0.5}
+                      fill={prizeColor[result.prize ? result.prize : "不明"]}
+                    />
+                  </g>
+                );
+              })}
+            </g>
+
+            <g>
+              {baseballData?.map((result, idx) => {
+                return (
+                  <g key={result.name + result.year}>
+                    <circle
+                      cx={p + wLen * idx}
+                      cy={chartHeight - result.rank * hLen}
+                      r={r}
+                      stroke={"black"}
+                      strokeWidth={0.5}
+                      fill={
+                        sameRankYear.find((year) => year === result.year)
+                          ? "none"
+                          : "white"
+                      }
+                    />
+                    <text
+                      x={p + wLen * idx}
+                      y={chartHeight - result.rank * hLen}
+                      stroke="none"
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={7}
+                      fill="black"
+                    >
+                      {result.nationalbest
+                        ? result.nationalbest
+                        : result.regionalbest}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          </svg>
+        </div>
+      </div>
     </Box>
   );
 };

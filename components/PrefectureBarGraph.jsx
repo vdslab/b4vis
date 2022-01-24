@@ -256,6 +256,7 @@ const PrefectureBarGraph = (props) => {
           </Select>
         </FormControl>
 
+        <div style={{ display: "flex" }}>
         <svg viewBox={`${0} ${-15} ${800} ${120}`}>
           <g>
             <g>
@@ -340,6 +341,7 @@ const PrefectureBarGraph = (props) => {
             </g>
           </g>
         </svg>
+        </div>
       </div>
 
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>

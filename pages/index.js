@@ -57,9 +57,16 @@ function Home(props) {
             </Paper>
           </Grid>
           <Grid item xs={12} md={5}>
-            <Grid container rowSpacing={2} columnSpacing={2}>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={2}
+              sx={{
+                height: "calc(100% + 16px)",
+              }}
+            >
               <Grid item xs={12}>
-                <Paper elevation={5}>
+                <Paper elevation={5} sx={{ height: "100%" }}>
                   <YearBarGraph
                     data={data}
                     changePrefecture={changePrefecture}
@@ -70,7 +77,7 @@ function Home(props) {
                 </Paper>
               </Grid>
               <Grid item xs={12}>
-                <Paper elevation={5}>
+                <Paper elevation={5} sx={{ height: "100%" }}>
                   <LineGraph
                     changeSchool={changeSchool}
                     selectedSchool={selectedSchool}
