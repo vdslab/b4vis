@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { prefectureName } from "../data/prefecture";
-import { Tooltip, FormControl, Select, MenuItem, Box } from "@mui/material";
+import { Tooltip, FormControl, Select, MenuItem, Box, InputLabel } from "@mui/material";
 
 const YearBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
@@ -120,7 +120,10 @@ const YearBarGraph = (props) => {
   return (
     <Box px={{ padding: "0.5rem", maxWidth: "400px" }}>
       <div style={{ display: "flex" }}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 90 }}>
+        <FormControl variant="outlined" sx={{ m: 1, minWidth: 90 }}>
+        <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
+            Prefecture
+          </InputLabel>
           <Select
             labelId="prefecture-select-label"
             id="prefecture-select"
@@ -140,7 +143,7 @@ const YearBarGraph = (props) => {
           </Select>
         </FormControl>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ fontSize: "0.75rem" }}>の2013〜2017年の結果</div>
+          <div style={{ fontSize: "1rem" }}>の2013〜2017年の結果</div>
         </div>
       </div>
 
