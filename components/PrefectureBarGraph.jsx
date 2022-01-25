@@ -444,7 +444,10 @@ const PrefectureBarGraph = (props) => {
                         stroke="lightgray"
                         fill={color[item.club]}
                         onClick={() => {
-                          props.changeSchool(item.name);
+                          if (props.selectedSchool !== item.name) {
+                            props.changeNowLoading(true);
+                            props.changeSchool(item.name);
+                          }
                         }}
                       />
 
@@ -458,6 +461,12 @@ const PrefectureBarGraph = (props) => {
                           strokeWidth={2}
                           stroke="#333333"
                           fill={color[item.club]}
+                          onClick={() => {
+                            if (props.selectedSchool !== item.name) {
+                              props.changeNowLoading(true);
+                              props.changeSchool(item.name);
+                            }
+                          }}
                         />
                       )}
 
@@ -471,7 +480,10 @@ const PrefectureBarGraph = (props) => {
                           fill={"orange"}
                           fillOpacity={0.5}
                           onClick={() => {
-                            props.changeSchool(item.name);
+                            if (props.selectedSchool !== item.name) {
+                              props.changeNowLoading(true);
+                              props.changeSchool(item.name);
+                            }
                           }}
                         />
                       )}

@@ -196,7 +196,10 @@ const YearBarGraph = (props) => {
                                   : color[item.club]
                               }
                               onClick={() => {
-                                props.changeSchool(item.name);
+                                if (props.selectedSchool !== item.name) {
+                                  props.changeNowLoading(true);
+                                  props.changeSchool(item.name);
+                                }
                               }}
                               onMouseOver={() => {
                                 setSelectedSchool(item.name);
@@ -220,6 +223,12 @@ const YearBarGraph = (props) => {
                                     ? "#ff4545"
                                     : color[item.club]
                                 }
+                                onClick={() => {
+                                  if (props.selectedSchool !== item.name) {
+                                    props.changeNowLoading(true);
+                                    props.changeSchool(item.name);
+                                  }
+                                }}
                               />
                             )}
 
@@ -233,7 +242,10 @@ const YearBarGraph = (props) => {
                                 fill={"orange"}
                                 fillOpacity={0.75}
                                 onClick={() => {
-                                  props.changeSchool(item.name);
+                                  if (props.selectedSchool !== item.name) {
+                                    props.changeNowLoading(true);
+                                    props.changeSchool(item.name);
+                                  }
                                 }}
                               />
                             )}
