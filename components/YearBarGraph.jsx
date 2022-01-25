@@ -183,25 +183,60 @@ const YearBarGraph = (props) => {
                           key={col}
                           disableInteractive
                         >
-                          <rect
-                            x={50 + len * Math.floor(col / 2)}
-                            y={len * row * 2 + (col % 2) * len + row * 5}
-                            width={len}
-                            height={len}
-                            stroke="lightgray"
-                            fill={
-                              item.name === selectedSchool
-                                ? "#ff4545"
-                                : color[item.club]
-                            }
-                            onClick={() => {
-                              props.changeSchool(item.name);
-                            }}
-                            onMouseOver={() => {
-                              setSelectedSchool(item.name);
-                            }}
-                            onMouseOut={() => setSelectedSchool(null)}
-                          />
+                          <g>
+                            <rect
+                              x={50 + len * Math.floor(col / 2)}
+                              y={len * row * 2 + (col % 2) * len + row * 5}
+                              width={len}
+                              height={len}
+                              stroke="lightgray"
+                              fill={
+                                item.name === selectedSchool
+                                  ? "#ff4f4f"
+                                  : color[item.club]
+                              }
+                              onClick={() => {
+                                props.changeSchool(item.name);
+                              }}
+                              onMouseOver={() => {
+                                setSelectedSchool(item.name);
+                              }}
+                              onMouseOut={() => setSelectedSchool(null)}
+                            />
+
+                            {/* 枠縁ver */}
+                            {item.name === props.selectedSchool && (
+                              <rect
+                                x={50 + len * Math.floor(col / 2) + 1}
+                                y={len * row * 2 + (col % 2) * len + row * 5+1}
+                                width={len-2}
+                                height={len-2}
+                                strokeWidth={2}
+                                stroke="#444444"
+                                fill={
+                                  item.name === selectedSchool
+                                    ? "#ff4545"
+                                    : color[item.club]
+                                }
+                              />
+                            )}
+                            
+                            {/* 色塗りver */}
+                            {item.name === props.selectedSchool && (
+                              <rect
+                                x={50 + len * Math.floor(col / 2)}
+                                y={len * row * 2 + (col % 2) * len + row * 5}
+                                width={len}
+                                height={len}
+                               
+                                fill={"orange"}
+                                fillOpacity={0.75}
+                                onClick={() => {
+                                  props.changeSchool(item.name);
+                                }}
+                              />
+                            )}
+                          </g>
                         </Tooltip>
                       );
                     })}

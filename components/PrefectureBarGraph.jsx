@@ -232,7 +232,16 @@ const PrefectureBarGraph = (props) => {
 
   return (
     <Box px={{ padding: "0.5rem" }}>
-      <div style={{fontSize:"1.25rem",fontWeight:"bolder",padding:"0.25rem"}}>2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校</div>
+      <div
+        style={{
+          fontSize: "1.25rem",
+          fontWeight: "bolder",
+          padding: "0.25rem",
+        }}
+      >
+        2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校
+      </div>
+
       <div style={{ display: "flex", height: "75px" }}>
         <FormControl sx={{ m: 1, minWidth: 90 }}>
           <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
@@ -256,7 +265,6 @@ const PrefectureBarGraph = (props) => {
           </Select>
         </FormControl>
 
-        <div style={{ display: "flex" }}>
         <svg viewBox={`${0} ${-15} ${800} ${120}`}>
           <g>
             <g>
@@ -341,7 +349,6 @@ const PrefectureBarGraph = (props) => {
             </g>
           </g>
         </svg>
-        </div>
       </div>
 
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
@@ -367,17 +374,48 @@ const PrefectureBarGraph = (props) => {
                     disableInteractive
                     key={col}
                   >
-                    <rect
-                      x={50 + 26 * col}
-                      y={26 * row - 13}
-                      width={26}
-                      height={26}
-                      stroke="lightgray"
-                      fill={color[item.club]}
-                      onClick={() => {
-                        props.changeSchool(item.name);
-                      }}
-                    />
+                    <g>
+                      <rect
+                        x={50 + 26 * col}
+                        y={26 * row - 13}
+                        width={26}
+                        height={26}
+                        stroke="lightgray"
+                        fill={color[item.club]}
+                        onClick={() => {
+                          props.changeSchool(item.name);
+                        }}
+                      />
+
+                      {/* 枠縁ver */}
+                      {item.name === props.selectedSchool && (
+                        <rect
+                          x={50 + 26 * col+1}
+                          y={26 * row - 13+1}
+                          width={26 - 2}
+                          height={26 - 2}
+                          strokeWidth={2}
+                          stroke="#333333"
+                          fill={color[item.club]}
+                        />
+                      )}
+
+                      {/*色塗りver*/}
+                      {item.name === props.selectedSchool && (
+                        <rect
+                          x={50 + 26 * col}
+                          y={26 * row - 13}
+                          width={26}
+                          height={26}
+                          
+                          fill={"orange"}
+                          fillOpacity={0.5}
+                          onClick={() => {
+                            props.changeSchool(item.name);
+                          }}
+                        />
+                      )}
+                    </g>
                   </Tooltip>
                 );
               })}
