@@ -129,12 +129,23 @@ const LineGraph = (props) => {
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
       setSameYear(sameYear);
+      props.changeNowLoading(false);
     })();
   }, [props.selectedSchool]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
   //console.log("year", sameRankYear);
+
+  if (props.nowLoading) {
+    return (
+      <Box px={{ padding: "0.5rem", height: "112.5px" }}>
+        <div style={{ fontSize: "0.75rem" }}>
+          <div>now loading...</div>
+        </div>
+      </Box>
+    );
+  }
 
   if (
     (baseballData === null && brassBandData === null) ||
@@ -158,8 +169,11 @@ const LineGraph = (props) => {
   const r = 5;
 
   return (
-    <Box px={{ padding: "0.5rem", height:"100%" }}>
-      <div className={styles.centering_brock} style={{justifyContent: "space-around"}}>
+    <Box px={{ padding: "0.5rem", height: "100%" }}>
+      <div
+        className={styles.centering_brock}
+        style={{ justifyContent: "space-around" }}
+      >
         <div
           style={{
             fontSize: "1rem",

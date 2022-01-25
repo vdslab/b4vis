@@ -241,7 +241,6 @@ const PrefectureBarGraph = (props) => {
       >
         2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校
       </div>
-
       <div style={{ display: "flex", height: "75px" }}>
         <FormControl sx={{ m: 1, minWidth: 90 }}>
           <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
@@ -328,24 +327,86 @@ const PrefectureBarGraph = (props) => {
               </text>
             </g>
             <g>
-              <rect
-                x={0}
-                y={60}
-                width={20}
-                height={20}
-                stroke="lightgray"
-                fill={color[0]}
-              />
-              <text
-                x={25}
-                y={70}
-                textAnchor="start"
-                dominantBaseline="central"
-                fontSize="20"
-                style={{ userSelect: "none" }}
-              >
-                上記2つを満たしている高校
-              </text>
+              <g>
+                <rect
+                  x={0}
+                  y={0}
+                  width={20}
+                  height={20}
+                  stroke="lightgray"
+                  fill={color[2]}
+                />
+                <text
+                  x={25}
+                  y={10}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="20"
+                  style={{ userSelect: "none" }}
+                >
+                  夏の甲子園で地区大会ベスト8以上の結果を出した高校
+                </text>
+                <text
+                  x={530}
+                  y={10}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="17.5"
+                  style={{ userSelect: "none" }}
+                >
+                  ※東京・北海道はベスト4以内
+                </text>
+              </g>
+              <g>
+                <rect
+                  x={0}
+                  y={30}
+                  width={20}
+                  height={20}
+                  stroke="lightgray"
+                  fill={color[1]}
+                />
+                <text
+                  x={25}
+                  y={40}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="20"
+                  style={{ userSelect: "none" }}
+                >
+                  吹奏楽コンクールで「都道府県大会：金賞」以上の結果を出した高校
+                </text>
+                <text
+                  x={440}
+                  y={67.5}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="17.5"
+                  style={{ userSelect: "none" }}
+                >
+                  ※東京・北海道は「支部大会：金賞」以上
+                </text>
+              </g>
+              <g>
+                <rect
+                  x={0}
+                  y={60}
+                  width={20}
+                  height={20}
+                  stroke="lightgray"
+                  fill={color[0]}
+                />
+                <text
+                  x={25}
+                  y={70}
+                  textAnchor="start"
+                  dominantBaseline="central"
+                  fontSize="20"
+                  style={{ userSelect: "none" }}
+                >
+                  上記2つを満たしている高校
+                </text>
+              </g>
             </g>
           </g>
         </svg>
@@ -390,8 +451,8 @@ const PrefectureBarGraph = (props) => {
                       {/* 枠縁ver */}
                       {item.name === props.selectedSchool && (
                         <rect
-                          x={50 + 26 * col+1}
-                          y={26 * row - 13+1}
+                          x={50 + 26 * col + 1}
+                          y={26 * row - 13 + 1}
                           width={26 - 2}
                           height={26 - 2}
                           strokeWidth={2}
@@ -407,7 +468,6 @@ const PrefectureBarGraph = (props) => {
                           y={26 * row - 13}
                           width={26}
                           height={26}
-                          
                           fill={"orange"}
                           fillOpacity={0.5}
                           onClick={() => {

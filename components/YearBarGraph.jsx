@@ -208,9 +208,11 @@ const YearBarGraph = (props) => {
                             {item.name === props.selectedSchool && (
                               <rect
                                 x={50 + len * Math.floor(col / 2) + 1}
-                                y={len * row * 2 + (col % 2) * len + row * 5+1}
-                                width={len-2}
-                                height={len-2}
+                                y={
+                                  len * row * 2 + (col % 2) * len + row * 5 + 1
+                                }
+                                width={len - 2}
+                                height={len - 2}
                                 strokeWidth={2}
                                 stroke="#444444"
                                 fill={
@@ -220,7 +222,7 @@ const YearBarGraph = (props) => {
                                 }
                               />
                             )}
-                            
+
                             {/* 色塗りver */}
                             {item.name === props.selectedSchool && (
                               <rect
@@ -228,7 +230,6 @@ const YearBarGraph = (props) => {
                                 y={len * row * 2 + (col % 2) * len + row * 5}
                                 width={len}
                                 height={len}
-                               
                                 fill={"orange"}
                                 fillOpacity={0.75}
                                 onClick={() => {

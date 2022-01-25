@@ -84,7 +84,6 @@ export function HelpPopup() {
                   Musica Bella
                 </a>
               </div>
-              {/* TODO:まるくんに聞く */}
               <div>
                 甲子園：
                 <a

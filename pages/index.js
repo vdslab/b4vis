@@ -15,6 +15,7 @@ function Home(props) {
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
+  const [nowLoading, setNowLoading] = useState(false);
 
   const changePrefecture = (prefecture) => {
     setSelectedPretecture(prefecture);
@@ -22,6 +23,10 @@ function Home(props) {
 
   const changeSchool = (school) => {
     setSelectedSchool(school);
+  };
+
+  const changeNowLoading = (nowLoading) => {
+    setNowLoading(nowLoading);
   };
 
   // TODO DBからデータ取ってきてgetStaticProps使う
@@ -53,6 +58,7 @@ function Home(props) {
                 selectedPrefecture={selectedPrefecture}
                 changeSchool={changeSchool}
                 selectedSchool={selectedSchool}
+                changeNowLoading={changeNowLoading}
               />
             </Paper>
           </Grid>
@@ -73,14 +79,18 @@ function Home(props) {
                     selectedPrefecture={selectedPrefecture}
                     changeSchool={changeSchool}
                     selectedSchool={selectedSchool}
+                    changeNowLoading={changeNowLoading}
                   />
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
                   <LineGraph
+                    data={data}
                     changeSchool={changeSchool}
                     selectedSchool={selectedSchool}
+                    nowLoading={nowLoading}
+                    changeNowLoading={changeNowLoading}
                   />
                 </Paper>
               </Grid>
