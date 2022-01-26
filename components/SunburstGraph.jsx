@@ -29,13 +29,65 @@ function SunburstGraph(props) {
   useEffect(() => {
     const dividedData = props.data[props.selectedPrefecture];
     const data = {
-      baseball: dividedData.baseball + dividedData.baseballPrivate,
+        name: "b4vis",
+        color: "hsl(290, 70%, 50%)",
+        children: [
+          {
+            name: "吹奏楽",
+            color: "hsl(151, 70%, 50%)",
+            children: [
+              {
+                name: "公立",
+                color: "hsl(100, 70%, 50%)",
+                loc: dividedData.brassband,
+              },
+              {
+                name: "公立",
+                color: "hsl(241, 70%, 50%)",
+                loc: dividedData.brassbandPrivate,
+              },
+            ],
+          },
+          {
+            name: "野球",
+            color: "hsl(151, 70%, 50%)",
+            children: [
+              {
+                name: "公立",
+                color: "hsl(100, 70%, 50%)",
+                loc: dividedData.baseball,
+              },
+              {
+                name: "公立",
+                color: "hsl(241, 70%, 50%)",
+                loc: dividedData.baseballPrivate,
+              },
+            ],
+          },
+          {
+            name: "吹奏楽・野球",
+            color: "hsl(151, 70%, 50%)",
+            children: [
+              {
+                name: "公立",
+                color: "hsl(100, 70%, 50%)",
+                loc: dividedData.double,
+              },
+              {
+                name: "公立",
+                color: "hsl(241, 70%, 50%)",
+                loc: dividedData.doublePrivate,
+              },
+            ],
+          },
+        ],
     };
+      setSchoolCount(data);
   }, [props]);
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <MyResponsiveSunburst data={data2} style={{height:"300px"}} />
+      <MyResponsiveSunburst data={schoolCount} style={{height:"300px"}} />
     </Box>
   );
 }
