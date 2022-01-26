@@ -42,7 +42,7 @@ function SunburstGraph(props) {
                 loc: dividedData.brassband,
               },
               {
-                name: "公立",
+                name: "私立",
                 color: "hsl(241, 70%, 50%)",
                 loc: dividedData.brassbandPrivate,
               },
@@ -58,7 +58,7 @@ function SunburstGraph(props) {
                 loc: dividedData.baseball,
               },
               {
-                name: "公立",
+                name: "私立",
                 color: "hsl(241, 70%, 50%)",
                 loc: dividedData.baseballPrivate,
               },
@@ -74,7 +74,7 @@ function SunburstGraph(props) {
                 loc: dividedData.double,
               },
               {
-                name: "公立",
+                name: "私立",
                 color: "hsl(241, 70%, 50%)",
                 loc: dividedData.doublePrivate,
               },
