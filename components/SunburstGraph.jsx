@@ -9,7 +9,6 @@ const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
 function SunburstGraph(props) {
   const [schoolCount, setSchoolCount] = useState(null);
 
-
   useEffect(() => {
     const dividedData = props.data[props.selectedPrefecture];
     const data = {
@@ -74,12 +73,16 @@ function SunburstGraph(props) {
   }, [props]);
 
   return (
-      <Box px={{ padding: "0.5rem", height: "100%" }}>
-          <div  style={{
-            fontSize: "1rem",
-            fontWeight: "bolder",
-            padding: "0 0 0 0.5rem",
-          }}>{props.selectedPrefecture}の私立・公立校の内訳</div>
+    <Box px={{ padding: "0.5rem", height: "100%" }}>
+      <div
+        style={{
+          fontSize: "1rem",
+          fontWeight: "bolder",
+          padding: "0 0 0 0.5rem",
+        }}
+      >
+        {props.selectedPrefecture}の私立・公立校の内訳
+      </div>
       <MyResponsiveSunburst data={schoolCount} style={{ height: "300px" }} />
     </Box>
   );

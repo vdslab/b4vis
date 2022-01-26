@@ -385,60 +385,22 @@ export async function getStaticProps() {
     }
     schoolCountData[prefecture] = {
       //鳥取のブラスバンドのデータがないため
-      brassband: Number.isNaN(
-        count[BRASSBAND] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE])
-      )
-        ? 0
-        : count[BRASSBAND] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE]),
-      brassbandPrivate: Number.isNaN(
-        count[BRASSBAND_PRIVATE] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE])
-      )
-        ? 0
-        : count[BRASSBAND_PRIVATE] /
-          (count[BRASSBAND] + count[BRASSBAND_PRIVATE]),
-      baseball: count[BASEBALL] / (count[BASEBALL] + count[BASEBALL_PRIVATE]),
-      baseballPrivate:
-        count[BASEBALL_PRIVATE] / (count[BASEBALL] + count[BASEBALL_PRIVATE]),
-      double: Number.isNaN(
-        count[DOUBLE] / (count[DOUBLE] + count[DOUBLE_PRIVATE])
-      )
-        ? 0
-        : count[DOUBLE] / (count[DOUBLE] + count[DOUBLE_PRIVATE]),
-      doublePrivate: Number.isNaN(
-        count[DOUBLE_PRIVATE] / (count[DOUBLE] + count[DOUBLE_PRIVATE])
-      )
-        ? 0
-        : count[DOUBLE_PRIVATE] / (count[DOUBLE] + count[DOUBLE_PRIVATE]),
+      brassband: count[BRASSBAND],
+      brassbandPrivate: count[BRASSBAND_PRIVATE],
+      baseball: count[BASEBALL],
+      baseballPrivate: count[BASEBALL_PRIVATE],
+      double: count[DOUBLE],
+      doublePrivate: count[DOUBLE_PRIVATE],
     };
   }
 
   schoolCountData["全国"] = {
-    brassband:
-      allSchoolCount[BRASSBAND] /
-      (allSchoolCount[BRASSBAND] + allSchoolCount[BRASSBAND_PRIVATE]),
-    brassbandPrivate:
-      allSchoolCount[BRASSBAND_PRIVATE] /
-      (allSchoolCount[BRASSBAND] + allSchoolCount[BRASSBAND_PRIVATE]),
-    baseball:
-      allSchoolCount[BASEBALL] /
-      (allSchoolCount[BASEBALL] + allSchoolCount[BASEBALL_PRIVATE]),
-    baseballPrivate:
-      allSchoolCount[BASEBALL_PRIVATE] /
-      (allSchoolCount[BASEBALL] + allSchoolCount[BASEBALL_PRIVATE]),
-    double: Number.isNaN(
-      allSchoolCount[DOUBLE] /
-        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE])
-    )
-      ? 0
-      : allSchoolCount[DOUBLE] /
-        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE]),
-    doublePrivate: Number.isNaN(
-      allSchoolCount[DOUBLE_PRIVATE] /
-        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE])
-    )
-      ? 0
-      : allSchoolCount[DOUBLE_PRIVATE] /
-        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE]),
+    brassband: allSchoolCount[BRASSBAND],
+    brassbandPrivate: allSchoolCount[BRASSBAND_PRIVATE],
+    baseball: allSchoolCount[BASEBALL],
+    baseballPrivate: allSchoolCount[BASEBALL_PRIVATE],
+    double: allSchoolCount[DOUBLE],
+    doublePrivate: allSchoolCount[DOUBLE_PRIVATE],
   };
 
   console.log(schoolCountData);
