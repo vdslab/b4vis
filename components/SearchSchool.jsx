@@ -79,7 +79,7 @@ const SearchSchool = (props) => {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <List sx={{ height: "635px", overflow: "auto", mt: 1 }}>
+      <List sx={{ overflow: "auto", mt: 1 }}>
         {Object.entries(schoolList).map((obj, i) => {
           const name = obj[0];
           const prefecture =

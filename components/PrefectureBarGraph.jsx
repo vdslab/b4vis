@@ -411,7 +411,6 @@ const PrefectureBarGraph = (props) => {
           </g>
         </svg>
       </div>
-
       <svg viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}>
         {arrangementPrefecture.map((prefecture, row) => {
           return (
