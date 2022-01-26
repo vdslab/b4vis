@@ -69,7 +69,7 @@ const SearchSchool = (props) => {
         }}
       >
         <InputBase
-          placeholder="SchoolName"
+          placeholder="学校名で検索"
           inputProps={{ "aria-label": "SchoolName" }}
           inputRef={props.inputEl}
           onChange={(e) => {
