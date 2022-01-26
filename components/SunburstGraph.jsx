@@ -37,12 +37,12 @@ function SunburstGraph(props) {
             color: "hsl(151, 70%, 50%)",
             children: [
               {
-                name: "公立",
+                name: "吹奏楽公立",
                 color: "hsl(100, 70%, 50%)",
                 loc: dividedData.brassband,
               },
               {
-                name: "私立",
+                name: "吹奏楽私立",
                 color: "hsl(241, 70%, 50%)",
                 loc: dividedData.brassbandPrivate,
               },
@@ -53,12 +53,12 @@ function SunburstGraph(props) {
             color: "hsl(151, 70%, 50%)",
             children: [
               {
-                name: "公立",
+                name: "野球公立",
                 color: "hsl(100, 70%, 50%)",
                 loc: dividedData.baseball,
               },
               {
-                name: "私立",
+                name: "野球私立",
                 color: "hsl(241, 70%, 50%)",
                 loc: dividedData.baseballPrivate,
               },
