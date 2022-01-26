@@ -169,7 +169,7 @@ const YearBarGraph = (props) => {
                       y={len * row * 2 + len + row * 5}
                       textAnchor="start"
                       dominantBaseline="central"
-                      fontSize="13"
+                      fontSize="15"
                       style={{ userSelect: "none" }}
                     >
                       {year}

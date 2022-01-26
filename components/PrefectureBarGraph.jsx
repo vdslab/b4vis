@@ -39,7 +39,7 @@ const PrefectureBarGraph = (props) => {
   useEffect(() => {
     setBrassbandData(props.data?.brassbandData);
     setBaseballData(props.data?.baseballData);
-  }, [props]);
+  }, [props.data]);
 
   useEffect(() => {
     if (baseballData && brassbandData) {

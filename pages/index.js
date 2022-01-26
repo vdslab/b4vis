@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PrefectureBarGraph from "../components/PrefectureBarGraph";
 import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
 const { Client } = require("pg");
-
-import { Grid, Paper, Container } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 
 function Home(props) {
   // const data = {
@@ -16,7 +15,9 @@ function Home(props) {
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
+  const [inputSchoolName, setInputSchoolName] = useState("");
   const [nowLoading, setNowLoading] = useState(false);
+  const inputEl = useRef("");
 
   const changePrefecture = (prefecture) => {
     setSelectedPretecture(prefecture);
@@ -28,6 +29,10 @@ function Home(props) {
 
   const changeNowLoading = (nowLoading) => {
     setNowLoading(nowLoading);
+  };
+
+  const changeSchoolName = () => {
+    setInputSchoolName(inputEl.current.value);
   };
 
   // TODO DBからデータ取ってきてgetStaticProps使う
@@ -49,9 +54,19 @@ function Home(props) {
   return (
     <div>
       <Header />
-      <Container sx={{ mt: 1, mb: 1 }} maxWidth="xl">
+      <div style={{ margin: 10 }}>
         <Grid container rowSpacing={2} columnSpacing={2}>
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={2}>
+            <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
+              <SearchSchool
+                data={data}
+                inputSchoolName={inputSchoolName}
+                changeSchoolName={changeSchoolName}
+                inputEl={inputEl}
+              />
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
             <Paper elevation={5}>
               <PrefectureBarGraph
                 data={data}
@@ -63,7 +78,7 @@ function Home(props) {
               />
             </Paper>
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={4}>
             <Grid
               container
               rowSpacing={2}
@@ -98,7 +113,7 @@ function Home(props) {
             </Grid>
           </Grid>
         </Grid>
-      </Container>
+      </div>
     </div>
   );
 }
