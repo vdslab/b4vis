@@ -18,7 +18,6 @@ const MyResponsiveSunburst = ({ data /* see data tab */ }) => (
       }}
       enableArcLabels={true}
       arcLabel={function (e) {
-        console.log(e)
         if (e.data.name === "公立" || e.data.name === "私立") {
           return e.data.name + " (" + (e.value * 100).toFixed(1) + "%)";
         } 

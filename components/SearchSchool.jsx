@@ -11,6 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const SearchSchool = (props) => {
   const [schoolList, setSchoolList] = useState([]);
+  const [inputName, setInputName] = useState("");
 
   useEffect(() => {
     if (props.inputSchoolName) {
@@ -55,7 +56,8 @@ const SearchSchool = (props) => {
       }
       setSchoolList(res);
     }
-  }, [props.inputSchoolName]);
+  }, [props]);
+
   return (
     <>
       <Paper
@@ -70,6 +72,11 @@ const SearchSchool = (props) => {
           placeholder="SchoolName"
           inputProps={{ "aria-label": "SchoolName" }}
           inputRef={props.inputEl}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              props.changeSchoolName("");
+            }
+          }}
           sx={{ m: 1 }}
         />
         <IconButton
@@ -100,6 +107,13 @@ const SearchSchool = (props) => {
             </ListItemButton>
           );
         })}
+
+        {Object.keys(schoolList).length === 0 && props.inputSchoolName !== "" && (
+          <div>
+            <div>検索結果がありません</div>
+            <div>その高校はあまり活躍されていないようです...</div>
+          </div>
+        )}
       </List>
     </>
   );
