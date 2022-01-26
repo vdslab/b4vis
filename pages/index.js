@@ -55,11 +55,12 @@ function Home(props) {
       <div style={{ margin: 10 }}>
         <Grid container rowSpacing={2} columnSpacing={2}>
           <Grid item xs={12} md={2}>
-            <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
+            <Paper elevation={5} sx={{ p: 2 }}>
               <SearchSchool
                 data={data}
                 inputSchoolName={inputSchoolName}
                 changeSchoolName={changeSchoolName}
+                changeSchool={changeSchool}
                 inputEl={inputEl}
               />
             </Paper>
