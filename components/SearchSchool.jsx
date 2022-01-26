@@ -15,7 +15,7 @@ const SearchSchool = (props) => {
   useEffect(() => {
     if (props.inputSchoolName) {
       const { baseballData, brassbandData } = props.data;
-      const res = [];
+      const res = {};
       for (const item of brassbandData) {
         if (item.name.includes(props.inputSchoolName)) {
           if (item["last"] !== "地区") {
@@ -34,16 +34,26 @@ const SearchSchool = (props) => {
               if (item["last"] === "都道府県") continue;
               if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
             }
-            res.push(item.name);
+            res[item["name"]] = item["prefecture"];
           }
         }
         for (const item of baseballData) {
           if (item.name.includes(props.inputSchoolName)) {
-            res.push(item.name);
+            const prefecture =
+              item["prefecture"].slice(1) === "北海道" ||
+              item["prefecture"].slice(1) === "東京"
+                ? item["prefecture"]
+                : item["prefecture"].slice(0, -1);
+            if (prefecture === "北北海道" || prefecture === "南北海道") {
+              if (Number(item["regionalbest"]) > 4) continue;
+            } else if (prefecture === "東東京" || prefecture === "西東京") {
+              if (Number(item["regionalbest"]) > 4) continue;
+            }
+            res[item["name"]] = item["prefecture"];
           }
         }
       }
-      setSchoolList([...new Set([...res])]);
+      setSchoolList(res);
     }
   }, [props.inputSchoolName]);
   return (
@@ -70,9 +80,20 @@ const SearchSchool = (props) => {
         </IconButton>
       </Paper>
       <List sx={{ height: "635px", overflow: "auto", mt: 1 }}>
-        {schoolList.map((name, i) => {
+        {Object.entries(schoolList).map((obj, i) => {
+          const name = obj[0];
+          const prefecture =
+            obj[1].slice(1) === "北海道" || obj[1].slice(1) === "東京"
+              ? obj[1].slice(1)
+              : obj[1].slice(0, -1);
           return (
-            <ListItemButton key={i} onClick={() => props.changeSchool(name)}>
+            <ListItemButton
+              key={i}
+              onClick={() => {
+                props.changePrefecture(prefecture);
+                props.changeSchool(name);
+              }}
+            >
               <ListItemText primary={name} />
             </ListItemButton>
           );

@@ -63,6 +63,7 @@ function Home(props) {
               <SearchSchool
                 data={data}
                 inputSchoolName={inputSchoolName}
+                changePrefecture={changePrefecture}
                 changeSchoolName={changeSchoolName}
                 changeSchool={changeSchool}
                 inputEl={inputEl}
