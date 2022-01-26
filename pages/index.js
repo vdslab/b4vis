@@ -94,10 +94,12 @@ function Home(props) {
                 <Paper elevation={5} sx={{ height: "100%" }}>
                   <SunburstGraph
                     data={allSchoolCountData}
+                    changePrefecture={changePrefecture}
+                    selectedPrefecture={selectedPrefecture}
                     changeSchool={changeSchool}
                     selectedSchool={selectedSchool}
-                    nowLoading={nowLoading}
                     changeNowLoading={changeNowLoading}
+                    nowLoading={nowLoading}
                   />
                 </Paper>
               </Grid>
