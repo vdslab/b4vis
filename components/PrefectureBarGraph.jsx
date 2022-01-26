@@ -243,8 +243,13 @@ const PrefectureBarGraph = (props) => {
         >
           2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校
         </div>
-        <div style={{ display: "flex", height: "75px" }}>
-          <FormControl sx={{ m: 1, minWidth: 90 }}>
+        <Box style={{ display: "flex", alignItems: "center" }}>
+          <FormControl
+            sx={{
+              m: 1,
+              minWidth: 90,
+            }}
+          >
             <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>
               Arrangement
             </InputLabel>
@@ -266,7 +271,7 @@ const PrefectureBarGraph = (props) => {
             </Select>
           </FormControl>
 
-          <svg viewBox={`${0} ${-15} ${800} ${120}`}>
+          <svg viewBox={`${0} ${-15} ${800} ${110}`}>
             <g>
               <g>
                 <rect
@@ -412,7 +417,7 @@ const PrefectureBarGraph = (props) => {
               </g>
             </g>
           </svg>
-        </div>
+        </Box>
         <svg
           viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
         >
