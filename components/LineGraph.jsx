@@ -152,11 +152,43 @@ const LineGraph = (props) => {
     (baseballData?.length === 0 && brassBandData?.length === 0)
   ) {
     return (
-      <Box px={{ padding: "0.5rem", height: "112.5px" }}>
-        <div style={{ fontSize: "0.75rem" }}>
-          <div>データがありません</div>
-          <div>グラフのセルをクリックして学校を選択してください</div>
+      <Box px={{ padding: "0.5rem", minHeight: "250px" }}>
+        <div style={{ fontSize: "0.75rem" }}></div>
+        <div
+          style={{
+            fontSize: "1rem",
+            fontWeight: "bolder",
+            padding: "0 0 0 0.5rem",
+          }}
+        >
+          学校詳細
         </div>
+        <svg
+          viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
+        >
+          <text
+            x={0}
+            y={25}
+            stroke="none"
+            textAnchor="start"
+            dominantBaseline="central"
+            fontSize={12.5}
+            fill="black"
+          >
+            データがありません
+          </text>
+          <text
+            x={0}
+            y={45}
+            stroke="none"
+            textAnchor="start"
+            dominantBaseline="central"
+            fontSize={12.5}
+            fill="black"
+          >
+            グラフのセルをクリックして学校を選択してください
+          </text>
+        </svg>
       </Box>
     );
   }

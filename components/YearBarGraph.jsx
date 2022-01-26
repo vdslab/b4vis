@@ -126,7 +126,7 @@ const YearBarGraph = (props) => {
   }
 
   return (
-    <Box px={{ padding: "0.5rem", maxWidth: "375px", maxHeight:"275px", height: "100%" }}>
+    <Box px={{ padding: "0.5rem", maxWidth: "375px", height: "100%" }}>
       <div className={styles.centering_brock}>
         <div style={{ display: "flex" }}>
           <FormControl variant="outlined" sx={{ m: 1, minWidth: 90 }}>
