@@ -92,7 +92,7 @@ export function HelpPopup() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  甲子園
+                  高校野球ドットコム
                 </a>
               </div>
             </div>
