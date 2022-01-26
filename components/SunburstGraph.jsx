@@ -1,10 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import * as d3 from "d3";
 import { install } from "resize-observer";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
-
-const MyResponsiveSunburst = dynamic(() => import('./test'),{ ssr: false });
+const MyResponsiveSunburst = dynamic(() => import("./test"), { ssr: false });
 
 import {
   Tooltip,
@@ -15,86 +13,86 @@ import {
   InputLabel,
 } from "@mui/material";
 
-
-
 function SunburstGraph(props) {
-    const [schoolCount, setSchoolCount] = useState(null);
-    
-    
-    if (process.browser) {
-        // windowやdocumentを使う処理を記述
-        install();
-      }
+  const [schoolCount, setSchoolCount] = useState(null);
+
+  if (process.browser) {
+    // windowやdocumentを使う処理を記述
+    install();
+  }
 
   useEffect(() => {
     const dividedData = props.data[props.selectedPrefecture];
     const data = {
-        name: "b4vis",
-        color: "hsl(290, 70%, 50%)",
-        children: [
-          {
-            name: "吹奏楽",
-            color: "hsl(151, 70%, 50%)",
-            children: [
-              {
-                name: "吹奏楽公立",
-                color: "hsl(100, 70%, 50%)",
-                loc: dividedData.brassband,
-              },
-              {
-                name: "吹奏楽私立",
-                color: "hsl(241, 70%, 50%)",
-                loc: dividedData.brassbandPrivate,
-              },
-            ],
-          },
-          {
-            name: "野球",
-            color: "hsl(151, 70%, 50%)",
-            children: [
-              {
-                name: "野球公立",
-                color: "hsl(100, 70%, 50%)",
-                loc: dividedData.baseball,
-              },
-              {
-                name: "野球私立",
-                color: "hsl(241, 70%, 50%)",
-                loc: dividedData.baseballPrivate,
-              },
-            ],
-          },
-          {
-            name: "吹奏楽・野球",
-            color: "hsl(151, 70%, 50%)",
-            children: [
-              {
-                name: "公立",
-                color: "hsl(100, 70%, 50%)",
-                loc: dividedData.double,
-              },
-              {
-                name: "私立",
-                color: "hsl(241, 70%, 50%)",
-                loc: dividedData.doublePrivate,
-              },
-            ],
-          },
-        ],
+      name: "b4vis",
+      color: "hsl(290, 70%, 50%)",
+      children: [
+        {
+          name: "吹奏楽",
+          key: "吹奏楽",
+          color: "hsl(300, 100%, 72%)",
+          children: [
+            {
+              key: "吹奏楽公立",
+              name: "公立",
+              loc: dividedData.brassband,
+            },
+            {
+              key: "吹奏楽私立",
+              name: "私立",
+              loc: dividedData.brassbandPrivate,
+            },
+          ],
+        },
+        {
+          name: "野球",
+          key: "野球",
+          color: "hsl(180, 100%, 72%)",
+          children: [
+            {
+              name: "公立",
+              key: "野球公立",
+              loc: dividedData.baseball,
+            },
+            {
+              name: "私立",
+              key: "野球私立",
+              loc: dividedData.baseballPrivate,
+            },
+          ],
+        },
+        {
+          name: "吹奏楽・野球",
+          key: "吹奏楽・野球",
+          color: "hsl(271, 100%, 72%)",
+          children: [
+            {
+              name: "公立",
+              key: "公立",
+              color: "hsl(201, 100%, 72%)",
+              loc: dividedData.double,
+            },
+            {
+              name: "私立",
+              key: "私立",
+              loc: dividedData.doublePrivate,
+            },
+          ],
+        },
+      ],
     };
-      setSchoolCount(data);
+    setSchoolCount(data);
   }, [props]);
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <MyResponsiveSunburst data={schoolCount} style={{height:"300px"}} />
+      <MyResponsiveSunburst data={schoolCount} style={{ height: "300px" }} />
     </Box>
   );
 }
 
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/sunburst
-
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
