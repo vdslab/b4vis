@@ -12,6 +12,7 @@ function Home(props) {
   //   baseballData: props.baseballData,
   //   brassbandData: props.brassbandData,
   // };
+  console.log(props.allSchoolCountData);
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
@@ -222,10 +223,13 @@ export async function getStaticProps() {
       prefecture !== "西東京"
     ) {
       if (selectedData[prefecture].hasOwnProperty(item["name"])) {
-        if (selectedData[prefecture][item["name"]] === BRASSBAND) {
+        if (
+          selectedData[prefecture][item["name"]] === BRASSBAND ||
+          selectedData[prefecture][item["name"]] === BRASSBAND_PRIVATE
+        ) {
           selectedData[prefecture][item["name"]] = isPrivateSchool
-            ? BASEBALL_PRIVATE
-            : BASEBALL;
+            ? DOUBLE_PRIVATE
+            : DOUBLE;
         }
       } else {
         selectedData[prefecture][item["name"]] = isPrivateSchool
@@ -235,7 +239,10 @@ export async function getStaticProps() {
     } else if (prefecture === "北北海道" || prefecture === "南北海道") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["北海道"].hasOwnProperty(item["name"])) {
-          if (selectedData["北海道"][item["name"]] === BRASSBAND) {
+          if (
+            selectedData["北海道"][item["name"]] === BRASSBAND ||
+            selectedData["北海道"][item["name"]] === BRASSBAND_PRIVATE
+          ) {
             selectedData["北海道"][item["name"]] = isPrivateSchool
               ? DOUBLE_PRIVATE
               : DOUBLE;
@@ -249,7 +256,10 @@ export async function getStaticProps() {
     } else if (prefecture === "東東京" || prefecture === "西東京") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["東京"].hasOwnProperty(item["name"])) {
-          if (selectedData["東京"][item["name"]] === BRASSBAND) {
+          if (
+            selectedData["東京"][item["name"]] === BRASSBAND ||
+            selectedData["東京"][item["name"]] === BRASSBAND_PRIVATE
+          ) {
             selectedData["東京"][item["name"]] = isPrivateSchool
               ? DOUBLE_PRIVATE
               : DOUBLE;
@@ -263,12 +273,136 @@ export async function getStaticProps() {
     }
   }
 
-  console.log(selectedData);
+  const schoolCountData = {
+    北海道: {},
+    青森: {},
+    岩手: {},
+    宮城: {},
+    秋田: {},
+    山形: {},
+    福島: {},
+    茨城: {},
+    栃木: {},
+    群馬: {},
+    埼玉: {},
+    千葉: {},
+    東京: {},
+    神奈川: {},
+    新潟: {},
+    富山: {},
+    石川: {},
+    福井: {},
+    山梨: {},
+    長野: {},
+    岐阜: {},
+    静岡: {},
+    愛知: {},
+    三重: {},
+    滋賀: {},
+    京都: {},
+    大阪: {},
+    兵庫: {},
+    奈良: {},
+    和歌山: {},
+    鳥取: {},
+    島根: {},
+    岡山: {},
+    広島: {},
+    山口: {},
+    徳島: {},
+    香川: {},
+    愛媛: {},
+    高知: {},
+    福岡: {},
+    佐賀: {},
+    長崎: {},
+    熊本: {},
+    大分: {},
+    宮崎: {},
+    鹿児島: {},
+    沖縄: {},
+    全国: {},
+  };
+
+  /* index が下記と一致
+  const DOUBLE = 0;
+  const BASEBALL = 1;
+  const BRASSBAND = 2;
+  const DOUBLE_PRIVATE = 3;
+  const BASEBALL_PRIVATE = 4;
+  const BRASSBAND_PRIVATE = 5;
+  */
+  const allSchoolCount = [0, 0, 0, 0, 0, 0];
+
+  for (let prefecture of Object.keys(selectedData)) {
+    const count = [0, 0, 0, 0, 0, 0];
+    for (let schoolName of Object.keys(selectedData[prefecture])) {
+      count[selectedData[prefecture][schoolName]] += 1;
+      allSchoolCount[selectedData[prefecture][schoolName]] += 1;
+    }
+    schoolCountData[prefecture] = {
+      //鳥取のブラスバンドのデータがないため
+      brassband: Number.isNaN(
+        count[BRASSBAND] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE])
+      )
+        ? 0
+        : count[BRASSBAND] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE]),
+      brassbandPrivate: Number.isNaN(
+        count[BRASSBAND_PRIVATE] / (count[BRASSBAND] + count[BRASSBAND_PRIVATE])
+      )
+        ? 0
+        : count[BRASSBAND_PRIVATE] /
+          (count[BRASSBAND] + count[BRASSBAND_PRIVATE]),
+      baseball: count[BASEBALL] / (count[BASEBALL] + count[BASEBALL_PRIVATE]),
+      baseballPrivate:
+        count[BASEBALL_PRIVATE] / (count[BASEBALL] + count[BASEBALL_PRIVATE]),
+      double: Number.isNaN(
+        count[DOUBLE] / (count[DOUBLE] + count[DOUBLE_PRIVATE])
+      )
+        ? 0
+        : count[DOUBLE] / (count[DOUBLE] + count[DOUBLE_PRIVATE]),
+      doublePrivate: Number.isNaN(
+        count[DOUBLE_PRIVATE] / (count[DOUBLE] + count[DOUBLE_PRIVATE])
+      )
+        ? 0
+        : count[DOUBLE_PRIVATE] / (count[DOUBLE] + count[DOUBLE_PRIVATE]),
+    };
+  }
+
+  schoolCountData["全国"] = {
+    brassband:
+      allSchoolCount[BRASSBAND] /
+      (allSchoolCount[BRASSBAND] + allSchoolCount[BRASSBAND_PRIVATE]),
+    brassbandPrivate:
+      allSchoolCount[BRASSBAND_PRIVATE] /
+      (allSchoolCount[BRASSBAND] + allSchoolCount[BRASSBAND_PRIVATE]),
+    baseball:
+      allSchoolCount[BASEBALL] /
+      (allSchoolCount[BASEBALL] + allSchoolCount[BASEBALL_PRIVATE]),
+    baseballPrivate:
+      allSchoolCount[BASEBALL_PRIVATE] /
+      (allSchoolCount[BASEBALL] + allSchoolCount[BASEBALL_PRIVATE]),
+    double: Number.isNaN(
+      allSchoolCount[DOUBLE] /
+        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE])
+    )
+      ? 0
+      : allSchoolCount[DOUBLE] /
+        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE]),
+    doublePrivate: Number.isNaN(
+      allSchoolCount[DOUBLE_PRIVATE] /
+        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE])
+    )
+      ? 0
+      : allSchoolCount[DOUBLE_PRIVATE] /
+        (allSchoolCount[DOUBLE] + allSchoolCount[DOUBLE_PRIVATE]),
+  };
+
+  console.log(schoolCountData);
 
   return {
     props: {
-      baseballData: "sample",
-      brassbandData: "sample2",
+      allSchoolCountData: schoolCountData,
     },
   };
 }
