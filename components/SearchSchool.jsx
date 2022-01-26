@@ -69,6 +69,7 @@ const SearchSchool = (props) => {
           placeholder="SchoolName"
           inputProps={{ "aria-label": "SchoolName" }}
           inputRef={props.inputEl}
+          sx={{ m: 1 }}
         />
         <IconButton
           type="text"
@@ -79,7 +80,7 @@ const SearchSchool = (props) => {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <List sx={{ overflow: "auto", mt: 1 }}>
+      <List sx={{ overflow: "auto", mt: 1, maxHeight: "100%" }}>
         {Object.entries(schoolList).map((obj, i) => {
           const name = obj[0];
           const prefecture =
