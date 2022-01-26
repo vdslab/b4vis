@@ -92,29 +92,40 @@ function Home(props) {
               }}
             >
               <Grid item xs={12}>
-                <Paper elevation={5} sx={{ height: "100%" }}>
-                  <YearBarGraph
-                    data={data}
-                    changePrefecture={changePrefecture}
-                    selectedPrefecture={selectedPrefecture}
-                    changeSchool={changeSchool}
-                    selectedSchool={selectedSchool}
-                    changeNowLoading={changeNowLoading}
-                  />
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper elevation={5} sx={{ height: "100%" }}>
-                  <SunburstGraph
-                    data={allSchoolCountData}
-                    changePrefecture={changePrefecture}
-                    selectedPrefecture={selectedPrefecture}
-                    changeSchool={changeSchool}
-                    selectedSchool={selectedSchool}
-                    changeNowLoading={changeNowLoading}
-                    nowLoading={nowLoading}
-                  />
-                </Paper>
+                <Grid
+                  container
+                  rowSpacing={2}
+                  columnSpacing={2}
+                  sx={{
+                    height: "100%",
+                  }}
+                >
+                  <Grid item xs={6} md={12}>
+                    <Paper elevation={5} sx={{ height: "100%" }}>
+                      <YearBarGraph
+                        data={data}
+                        changePrefecture={changePrefecture}
+                        selectedPrefecture={selectedPrefecture}
+                        changeSchool={changeSchool}
+                        selectedSchool={selectedSchool}
+                        changeNowLoading={changeNowLoading}
+                      />
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={6} md={12}>
+                    <Paper elevation={5} sx={{ height: "100%" }}>
+                      <SunburstGraph
+                        data={allSchoolCountData}
+                        changePrefecture={changePrefecture}
+                        selectedPrefecture={selectedPrefecture}
+                        changeSchool={changeSchool}
+                        selectedSchool={selectedSchool}
+                        changeNowLoading={changeNowLoading}
+                        nowLoading={nowLoading}
+                      />
+                    </Paper>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>

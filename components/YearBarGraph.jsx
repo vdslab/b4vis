@@ -152,7 +152,11 @@ const YearBarGraph = (props) => {
             </Select>
           </FormControl>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{ fontSize: "1rem" }}>の2013〜2017年の結果</div>
+            <div style={{
+            fontSize: "1rem",
+            fontWeight: "bolder",
+            padding: "0 0 0 0.5rem",
+          }}>の2013〜2017年の結果</div>
           </div>
         </div>
         <div>
