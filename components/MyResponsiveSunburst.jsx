@@ -21,7 +21,7 @@ const MyResponsiveSunburst = ({ data /* see data tab */ }) => (
         if (e.data.name === "公立" || e.data.name === "私立") {
           return e.data.name + " (" +e.value + ")";
         } 
-        return e.data.name + " (" + e.value + ")";
+        return e.data.name ;
       }}
       arcLabelsSkipAngle={10}
       arcLabelsTextColor={"black"}

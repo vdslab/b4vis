@@ -88,7 +88,7 @@ function Home(props) {
               rowSpacing={2}
               columnSpacing={2}
               sx={{
-                height: "calc(100% + 16px)",
+                height: "100%",
               }}
             >
               <Grid item xs={12}>
