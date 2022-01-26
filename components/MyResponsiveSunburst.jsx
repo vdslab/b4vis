@@ -1,7 +1,7 @@
 import { ResponsiveSunburst } from "@nivo/sunburst";
 
 const MyResponsiveSunburst = ({ data /* see data tab */ }) => (
-  <div style={{ width: "100%", height: "290px" }}>
+  <div style={{ width: "100%", height: "225px" }}>
     <ResponsiveSunburst
       data={data}
       margin={{ top: 20, right: 30, bottom: 10, left: 30 }}

@@ -83,7 +83,7 @@ function SunburstGraph(props) {
       >
         {props.selectedPrefecture}の私立・公立校の内訳
       </div>
-      <MyResponsiveSunburst data={schoolCount} style={{ height: "300px" }} />
+      <MyResponsiveSunburst data={schoolCount}  />
     </Box>
   );
 }
