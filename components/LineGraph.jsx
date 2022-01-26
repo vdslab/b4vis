@@ -131,7 +131,7 @@ const LineGraph = (props) => {
       setSameYear(sameYear);
       props.changeNowLoading(false);
     })();
-  }, [props.selectedSchool]);
+  }, [props]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
