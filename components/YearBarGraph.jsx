@@ -155,44 +155,70 @@ const YearBarGraph = (props) => {
             <div style={{ fontSize: "1rem" }}>の2013〜2017年の結果</div>
           </div>
         </div>
-        <div>
-          <svg
-            viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
-          >
-            {Object.keys(showData)
-              .reverse()
-              .map((year, row) => {
-                return (
-                  <g key={year}>
-                    <text
-                      x={0}
-                      y={len * row * 2 + len + row * 5}
-                      textAnchor="start"
-                      dominantBaseline="central"
-                      fontSize="15"
-                      style={{ userSelect: "none" }}
-                    >
-                      {year}
-                    </text>
-                    {showData[year].map((item, col) => {
-                      return (
-                        <Tooltip
-                          title={item.name}
-                          arrow
-                          placement="bottom"
-                          key={col}
-                          disableInteractive
-                        >
-                          <g>
+
+        <svg
+          viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
+        >
+          {Object.keys(showData)
+            .reverse()
+            .map((year, row) => {
+              return (
+                <g key={year}>
+                  <text
+                    x={0}
+                    y={len * row * 2 + len + row * 5}
+                    textAnchor="start"
+                    dominantBaseline="central"
+                    fontSize="15"
+                    style={{ userSelect: "none" }}
+                  >
+                    {year}
+                  </text>
+                  {showData[year].map((item, col) => {
+                    return (
+                      <Tooltip
+                        title={item.name}
+                        arrow
+                        placement="bottom"
+                        key={col}
+                        disableInteractive
+                      >
+                        <g>
+                          <rect
+                            x={50 + len * Math.floor(col / 2)}
+                            y={len * row * 2 + (col % 2) * len + row * 5}
+                            width={len}
+                            height={len}
+                            stroke="lightgray"
+                            fill={
+                              item.name === selectedSchool
+                                ? "#ff4f4f"
+                                : color[item.club]
+                            }
+                            onClick={() => {
+                              if (props.selectedSchool !== item.name) {
+                                props.changeNowLoading(true);
+                                props.changeSchool(item.name);
+                              }
+                            }}
+                            onMouseOver={() => {
+                              setSelectedSchool(item.name);
+                            }}
+                            onMouseOut={() => setSelectedSchool(null)}
+                          />
+
+                          {/* 枠縁ver */}
+                          {item.name === props.selectedSchool && (
                             <rect
-                              x={50 + len * Math.floor(col / 2)}
-                              y={len * row * 2 + (col % 2) * len + row * 5}
-                              width={len}
-                              height={len}
-                              stroke="lightgray"
+                              x={50 + len * Math.floor(col / 2) + 1}
+                              y={len * row * 2 + (col % 2) * len + row * 5 + 1}
+                              width={len - 2}
+                              height={len - 2}
+                              strokeWidth={2}
+                              stroke="#444444"
                               fill={
                                 item.name === selectedSchool
-                                  ? "#ff4f4f"
+                                  ? "#ff4545"
                                   : color[item.club]
                               }
                               onClick={() => {
@@ -201,63 +227,34 @@ const YearBarGraph = (props) => {
                                   props.changeSchool(item.name);
                                 }
                               }}
-                              onMouseOver={() => {
-                                setSelectedSchool(item.name);
-                              }}
-                              onMouseOut={() => setSelectedSchool(null)}
                             />
+                          )}
 
-                            {/* 枠縁ver */}
-                            {item.name === props.selectedSchool && (
-                              <rect
-                                x={50 + len * Math.floor(col / 2) + 1}
-                                y={
-                                  len * row * 2 + (col % 2) * len + row * 5 + 1
+                          {/* 色塗りver */}
+                          {item.name === props.selectedSchool && (
+                            <rect
+                              x={50 + len * Math.floor(col / 2)}
+                              y={len * row * 2 + (col % 2) * len + row * 5}
+                              width={len}
+                              height={len}
+                              fill={"orange"}
+                              fillOpacity={0.75}
+                              onClick={() => {
+                                if (props.selectedSchool !== item.name) {
+                                  props.changeNowLoading(true);
+                                  props.changeSchool(item.name);
                                 }
-                                width={len - 2}
-                                height={len - 2}
-                                strokeWidth={2}
-                                stroke="#444444"
-                                fill={
-                                  item.name === selectedSchool
-                                    ? "#ff4545"
-                                    : color[item.club]
-                                }
-                                onClick={() => {
-                                  if (props.selectedSchool !== item.name) {
-                                    props.changeNowLoading(true);
-                                    props.changeSchool(item.name);
-                                  }
-                                }}
-                              />
-                            )}
-
-                            {/* 色塗りver */}
-                            {item.name === props.selectedSchool && (
-                              <rect
-                                x={50 + len * Math.floor(col / 2)}
-                                y={len * row * 2 + (col % 2) * len + row * 5}
-                                width={len}
-                                height={len}
-                                fill={"orange"}
-                                fillOpacity={0.75}
-                                onClick={() => {
-                                  if (props.selectedSchool !== item.name) {
-                                    props.changeNowLoading(true);
-                                    props.changeSchool(item.name);
-                                  }
-                                }}
-                              />
-                            )}
-                          </g>
-                        </Tooltip>
-                      );
-                    })}
-                  </g>
-                );
-              })}
-          </svg>
-        </div>
+                              }}
+                            />
+                          )}
+                        </g>
+                      </Tooltip>
+                    );
+                  })}
+                </g>
+              );
+            })}
+        </svg>
       </div>
     </Box>
   );

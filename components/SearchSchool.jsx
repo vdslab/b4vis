@@ -59,6 +59,7 @@ const SearchSchool = (props) => {
   return (
     <>
       <Paper
+        variant="outlined"
         sx={{
           p: "4px 4px",
           display: "flex",
