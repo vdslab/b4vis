@@ -1,9 +1,17 @@
-import { useEffect } from "react";
-import { Paper, InputBase, List, ListItem } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
+import { useState, useEffect } from "react";
+import {
+  Paper,
+  InputBase,
+  List,
+  ListItemButton,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchSchool = (props) => {
+  const [schoolList, setSchoolList] = useState([]);
+
   useEffect(() => {
     if (props.inputSchoolName) {
       const { baseballData, brassbandData } = props.data;
@@ -35,27 +43,42 @@ const SearchSchool = (props) => {
           }
         }
       }
-      console.log(new Set([res]));
+      setSchoolList([...new Set([...res])]);
     }
   }, [props.inputSchoolName]);
   return (
-    <Paper sx={{ p: "4px 4px", display: "flex", alignItems: "center" }}>
-      <InputBase
-        placeholder="SchoolName"
-        inputProps={{ "aria-label": "SchoolName" }}
-        inputRef={props.inputEl}
-      />
-      <IconButton
-        type="text"
-        sx={{ p: "10px" }}
-        aria-label="search"
-        onClick={props.changeSchoolName}
+    <>
+      <Paper
+        sx={{
+          p: "4px 4px",
+          display: "flex",
+          alignItems: "center",
+        }}
       >
-        <SearchIcon />
-      </IconButton>
-
-      <List>{}</List>
-    </Paper>
+        <InputBase
+          placeholder="SchoolName"
+          inputProps={{ "aria-label": "SchoolName" }}
+          inputRef={props.inputEl}
+        />
+        <IconButton
+          type="text"
+          sx={{ p: "10px" }}
+          aria-label="search"
+          onClick={props.changeSchoolName}
+        >
+          <SearchIcon />
+        </IconButton>
+      </Paper>
+      <List sx={{ height: "635px", overflow: "auto", mt: 1 }}>
+        {schoolList.map((name, i) => {
+          return (
+            <ListItemButton key={i} onClick={() => props.changeSchool(name)}>
+              <ListItemText primary={name} />
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </>
   );
 };
 
