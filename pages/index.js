@@ -5,13 +5,15 @@ import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
 const { Client } = require("pg");
 import { Grid, Paper } from "@mui/material";
+import SearchSchool from "../components/SearchSchool";
+import SunburstGraph from "../components/SunburstGraph";
 
 function Home(props) {
   // const data = {
   //   baseballData: props.baseballData,
   //   brassbandData: props.brassbandData,
   // };
-  console.log(props.allSchoolCountData);
+  const allSchoolCountData = props.allSchoolCountData;
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
   const [selectedSchool, setSelectedSchool] = useState("");
@@ -67,7 +69,7 @@ function Home(props) {
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper elevation={5}>
+            <Paper elevation={5} sx={{ height: "100%" }}>
               <PrefectureBarGraph
                 data={data}
                 changePrefecture={changePrefecture}
@@ -87,6 +89,17 @@ function Home(props) {
                 height: "calc(100% + 16px)",
               }}
             >
+              <Grid item xs={12}>
+                <Paper elevation={5} sx={{ height: "100%" }}>
+                  <SunburstGraph
+                    data={allSchoolCountData}
+                    changeSchool={changeSchool}
+                    selectedSchool={selectedSchool}
+                    nowLoading={nowLoading}
+                    changeNowLoading={changeNowLoading}
+                  />
+                </Paper>
+              </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
                   <YearBarGraph
