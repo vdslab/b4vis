@@ -341,7 +341,7 @@ const PrefectureBarGraph = (props) => {
                     width={20}
                     height={20}
                     stroke="lightgray"
-                    fill={color[2]}
+                    fill={color[1]}
                   />
                   <text
                     x={25}
@@ -371,7 +371,7 @@ const PrefectureBarGraph = (props) => {
                     width={20}
                     height={20}
                     stroke="lightgray"
-                    fill={color[1]}
+                    fill={color[2]}
                   />
                   <text
                     x={25}
