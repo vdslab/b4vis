@@ -7,12 +7,9 @@ const { Client } = require("pg");
 import { Grid, Paper } from "@mui/material";
 import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
+import { useMediaQuery } from "@mui/material";
 
 function Home(props) {
-  // const data = {
-  //   baseballData: props.baseballData,
-  //   brassbandData: props.brassbandData,
-  // };
   const allSchoolCountData = props.allSchoolCountData;
   const [data, setData] = useState(null);
   const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
@@ -20,6 +17,7 @@ function Home(props) {
   const [inputSchoolName, setInputSchoolName] = useState("");
   const [nowLoading, setNowLoading] = useState(false);
   const inputEl = useRef("");
+  const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
 
   const changePrefecture = (prefecture) => {
     setSelectedPretecture(prefecture);
@@ -54,23 +52,25 @@ function Home(props) {
   }, []);
 
   return (
-    <div>
+    <div style={{ minWidth: "500px" }}>
       <Header />
       <div style={{ margin: 10 }}>
         <Grid container rowSpacing={2} columnSpacing={2}>
-          <Grid item xs={12} md={2}>
-            <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
-              <SearchSchool
-                data={data}
-                inputSchoolName={inputSchoolName}
-                changePrefecture={changePrefecture}
-                changeSchoolName={changeSchoolName}
-                changeSchool={changeSchool}
-                inputEl={inputEl}
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
+          {showSearchBar && (
+            <Grid item xs={12} md={2}>
+              <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
+                <SearchSchool
+                  data={data}
+                  inputSchoolName={inputSchoolName}
+                  changePrefecture={changePrefecture}
+                  changeSchoolName={changeSchoolName}
+                  changeSchool={changeSchool}
+                  inputEl={inputEl}
+                />
+              </Paper>
+            </Grid>
+          )}
+          <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
               <PrefectureBarGraph
                 data={data}
@@ -79,10 +79,11 @@ function Home(props) {
                 changeSchool={changeSchool}
                 selectedSchool={selectedSchool}
                 changeNowLoading={changeNowLoading}
+                allSchoolCountData={allSchoolCountData}
               />
             </Paper>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={showSearchBar ? 4 : 5}>
             <Grid
               container
               rowSpacing={2}
