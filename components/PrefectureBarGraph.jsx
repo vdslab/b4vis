@@ -10,14 +10,28 @@ import {
 } from "@mui/material";
 import styles from "./css/Common.module.css";
 import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
+import { useDispatch,useSelector } from "react-redux";
+import { appSlice } from "../store/features";
 
 
 const PrefectureBarGraph = (props) => {
+  const dispatch = useDispatch();
+
   const [brassbandData, setBrassbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [showData, setShowData] = useState(null);
   const [arrangement, setArrangement] = useState("default");
   const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
+
+  const selectedSchool = useSelector((state) => state.app.selectedSchool);
+  
+  const changePrefecture = (prefecture) => {
+    dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
+  };
+
+  const changeSchool = (school) => {
+    dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
 
   const DOUBLE = 0;
   const BASEBALL = 1;
@@ -45,7 +59,6 @@ const PrefectureBarGraph = (props) => {
   }, [props.data]);
 
   useEffect(() => {
-    console.log("here");
     if (baseballData && brassbandData) {
       const selectedData = {
         北海道: {},
@@ -439,7 +452,7 @@ const PrefectureBarGraph = (props) => {
         >
           {arrangementPrefecture.map((prefecture, row) => {
             return (
-              <g key={row} onClick={() => props.changePrefecture(prefecture)}>
+              <g key={row} onClick={() => changePrefecture(prefecture)}>
                 <text
                   x={0}
                   y={13 * row * 2 + 1}
@@ -468,15 +481,15 @@ const PrefectureBarGraph = (props) => {
                           stroke="lightgray"
                           fill={color[item.club]}
                           onClick={() => {
-                            if (props.selectedSchool !== item.name) {
+                            if (selectedSchool !== item.name) {
                               props.changeNowLoading(true);
-                              props.changeSchool(item.name);
+                              changeSchool(item.name);
                             }
                           }}
                         />
 
                         {/* 枠縁ver */}
-                        {item.name === props.selectedSchool && (
+                        {item.name === selectedSchool && (
                           <rect
                             x={50 + 26 * col + 1}
                             y={26 * row - 13 + 1}
@@ -486,16 +499,16 @@ const PrefectureBarGraph = (props) => {
                             stroke="#333333"
                             fill={color[item.club]}
                             onClick={() => {
-                              if (props.selectedSchool !== item.name) {
+                              if (selectedSchool !== item.name) {
                                 props.changeNowLoading(true);
-                                props.changeSchool(item.name);
+                                changeSchool(item.name);
                               }
                             }}
                           />
                         )}
 
                         {/*色塗りver*/}
-                        {item.name === props.selectedSchool && (
+                        {item.name === selectedSchool && (
                           <rect
                             x={50 + 26 * col}
                             y={26 * row - 13}
@@ -504,9 +517,9 @@ const PrefectureBarGraph = (props) => {
                             fill={"orange"}
                             fillOpacity={0.5}
                             onClick={() => {
-                              if (props.selectedSchool !== item.name) {
+                              if (selectedSchool !== item.name) {
                                 props.changeNowLoading(true);
-                                props.changeSchool(item.name);
+                                changeSchool(item.name);
                               }
                             }}
                           />

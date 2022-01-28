@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Box } from "@mui/material";
 import styles from "./css/Common.module.css";
+import { useSelector } from "react-redux";
 
 const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
   ssr: false,
@@ -9,9 +10,10 @@ const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
 
 function SunburstGraph(props) {
   const [schoolCount, setSchoolCount] = useState(null);
+  const selectedPrefecture = useSelector((state) => state.app.selectedPrefecture);
 
   useEffect(() => {
-    const dividedData = props.data[props.selectedPrefecture];
+    const dividedData = props.data[selectedPrefecture];
     const data = {
       name: "b4vis",
       color: "hsl(290, 70%, 50%)",
@@ -71,7 +73,7 @@ function SunburstGraph(props) {
       ],
     };
     setSchoolCount(data);
-  }, [props]);
+  }, [selectedPrefecture,props.data]);
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
@@ -83,7 +85,7 @@ function SunburstGraph(props) {
           padding: "0 0 0 0.5rem",
         }}
       >
-        {props.selectedPrefecture}の私立・公立校の内訳
+        {selectedPrefecture}の私立・公立校の内訳
       </div>
       <div>
         <MyResponsiveSunburst data={schoolCount} />

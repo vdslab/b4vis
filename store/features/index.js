@@ -6,6 +6,7 @@ const initialState = {
   selectedPrefecture: "",
   allSchoolData: null,
   allSchoolCountData: null,
+  inputSchoolName: "",
 };
 
 export const appSlice = createSlice({
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     },
     updateAllSchoolData(state, action) {
       state.allSchoolCountData = action.payload;
+    },
+    updateInputSchoolName(state, action) {
+      state.inputSchoolName = action.payload;
     },
   },
 });

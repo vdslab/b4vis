@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import styles from "./css/Common.module.css";
+import { useSelector } from "react-redux";
 
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
@@ -18,6 +19,8 @@ const LineGraph = (props) => {
   const [brassBandData, setBrasbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [sameRankYear, setSameYear] = useState(null);
+  const selectedSchool = useSelector((state) => state.app.selectedSchool);
+
   const margin = {
     top: 40,
     bottom: 10,
@@ -34,13 +37,13 @@ const LineGraph = (props) => {
     (async () => {
       const brassBandRequest = await fetch(`../api/brassBand/school`, {
         method: "POST",
-        body: JSON.stringify(props.selectedSchool),
+        body: JSON.stringify(selectedSchool),
       });
       const brassBandData = await brassBandRequest.json();
 
       const baseballRequest = await fetch(`../api/baseball/school`, {
         method: "POST",
-        body: JSON.stringify(props.selectedSchool),
+        body: JSON.stringify(selectedSchool),
       });
       const baseballData = await baseballRequest.json();
 
@@ -56,7 +59,7 @@ const LineGraph = (props) => {
         for (let year of YEAR_LIST) {
           let find = false;
           for (let item of brassBandData.data) {
-            if (item.year === year && item.name === props.selectedSchool) {
+            if (item.year === year && item.name === selectedSchool) {
               item.rank = brassBandRank[item.last];
               selectedBrassBandData.push(item);
               brassBandYear[item.year] = { rank: item.rank };
@@ -78,7 +81,7 @@ const LineGraph = (props) => {
           let find = false;
           for (let item of baseballData.data) {
             if (item.year === year) {
-              if (item.name === props.selectedSchool) {
+              if (item.name === selectedSchool) {
                 if (item.nationalbest !== null) {
                   item.rank = 3;
                 } else if (item.regionalbest <= 8) {
@@ -131,7 +134,7 @@ const LineGraph = (props) => {
       setSameYear(sameYear);
       props.changeNowLoading(false);
     })();
-  }, [props]);
+  }, [selectedSchool, props]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
@@ -213,7 +216,7 @@ const LineGraph = (props) => {
             padding: "0 0 0 0.5rem",
           }}
         >
-          {props.selectedSchool}
+          {selectedSchool}
         </div>
         <div style={{ heigth: "100%" }}>
           {props.nowLoading ? (
@@ -538,7 +541,7 @@ const LineGraph = (props) => {
                         stroke={"black"}
                         strokeWidth={0.5}
                         fill={
-                          sameRankYear.find((year) => year === result.year)
+                          sameRankYear?.find((year) => year === result.year)
                             ? "none"
                             : "white"
                         }

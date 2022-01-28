@@ -9,12 +9,27 @@ import {
   InputLabel,
 } from "@mui/material";
 import styles from "./css/Common.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { appSlice } from "../store/features";
 
 const YearBarGraph = (props) => {
+  const dispatch = useDispatch();
+
   const [brassbandData, setBrassbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
-  const [selectedSchool, setSelectedSchool] = useState(null);
+  const [hoverSchool, setHoverSchool] = useState(null);
   const [showData, setShowData] = useState(null);
+
+  const selectedPrefecture = useSelector((state) => state.app.selectedPrefecture);
+  const preSelectedSchool = useSelector((state) => state.app.selectedSchool);
+  
+  const changePrefecture = (prefecture) => {
+    dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
+  };
+
+  const changeSchool = (school) => {
+    dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
 
   const DOUBLE = 0;
   const BASEBALL = 1;
@@ -49,9 +64,9 @@ const YearBarGraph = (props) => {
       for (const item of brassbandData) {
         // 地区大会は除外
         if (item["last"] !== "地区") {
-          if (item["prefecture"].slice(0, -1) === props.selectedPrefecture) {
+          if (item["prefecture"].slice(0, -1) === selectedPrefecture) {
             // 北海道以外
-            if (props.selectedPrefecture !== "東京") {
+            if (selectedPrefecture !== "東京") {
               // 東京以外
               // 都道府県でも銀賞以下は除外
               if (item["last"] === "都道府県" && item["prize"] !== "金賞")
@@ -65,7 +80,7 @@ const YearBarGraph = (props) => {
             }
           } else if (
             item["prefecture"].slice(-2) === "地区" &&
-            props.selectedPrefecture === "北海道"
+            selectedPrefecture === "北海道"
           ) {
             // 北海道
             // 都道府県大会(他でいう地区大会)は除外
@@ -83,8 +98,8 @@ const YearBarGraph = (props) => {
       //野球
       for (const item of baseballData) {
         if (
-          item["prefecture"].slice(0, -1) === props.selectedPrefecture ||
-          (props.selectedPrefecture === item["prefecture"].slice(1) &&
+          item["prefecture"].slice(0, -1) === selectedPrefecture ||
+          (selectedPrefecture === item["prefecture"].slice(1) &&
             item["regionalbest"] <= 4)
         ) {
           let find = false;
@@ -113,7 +128,7 @@ const YearBarGraph = (props) => {
 
       setShowData(selectedData);
     }
-  }, [props.selectedPrefecture, baseballData, brassbandData]);
+  }, [selectedPrefecture, baseballData, brassbandData]);
 
   if (!showData) {
     return (
@@ -136,9 +151,9 @@ const YearBarGraph = (props) => {
             <Select
               labelId="prefecture-select-label"
               id="prefecture-select"
-              value={props.selectedPrefecture}
+              value={selectedPrefecture}
               label="Prefecture"
-              onChange={(e) => props.changePrefecture(e.target.value)}
+              onChange={(e) => changePrefecture(e.target.value)}
               sx={{ fontSize: 12 }}
             >
               {prefectureName.map((p, i) => {
@@ -195,24 +210,24 @@ const YearBarGraph = (props) => {
                             height={len}
                             stroke="lightgray"
                             fill={
-                              item.name === selectedSchool
+                              item.name === hoverSchool
                                 ? "#ff4f4f"
                                 : color[item.club]
                             }
                             onClick={() => {
-                              if (props.selectedSchool !== item.name) {
+                              if (preSelectedSchool !== item.name) {
                                 props.changeNowLoading(true);
-                                props.changeSchool(item.name);
+                                changeSchool(item.name);
                               }
                             }}
                             onMouseOver={() => {
-                              setSelectedSchool(item.name);
+                              setHoverSchool(item.name);
                             }}
-                            onMouseOut={() => setSelectedSchool(null)}
+                            onMouseOut={() => setHoverSchool(null)}
                           />
 
                           {/* 枠縁ver */}
-                          {item.name === props.selectedSchool && (
+                          {item.name === preSelectedSchool && (
                             <rect
                               x={50 + len * Math.floor(col / 2) + 1}
                               y={len * row * 2 + (col % 2) * len + row * 5 + 1}
@@ -221,21 +236,21 @@ const YearBarGraph = (props) => {
                               strokeWidth={2}
                               stroke="#444444"
                               fill={
-                                item.name === selectedSchool
+                                item.name === hoverSchool
                                   ? "#ff4545"
                                   : color[item.club]
                               }
                               onClick={() => {
-                                if (props.selectedSchool !== item.name) {
+                                if (preSelectedSchool !== item.name) {
                                   props.changeNowLoading(true);
-                                  props.changeSchool(item.name);
+                                  changeSchool(item.name);
                                 }
                               }}
                             />
                           )}
 
                           {/* 色塗りver */}
-                          {item.name === props.selectedSchool && (
+                          {item.name === preSelectedSchool && (
                             <rect
                               x={50 + len * Math.floor(col / 2)}
                               y={len * row * 2 + (col % 2) * len + row * 5}
@@ -244,9 +259,9 @@ const YearBarGraph = (props) => {
                               fill={"orange"}
                               fillOpacity={0.75}
                               onClick={() => {
-                                if (props.selectedSchool !== item.name) {
+                                if (preSelectedSchool !== item.name) {
                                   props.changeNowLoading(true);
-                                  props.changeSchool(item.name);
+                                  changeSchool(item.name);
                                 }
                               }}
                             />

@@ -9,30 +9,21 @@ import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
 import { useMediaQuery } from "@mui/material";
 
+import { useDispatch, useSelector } from "react-redux";
+import { appSlice } from "../store/features/index";
+
 function Home(props) {
+  const dispatch = useDispatch();
+
   const allSchoolCountData = props.allSchoolCountData;
   const [data, setData] = useState(null);
-  const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
-  const [selectedSchool, setSelectedSchool] = useState("");
   const [inputSchoolName, setInputSchoolName] = useState("");
   const [nowLoading, setNowLoading] = useState(false);
-  const inputEl = useRef("");
+
   const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
-
-  const changePrefecture = (prefecture) => {
-    setSelectedPretecture(prefecture);
-  };
-
-  const changeSchool = (school) => {
-    setSelectedSchool(school);
-  };
 
   const changeNowLoading = (nowLoading) => {
     setNowLoading(nowLoading);
-  };
-
-  const changeSchoolName = () => {
-    setInputSchoolName(inputEl.current.value);
   };
 
   // TODO DBからデータ取ってきてgetStaticProps使う
@@ -59,14 +50,7 @@ function Home(props) {
           {showSearchBar && (
             <Grid item xs={12} md={2}>
               <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
-                <SearchSchool
-                  data={data}
-                  inputSchoolName={inputSchoolName}
-                  changePrefecture={changePrefecture}
-                  changeSchoolName={changeSchoolName}
-                  changeSchool={changeSchool}
-                  inputEl={inputEl}
-                />
+                <SearchSchool data={data} inputSchoolName={inputSchoolName} />
               </Paper>
             </Grid>
           )}
@@ -74,10 +58,6 @@ function Home(props) {
             <Paper elevation={5} sx={{ height: "100%" }}>
               <PrefectureBarGraph
                 data={data}
-                changePrefecture={changePrefecture}
-                selectedPrefecture={selectedPrefecture}
-                changeSchool={changeSchool}
-                selectedSchool={selectedSchool}
                 changeNowLoading={changeNowLoading}
                 allSchoolCountData={allSchoolCountData}
               />
@@ -105,25 +85,13 @@ function Home(props) {
                     <Paper elevation={5} sx={{ height: "100%" }}>
                       <YearBarGraph
                         data={data}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
                         changeNowLoading={changeNowLoading}
                       />
                     </Paper>
                   </Grid>
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <SunburstGraph
-                        data={allSchoolCountData}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
-                        changeNowLoading={changeNowLoading}
-                        nowLoading={nowLoading}
-                      />
+                      <SunburstGraph data={allSchoolCountData} />
                     </Paper>
                   </Grid>
                 </Grid>
@@ -132,8 +100,6 @@ function Home(props) {
                 <Paper elevation={5} sx={{ height: "100%" }}>
                   <LineGraph
                     data={data}
-                    changeSchool={changeSchool}
-                    selectedSchool={selectedSchool}
                     nowLoading={nowLoading}
                     changeNowLoading={changeNowLoading}
                   />
