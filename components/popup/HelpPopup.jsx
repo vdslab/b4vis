@@ -7,7 +7,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
-import styles from "./css/HelpPopup.module.css";
+import styles from "../css/HelpPopup.module.css";
 
 export function HelpPopup(props) {
   return (
