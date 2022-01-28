@@ -6,8 +6,9 @@ import {
   DialogTitle,
   Box,
   IconButton,
+  DialogActions,
 } from "@mui/material";
-import { HelpOutline } from "@mui/icons-material";
+import { HelpOutline, CloseOutlined } from "@mui/icons-material";
 import styles from "./HelpPopup.module.css";
 
 export function HelpPopup() {
@@ -34,9 +35,25 @@ export function HelpPopup() {
         fullWidth={true}
         maxWidth={"lg"}
       >
-        <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
-          b4visとは
-        </DialogTitle>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
+            b4visとは
+          </DialogTitle>
+          <DialogActions>
+            <IconButton
+              onClick={handleClose}
+              aria-label="close"
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseOutlined />
+            </IconButton>
+          </DialogActions>
+        </div>
         <DialogContent>
           <DialogContentText>
             <div>
@@ -58,7 +75,6 @@ export function HelpPopup() {
               </div>
               <div style={{ padding: "1rem 0 1rem 0" }}>
                 グラフのセルをクリックすることでその学校のある都道府県の2013~2017年の詳細(ビュー②)とその学校の詳細(ビュー④)を見ることができます。
-             
                 また、セルをクリックするか県名を選ぶことで、ビュー③で該当する県の私立/公立校の内訳を見ることができます。
               </div>
 
