@@ -8,9 +8,21 @@ import {
   IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useSelector, useDispatch } from "react-redux";
+import { appSlice } from "../store/features";
 
 const SearchSchool = (props) => {
+  const dispatch = useDispatch();
+
   const [schoolList, setSchoolList] = useState([]);
+
+  const changePrefecture = (prefecture) => {
+    dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
+  };
+  
+  const changeSchool = (school) => {
+    dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
 
   useEffect(() => {
     if (props.inputSchoolName) {
@@ -99,8 +111,8 @@ const SearchSchool = (props) => {
             <ListItemButton
               key={i}
               onClick={() => {
-                props.changePrefecture(prefecture);
-                props.changeSchool(name);
+                changePrefecture(prefecture);
+                changeSchool(name);
               }}
             >
               <ListItemText primary={name} />
