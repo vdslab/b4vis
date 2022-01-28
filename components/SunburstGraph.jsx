@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Box } from "@mui/material";
+import styles from "./css/Common.module.css";
 
 const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
   ssr: false,
@@ -74,6 +75,7 @@ function SunburstGraph(props) {
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
+      <div className={styles.centering_brock}>
       <div
         style={{
           fontSize: "1rem",
@@ -83,7 +85,10 @@ function SunburstGraph(props) {
       >
         {props.selectedPrefecture}の私立・公立校の内訳
       </div>
-      <MyResponsiveSunburst data={schoolCount}  />
+      <div>
+        <MyResponsiveSunburst data={schoolCount} />
+        </div>
+        </div>
     </Box>
   );
 }
