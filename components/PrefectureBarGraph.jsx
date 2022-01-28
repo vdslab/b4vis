@@ -8,7 +8,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import styles from "./Common.module.css";
+import styles from "./css/Common.module.css";
 import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
 
 

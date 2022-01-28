@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Box } from "@mui/material";
-import styles from "./ZenkokuSunburst.module.css";
+import styles from "./css/ZenkokuSunburst.module.css";
 
 const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
   ssr: false,
