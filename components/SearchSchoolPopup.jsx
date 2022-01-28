@@ -1,13 +1,11 @@
 import {
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   DialogActions,
 } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
-import styles from "./css/HelpPopup.module.css";
 import SearchSchool from "./SearchSchool";
 
 export function SearchSchoolPopup(props) {

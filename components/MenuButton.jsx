@@ -63,7 +63,6 @@ export function MenuButton() {
           学校から検索
         </MenuItem>
       </Menu>
-
       <HelpPopup isOpen={showHelpPopup} handleClose={handleHelpPopupClose} />
       <SearchSchoolPopup
         isOpen={showSearchPopup}
