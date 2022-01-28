@@ -11,7 +11,6 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const SearchSchool = (props) => {
   const [schoolList, setSchoolList] = useState([]);
-  const [inputName, setInputName] = useState("");
 
   useEffect(() => {
     if (props.inputSchoolName) {
@@ -88,8 +87,8 @@ const SearchSchool = (props) => {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <List sx={{ overflow: "auto", mt: 1, maxHeight: "650px" }}>
-        {Object.entries(schoolList).map((obj, i) => {
+      <List sx={{ overflow: "auto", mt: 1, maxHeight: "700px" }}>
+        {props.inputSchoolName !== "" && Object.entries(schoolList).map((obj, i) => {
           const name = obj[0];
           const prefecture =
             obj[1].slice(1) === "北海道" || obj[1].slice(1) === "東京"
