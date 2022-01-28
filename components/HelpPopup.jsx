@@ -14,7 +14,7 @@ export function HelpPopup(props) {
     <div>
       <Dialog
         open={props.isOpen}
-        onClose={props.handleHelpDialogClose}
+        onClose={props.handleClose}
         fullWidth={true}
         maxWidth={"lg"}
       >
@@ -24,7 +24,7 @@ export function HelpPopup(props) {
           </DialogTitle>
           <DialogActions>
             <IconButton
-              onClick={props.handleHelpDialogClose}
+              onClick={props.handleClose}
               aria-label="close"
               sx={{
                 position: "absolute",

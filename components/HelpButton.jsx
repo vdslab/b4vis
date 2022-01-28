@@ -21,7 +21,7 @@ export function HelpButton(props) {
           <HelpOutline />
         </IconButton>
       </Box>
-      <HelpPopup isOpen={open} handleHelpDialogClose={handleClose} />
+      <HelpPopup isOpen={open} handleClose={handleClose} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { AppBar, Box, Toolbar, Typography, useMediaQuery } from "@mui/material";
 import { HelpButton } from "./HelpButton";
-import { SearchPopup } from "./SearchPopup";
+import { MenuButton } from "./MenuButton";
 
 export default function Header() {
   const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
@@ -13,7 +13,7 @@ export default function Header() {
             b4vis
           </Typography>
 
-          {showSearchBar ? <HelpButton /> : <SearchPopup />}
+          {showSearchBar ? <HelpButton /> : <MenuButton />}
         </Toolbar>
       </AppBar>
     </Box>

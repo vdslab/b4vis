@@ -4,10 +4,12 @@ import { MenuRounded } from "@mui/icons-material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { HelpPopup } from "./HelpPopup";
+import { SearchSchoolPopup } from "./SearchSchoolPopup";
 
-export function SearchPopup() {
+export function MenuButton() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [showHelpDialog, setShowHelpDialog] = useState(false);
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -17,8 +19,12 @@ export function SearchPopup() {
     setAnchorEl(null);
   };
 
-  const handleHelpDialogClose = (event) => {
-    setShowHelpDialog(false);
+  const handleHelpPopupClose = (event) => {
+    setShowHelpPopup(false);
+  };
+
+  const handleSearchPopupClose = (event) => {
+    setShowSearchPopup(false);
   };
 
   return (
@@ -43,17 +49,25 @@ export function SearchPopup() {
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
-            setShowHelpDialog(true);
+            setShowHelpPopup(true);
           }}
         >
           b4visとは
         </MenuItem>
-        <MenuItem onClick={handleClose}>学校を探す</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            setShowSearchPopup(true);
+          }}
+        >
+          学校から検索
+        </MenuItem>
       </Menu>
 
-      <HelpPopup
-        isOpen={showHelpDialog}
-        handleHelpDialogClose={handleHelpDialogClose}
+      <HelpPopup isOpen={showHelpPopup} handleClose={handleHelpPopupClose} />
+      <SearchSchoolPopup
+        isOpen={showSearchPopup}
+        handleClose={handleSearchPopupClose}
       />
     </div>
   );

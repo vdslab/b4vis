@@ -71,6 +71,7 @@ const SearchSchool = (props) => {
           placeholder="学校名で検索"
           inputProps={{ "aria-label": "SchoolName" }}
           inputRef={props.inputEl}
+          fullWidth={true}
           onChange={(e) => {
             if (e.target.value === "") {
               props.changeSchoolName("");
