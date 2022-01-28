@@ -3,8 +3,8 @@ import { IconButton } from "@mui/material";
 import { MenuRounded } from "@mui/icons-material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { HelpPopup } from "./HelpPopup";
-import { SearchSchoolPopup } from "./SearchSchoolPopup";
+import { HelpPopup } from "./popup/HelpPopup";
+import { SearchSchoolPopup } from "./popup/SearchSchoolPopup";
 
 export function MenuButton() {
   const [anchorEl, setAnchorEl] = useState(null);

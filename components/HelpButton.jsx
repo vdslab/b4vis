@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, IconButton } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
-import { HelpPopup } from "./HelpPopup";
+import { HelpPopup } from "./popup/HelpPopup";
 
 export function HelpButton(props) {
   const [open, setOpen] = useState(false);

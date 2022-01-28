@@ -6,7 +6,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
-import SearchSchool from "./SearchSchool";
+import SearchSchool from "../SearchSchool";
 
 export function SearchSchoolPopup(props) {
   return (
