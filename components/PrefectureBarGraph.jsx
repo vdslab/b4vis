@@ -9,6 +9,8 @@ import {
   Box,
 } from "@mui/material";
 import styles from "./Common.module.css";
+import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
+
 
 const PrefectureBarGraph = (props) => {
   const [brassbandData, setBrassbandData] = useState(null);
@@ -43,6 +45,7 @@ const PrefectureBarGraph = (props) => {
   }, [props.data]);
 
   useEffect(() => {
+    console.log("here");
     if (baseballData && brassbandData) {
       const selectedData = {
         北海道: {},
@@ -234,14 +237,27 @@ const PrefectureBarGraph = (props) => {
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
       <div className={styles.centering_brock}>
-        <div
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: "bolder",
-            padding: "0.25rem",
-          }}
-        >
-          2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bolder",
+              padding: "1.5rem 0 0 0.5rem",
+              width: "125%",
+              display: "flex",
+            }}
+          >
+            <div>
+              <div>2013〜2017年に</div>
+              <div>吹奏楽コンクール・甲子園</div>
+              <div>上位大会に進んだ高校</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", width:"100%", justifyContent:"center" }}>
+            <Box>
+              <ZenkokuSunburstGraph data={props.allSchoolCountData} />
+            </Box>
+          </div>
         </div>
         <Box style={{ display: "flex", alignItems: "center" }}>
           <FormControl
