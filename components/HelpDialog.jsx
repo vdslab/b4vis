@@ -1,37 +1,20 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Box,
   IconButton,
   DialogActions,
 } from "@mui/material";
-import { HelpOutline, CloseOutlined } from "@mui/icons-material";
-import styles from "./HelpPopup.module.css";
+import { CloseOutlined } from "@mui/icons-material";
+import styles from "./css/HelpPopup.module.css";
 
-export function HelpPopup() {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+export function HelpDialog(props) {
   return (
     <div>
-      <Box>
-        <IconButton onClick={handleClickOpen}>
-          <HelpOutline />
-        </IconButton>
-      </Box>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={props.isOpen}
+        onClose={props.handleHelpDialogClose}
         fullWidth={true}
         maxWidth={"lg"}
       >
@@ -41,7 +24,7 @@ export function HelpPopup() {
           </DialogTitle>
           <DialogActions>
             <IconButton
-              onClick={handleClose}
+              onClick={props.handleHelpDialogClose}
               aria-label="close"
               sx={{
                 position: "absolute",
