@@ -1,10 +1,7 @@
 import { useState } from "react";
-import {
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { HelpOutline } from "@mui/icons-material";
-import { HelpDialog } from "./HelpDialog";
+import { HelpPopup } from "./HelpPopup";
 
 export function HelpButton(props) {
   const [open, setOpen] = useState(false);
@@ -20,13 +17,11 @@ export function HelpButton(props) {
   return (
     <div>
       <Box>
-        {props.hasButton &&
-          <IconButton onClick={handleClickOpen}>
-            <HelpOutline />
-          </IconButton>
-        }
+        <IconButton onClick={handleClickOpen}>
+          <HelpOutline />
+        </IconButton>
       </Box>
-      <HelpDialog isOpen={open} openClick={handleClose}/>
+      <HelpPopup isOpen={open} handleHelpDialogClose={handleClose} />
     </div>
   );
 }

@@ -9,7 +9,7 @@ import {
 import { CloseOutlined } from "@mui/icons-material";
 import styles from "./css/HelpPopup.module.css";
 
-export function HelpDialog(props) {
+export function HelpPopup(props) {
   return (
     <div>
       <Dialog
