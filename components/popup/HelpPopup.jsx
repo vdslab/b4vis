@@ -1,44 +1,45 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
   Box,
+  DialogTitle,
   IconButton,
+  DialogActions,
 } from "@mui/material";
-import { HelpOutline } from "@mui/icons-material";
-import styles from "./HelpPopup.module.css";
+import { CloseOutlined } from "@mui/icons-material";
+import styles from "../css/HelpPopup.module.css";
 
-export function HelpPopup() {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+export function HelpPopup(props) {
   return (
     <div>
-      <Box>
-        <IconButton onClick={handleClickOpen}>
-          <HelpOutline />
-        </IconButton>
-      </Box>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={props.isOpen}
+        onClose={props.handleClose}
         fullWidth={true}
         maxWidth={"lg"}
       >
-        <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
-          b4visとは
-        </DialogTitle>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
+            b4visとは
+          </DialogTitle>
+          <DialogActions>
+            <IconButton
+              onClick={props.handleClose}
+              aria-label="close"
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseOutlined />
+            </IconButton>
+          </DialogActions>
+        </div>
+
         <DialogContent>
-          <DialogContentText>
+          <Box px={{ padding: "0 1rem 1rem rem", height: "100%" }}>
             <div>
               b4visでは吹奏楽コンクールと夏の甲子園で上位大会に進んだ高校を可視化します。
             </div>
@@ -49,7 +50,7 @@ export function HelpPopup() {
                 左上のボタンから吹奏楽・野球ともに上位大会に進んだ学校が多い/少ない県順に並び替えることができます。
                 <ul style={{ margin: "0.5rem 0 0.5rem 0" }}>
                   <li>
-                    吹奏楽コンクールで都道府県大会以上(東京・北海道は支部大会以上)の成績
+                    吹奏楽コンクール(高A)で都道府県大会以上(東京・北海道は支部大会以上)の成績
                   </li>
                   <li>
                     夏の甲子園で地区大会ベスト8以上(東京・北海道はベスト4以上)
@@ -58,7 +59,6 @@ export function HelpPopup() {
               </div>
               <div style={{ padding: "1rem 0 1rem 0" }}>
                 グラフのセルをクリックすることでその学校のある都道府県の2013~2017年の詳細(ビュー②)とその学校の詳細(ビュー④)を見ることができます。
-             
                 また、セルをクリックするか県名を選ぶことで、ビュー③で該当する県の私立/公立校の内訳を見ることができます。
               </div>
 
@@ -102,7 +102,7 @@ export function HelpPopup() {
                 </a>
               </div>
             </div>
-          </DialogContentText>
+          </Box>
         </DialogContent>
       </Dialog>
     </div>

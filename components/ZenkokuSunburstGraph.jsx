@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Box, CircularProgress } from "@mui/material";
-import styles from "./css/Common.module.css";
+import { Box } from "@mui/material";
+import styles from "./css/ZenkokuSunburst.module.css";
 import { useSelector } from "react-redux";
 
 const MyResponsiveSunburst = dynamic(() => import("./MyResponsiveSunburst"), {
   ssr: false,
 });
 
-function SunburstGraph() {
+function ZenkokuSunburstGraph() {
   const [schoolCount, setSchoolCount] = useState(null);
-  const selectedPrefecture = useSelector(
-    (state) => state.app.selectedPrefecture
-  );
   const allSchoolCountData = useSelector(
     (state) => state.app.allSchoolCountData
   );
 
   useEffect(() => {
-    if (allSchoolCountData && selectedPrefecture !== "") {
-      const dividedData = allSchoolCountData[selectedPrefecture];
+    if (allSchoolCountData) {
+      const dividedData = allSchoolCountData["全国"];
       if (dividedData) {
         const data = {
           name: "b4vis",
@@ -82,32 +79,25 @@ function SunburstGraph() {
         setSchoolCount(data);
       }
     }
-  }, [selectedPrefecture, allSchoolCountData]);
+  }, [allSchoolCountData]);
 
   return (
-    <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <div className={styles.centering_space_evenly}>
-        <div
-          style={{
-            fontSize: "1rem",
-            fontWeight: "bolder",
-            padding: "0 0 0 0.5rem",
-          }}
-        >
-          {selectedPrefecture}の私立・公立校の内訳
+    <Box px={{ height: "100%" }}>
+      <div className={styles.box}>
+        <div className={styles.text}>
+          <div> 全国の私立</div>
+          <div>公立校の内訳</div>
         </div>
-        <div className={styles.centering}>
-          {schoolCount ? (
-            <MyResponsiveSunburst data={schoolCount} />
-          ) : (
-            <div className={styles.centering}>
-              <CircularProgress />
-            </div>
-          )}
+        <div style={{ width: "200px" }}>
+          <MyResponsiveSunburst
+            data={schoolCount}
+            h={"200px"}
+            myMargin={{ top: 0, right: 20, bottom: 0, left: 20 }}
+          />
         </div>
       </div>
     </Box>
   );
 }
 
-export default SunburstGraph;
+export default ZenkokuSunburstGraph;

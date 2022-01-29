@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Paper,
   InputBase,
@@ -8,17 +8,35 @@ import {
   IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useSelector, useDispatch } from "react-redux";
+import { appSlice } from "../store/features";
 
 const SearchSchool = (props) => {
+  const dispatch = useDispatch();
+  const inputEl = useRef("");
+  const inputSchoolName = useSelector((state) => state.app.inputSchoolName);
+  const allSchoolData = useSelector((state) => state.app.allSchoolData);
+
   const [schoolList, setSchoolList] = useState([]);
-  const [inputName, setInputName] = useState("");
+
+  const changePrefecture = (prefecture) => {
+    dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
+  };
+
+  const changeSchool = (school) => {
+    dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
+
+  const changeSchoolName = () => {
+    dispatch(appSlice.actions.updateInputSchoolName(inputEl.current.value));
+  };
 
   useEffect(() => {
-    if (props.inputSchoolName) {
-      const { baseballData, brassbandData } = props.data;
+    if (inputSchoolName) {
+      const { baseballData, brassbandData } = allSchoolData;
       const res = {};
       for (const item of brassbandData) {
-        if (item.name.includes(props.inputSchoolName)) {
+        if (item.name.includes(inputSchoolName)) {
           if (item["last"] !== "地区") {
             if (
               item["prefecture"].slice(-2) !== "地区" &&
@@ -39,7 +57,7 @@ const SearchSchool = (props) => {
           }
         }
         for (const item of baseballData) {
-          if (item.name.includes(props.inputSchoolName)) {
+          if (item.name.includes(inputSchoolName)) {
             const prefecture =
               item["prefecture"].slice(1) === "北海道" ||
               item["prefecture"].slice(1) === "東京"
@@ -56,7 +74,7 @@ const SearchSchool = (props) => {
       }
       setSchoolList(res);
     }
-  }, [props]);
+  }, [inputSchoolName, allSchoolData]);
 
   return (
     <>
@@ -66,15 +84,17 @@ const SearchSchool = (props) => {
           p: "4px 4px",
           display: "flex",
           alignItems: "center",
+          overflowY:"clip",
         }}
       >
         <InputBase
           placeholder="学校名で検索"
           inputProps={{ "aria-label": "SchoolName" }}
-          inputRef={props.inputEl}
+          inputRef={inputEl}
+          fullWidth={true}
           onChange={(e) => {
             if (e.target.value === "") {
-              props.changeSchoolName("");
+              changeSchoolName("");
             }
           }}
           sx={{ m: 1 }}
@@ -83,13 +103,13 @@ const SearchSchool = (props) => {
           type="text"
           sx={{ p: "10px" }}
           aria-label="search"
-          onClick={props.changeSchoolName}
+          onClick={changeSchoolName}
         >
           <SearchIcon />
         </IconButton>
       </Paper>
-      <List sx={{ overflow: "auto", mt: 1, maxHeight: "100%" }}>
-        {Object.entries(schoolList).map((obj, i) => {
+      <List sx={{ overflow: "auto", mt: 1, maxHeight: "700px" }}>
+        {inputSchoolName !== "" && Object.entries(schoolList).map((obj, i) => {
           const name = obj[0];
           const prefecture =
             obj[1].slice(1) === "北海道" || obj[1].slice(1) === "東京"
@@ -99,8 +119,11 @@ const SearchSchool = (props) => {
             <ListItemButton
               key={i}
               onClick={() => {
-                props.changePrefecture(prefecture);
-                props.changeSchool(name);
+                changePrefecture(prefecture);
+                changeSchool(name);
+                if (props.clickAndClose) {
+                  props.handleClose();
+                }
               }}
             >
               <ListItemText primary={name} />
@@ -108,7 +131,7 @@ const SearchSchool = (props) => {
           );
         })}
 
-        {Object.keys(schoolList).length === 0 && props.inputSchoolName !== "" && (
+        {Object.keys(schoolList).length === 0 && inputSchoolName !== "" && (
           <div>
             <div>検索結果がありません</div>
             <div>その高校はあまり活躍されていないようです...</div>
@@ -118,5 +141,9 @@ const SearchSchool = (props) => {
     </>
   );
 };
+
+SearchSchool.defaultProps = {
+  clickAndClose :false,
+}
 
 export default SearchSchool;

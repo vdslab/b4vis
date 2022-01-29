@@ -7,19 +7,37 @@ import {
   Select,
   MenuItem,
   Box,
+  CircularProgress
 } from "@mui/material";
-import styles from "./Common.module.css";
+import styles from "./css/Common.module.css";
+import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
+import { useDispatch, useSelector } from "react-redux";
+import { appSlice, updateNowLoading } from "../store/features";
+import { SchoolLabel } from "./Common";
 
-const PrefectureBarGraph = (props) => {
+const PrefectureBarGraph = () => {
+  const dispatch = useDispatch();
+
   const [brassbandData, setBrassbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [showData, setShowData] = useState(null);
   const [arrangement, setArrangement] = useState("default");
   const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
 
-  const DOUBLE = 0;
-  const BASEBALL = 1;
-  const BRASSBAND = 2;
+  const selectedSchool = useSelector((state) => state.app.selectedSchool);
+  const allSchoolData = useSelector((state) => state.app.allSchoolData);
+ 
+  const changePrefecture = (prefecture) => {
+    dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
+  };
+
+  const changeSchool = (school) => {
+    dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
+
+  const changeNowLoading = (isLoading) => {
+    dispatch(updateNowLoading(isLoading));
+  };
 
   const ARRANGEMENT = ["default", "昇順", "降順"];
 
@@ -38,9 +56,9 @@ const PrefectureBarGraph = (props) => {
   const svgHeight = margin.top + margin.bottom + contentHeight;
 
   useEffect(() => {
-    setBrassbandData(props.data?.brassbandData);
-    setBaseballData(props.data?.baseballData);
-  }, [props.data]);
+    setBrassbandData(allSchoolData?.brassbandData);
+    setBaseballData(allSchoolData?.baseballData);
+  }, [allSchoolData]);
 
   useEffect(() => {
     if (baseballData && brassbandData) {
@@ -105,18 +123,18 @@ const PrefectureBarGraph = (props) => {
               continue;
             // 重複が無いようにsetで持っておく
             selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-              BRASSBAND;
+              SchoolLabel.BRASSBAND;
           } else if (item["prefecture"].slice(-2) === "地区") {
             //北海道
             if (item["last"] === "都道府県") continue;
             if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
-            selectedData["北海道"][item["name"]] = BRASSBAND;
+            selectedData["北海道"][item["name"]] = SchoolLabel.BRASSBAND;
           } else if (item["prefecture"] === "東京都") {
             if (item["last"] === "都道府県") continue;
             if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
             // 重複が無いようにsetで持っておく
             selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-              BRASSBAND;
+              SchoolLabel.BRASSBAND;
           }
         }
       }
@@ -135,27 +153,27 @@ const PrefectureBarGraph = (props) => {
           prefecture !== "西東京"
         ) {
           if (selectedData[prefecture].hasOwnProperty(item["name"])) {
-            if (selectedData[prefecture][item["name"]] === BRASSBAND)
-              selectedData[prefecture][item["name"]] = DOUBLE;
+            if (selectedData[prefecture][item["name"]] === SchoolLabel.BRASSBAND)
+              selectedData[prefecture][item["name"]] = SchoolLabel.DOUBLE;
           } else {
-            selectedData[prefecture][item["name"]] = BASEBALL;
+            selectedData[prefecture][item["name"]] = SchoolLabel.BASEBALL;
           }
         } else if (prefecture === "北北海道" || prefecture === "南北海道") {
           if (Number(item["regionalbest"]) <= 4) {
             if (selectedData["北海道"].hasOwnProperty(item["name"])) {
-              if (selectedData["北海道"][item["name"]] === BRASSBAND)
-                selectedData["北海道"][item["name"]] = DOUBLE;
+              if (selectedData["北海道"][item["name"]] === SchoolLabel.BRASSBAND)
+                selectedData["北海道"][item["name"]] = SchoolLabel.DOUBLE;
             } else {
-              selectedData["北海道"][item["name"]] = BASEBALL;
+              selectedData["北海道"][item["name"]] = SchoolLabel.BASEBALL;
             }
           }
         } else if (prefecture === "東東京" || prefecture === "西東京") {
           if (Number(item["regionalbest"]) <= 4) {
             if (selectedData["東京"].hasOwnProperty(item["name"])) {
-              if (selectedData["東京"][item["name"]] === BRASSBAND)
-                selectedData["東京"][item["name"]] = DOUBLE;
+              if (selectedData["東京"][item["name"]] === SchoolLabel.BRASSBAND)
+                selectedData["東京"][item["name"]] = SchoolLabel.DOUBLE;
             } else {
-              selectedData["東京"][item["name"]] = BASEBALL;
+              selectedData["東京"][item["name"]] = SchoolLabel.BASEBALL;
             }
           }
         }
@@ -217,31 +235,40 @@ const PrefectureBarGraph = (props) => {
     }
   }, [baseballData, brassbandData, arrangement]);
 
-  // useEffect(() => {
-  //   if (showData) console.log(showData);
-  // }, [arrangement]);
-
   if (!showData) {
     return (
-      <Box px={{ padding: "0.5rem", height: "245px" }}>
-        <div style={{ fontSize: "0.75rem" }}>
-          <div>loading...</div>
-        </div>
+      <Box className={styles.centering} px={{ padding: "0.5rem", height: "100%" }}>
+        <CircularProgress />
       </Box>
     );
   }
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <div className={styles.centering_brock}>
-        <div
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: "bolder",
-            padding: "0.25rem",
-          }}
-        >
-          2013〜2017年で吹奏楽コンクール・甲子園で上位大会に進んだ高校
+      <div className={styles.centering_space_evenly}>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bolder",
+              padding: "1.5rem 0 0 0.5rem",
+              width: "125%",
+              display: "flex",
+            }}
+          >
+            <div>
+              <div>2013〜2017年に</div>
+              <div>吹奏楽コンクール・甲子園</div>
+              <div>上位大会に進んだ高校</div>
+            </div>
+          </div>
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            <Box>
+              <ZenkokuSunburstGraph />
+            </Box>
+          </div>
         </div>
         <Box style={{ display: "flex", alignItems: "center" }}>
           <FormControl
@@ -423,7 +450,7 @@ const PrefectureBarGraph = (props) => {
         >
           {arrangementPrefecture.map((prefecture, row) => {
             return (
-              <g key={row} onClick={() => props.changePrefecture(prefecture)}>
+              <g key={row} onClick={() => changePrefecture(prefecture)}>
                 <text
                   x={0}
                   y={13 * row * 2 + 1}
@@ -452,15 +479,15 @@ const PrefectureBarGraph = (props) => {
                           stroke="lightgray"
                           fill={color[item.club]}
                           onClick={() => {
-                            if (props.selectedSchool !== item.name) {
-                              props.changeNowLoading(true);
-                              props.changeSchool(item.name);
+                            if (selectedSchool !== item.name) {
+                              changeNowLoading(true);
+                              changeSchool(item.name);
                             }
                           }}
                         />
 
                         {/* 枠縁ver */}
-                        {item.name === props.selectedSchool && (
+                        {item.name === selectedSchool && (
                           <rect
                             x={50 + 26 * col + 1}
                             y={26 * row - 13 + 1}
@@ -470,16 +497,16 @@ const PrefectureBarGraph = (props) => {
                             stroke="#333333"
                             fill={color[item.club]}
                             onClick={() => {
-                              if (props.selectedSchool !== item.name) {
-                                props.changeNowLoading(true);
-                                props.changeSchool(item.name);
+                              if (selectedSchool !== item.name) {
+                                changeNowLoading(true);
+                                changeSchool(item.name);
                               }
                             }}
                           />
                         )}
 
                         {/*色塗りver*/}
-                        {item.name === props.selectedSchool && (
+                        {item.name === selectedSchool && (
                           <rect
                             x={50 + 26 * col}
                             y={26 * row - 13}
@@ -488,9 +515,9 @@ const PrefectureBarGraph = (props) => {
                             fill={"orange"}
                             fillOpacity={0.5}
                             onClick={() => {
-                              if (props.selectedSchool !== item.name) {
-                                props.changeNowLoading(true);
-                                props.changeSchool(item.name);
+                              if (selectedSchool !== item.name) {
+                                changeNowLoading(true);
+                                changeSchool(item.name);
                               }
                             }}
                           />
