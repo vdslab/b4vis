@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import styles from "./css/Common.module.css";
 import { useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ function SunburstGraph() {
   );
 
   useEffect(() => {
-    if(allSchoolCountData && selectedPrefecture!==""){
+    if (allSchoolCountData && selectedPrefecture !== "") {
       const dividedData = allSchoolCountData[selectedPrefecture];
       if (dividedData) {
         const data = {
@@ -96,10 +96,14 @@ function SunburstGraph() {
         >
           {selectedPrefecture}の私立・公立校の内訳
         </div>
-        <div>
-          {schoolCount &&
+        <div className={styles.centering}>
+          {schoolCount ? (
             <MyResponsiveSunburst data={schoolCount} />
-          }
+          ) : (
+            <div className={styles.centering}>
+              <CircularProgress />
+            </div>
+          )}
         </div>
       </div>
     </Box>
