@@ -24,7 +24,7 @@ const PrefectureBarGraph = (props) => {
 
   const selectedSchool = useSelector((state) => state.app.selectedSchool);
   const allSchoolData = useSelector((state) => state.app.allSchoolData);
-
+ 
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
   };
@@ -274,7 +274,7 @@ const PrefectureBarGraph = (props) => {
             style={{ display: "flex", width: "100%", justifyContent: "center" }}
           >
             <Box>
-              <ZenkokuSunburstGraph data={props.allSchoolCountData} />
+              <ZenkokuSunburstGraph />
             </Box>
           </div>
         </div>

@@ -34,6 +34,13 @@ export const updateNowLoading = createAsyncThunk(
   }
 );
 
+export const updateAllSchoolCountData = createAsyncThunk(
+  "app/updateAllSchoolCountData",
+  async (data) => {
+    return data;
+  }
+);
+
 export const appSlice = createSlice({
   name: "app",
   initialState,
@@ -44,9 +51,6 @@ export const appSlice = createSlice({
     updateSelectedPrefecture(state, action) {
       state.selectedPrefecture = action.payload;
     },
-    // updateAllSchoolCountData(state, action) {
-    //   state.allSchoolCountData = action.payload;
-    // },
     updateInputSchoolName(state, action) {
       state.inputSchoolName = action.payload;
     },
@@ -57,6 +61,9 @@ export const appSlice = createSlice({
     },
     [updateNowLoading.fulfilled]: (state, action) => {
       state.nowLoading = action.payload;
+    },
+    [updateAllSchoolCountData.fulfilled]: (state, action) => {
+      state.allSchoolCountData = action.payload;
     },
   },
 });

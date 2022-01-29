@@ -10,24 +10,17 @@ import SunburstGraph from "../components/SunburstGraph";
 import { useMediaQuery } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { appSlice, updateNowLoading } from "../store/features/index";
+import { updateAllSchoolCountData } from "../store/features/index";
 import { fetchAllSchoolData } from "../store/features";
 
 function Home(props) {
   const dispatch = useDispatch();
-
-  const allSchoolCountData = props.allSchoolCountData;
-  const [nowLoading, setNowLoading] = useState(false);
-
   const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
-
-  const changeNowLoading = (nowLoading) => {
-    setNowLoading(nowLoading);
-  };
 
   useEffect(() => {
     dispatch(fetchAllSchoolData());
-  }, [dispatch]);
+    dispatch(updateAllSchoolCountData(props.allSchoolCountData));
+  }, [dispatch, props.allSchoolCountData]);
 
   return (
     <div style={{ minWidth: "500px" }}>
@@ -43,7 +36,7 @@ function Home(props) {
           )}
           <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
-              <PrefectureBarGraph allSchoolCountData={allSchoolCountData} />
+              <PrefectureBarGraph />
             </Paper>
           </Grid>
           <Grid item xs={12} md={showSearchBar ? 4 : 5}>
@@ -71,14 +64,14 @@ function Home(props) {
                   </Grid>
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <SunburstGraph data={allSchoolCountData} />
+                      <SunburstGraph />
                     </Paper>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
-                  <LineGraph nowLoading={nowLoading} />
+                  <LineGraph />
                 </Paper>
               </Grid>
             </Grid>
@@ -345,8 +338,6 @@ export async function getStaticProps() {
     double: allSchoolCount[DOUBLE],
     doublePrivate: allSchoolCount[DOUBLE_PRIVATE],
   };
-
-  console.log(schoolCountData);
 
   return {
     props: {
