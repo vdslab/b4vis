@@ -1,4 +1,4 @@
-import { useState, useEffect,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Paper,
   InputBase,
@@ -22,7 +22,7 @@ const SearchSchool = (props) => {
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
   };
-  
+
   const changeSchool = (school) => {
     dispatch(appSlice.actions.updateSelectedSchool(school));
   };
@@ -75,8 +75,6 @@ const SearchSchool = (props) => {
       setSchoolList(res);
     }
   }, [inputSchoolName, allSchoolData]);
-  
-  // redux導入後値の保存がきいて、おかしくなる
 
   return (
     <>
@@ -86,6 +84,7 @@ const SearchSchool = (props) => {
           p: "4px 4px",
           display: "flex",
           alignItems: "center",
+          overflowY:"clip",
         }}
       >
         <InputBase

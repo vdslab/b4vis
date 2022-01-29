@@ -5,8 +5,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { HelpPopup } from "./popup/HelpPopup";
 import { SearchSchoolPopup } from "./popup/SearchSchoolPopup";
+import { useDispatch } from "react-redux";
+import { appSlice } from "../store/features"
 
 export function MenuButton() {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [showHelpPopup, setShowHelpPopup] = useState(false);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
@@ -25,6 +28,7 @@ export function MenuButton() {
 
   const handleSearchPopupClose = (event) => {
     setShowSearchPopup(false);
+    dispatch(appSlice.actions.resetInputSchoolName());
   };
 
   return (

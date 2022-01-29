@@ -12,7 +12,6 @@ export default function Header() {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             b4vis
           </Typography>
-
           {showSearchBar ? <HelpButton /> : <MenuButton />}
         </Toolbar>
       </AppBar>

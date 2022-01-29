@@ -8,10 +8,12 @@ import { Grid, Paper } from "@mui/material";
 import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
 import { useMediaQuery } from "@mui/material";
-
-import { useDispatch, useSelector } from "react-redux";
-import { updateAllSchoolCountData } from "../store/features/index";
-import { fetchAllSchoolData } from "../store/features";
+import { useDispatch } from "react-redux";
+import {
+  fetchAllSchoolData,
+  updateAllSchoolCountData,
+  appSlice,
+} from "../store/features/index";
 
 function Home(props) {
   const dispatch = useDispatch();
@@ -21,6 +23,10 @@ function Home(props) {
     dispatch(fetchAllSchoolData());
     dispatch(updateAllSchoolCountData(props.allSchoolCountData));
   }, [dispatch, props.allSchoolCountData]);
+
+  useEffect(() => {
+    dispatch(appSlice.actions.resetInputSchoolName());
+  }, [dispatch, showSearchBar]);
 
   return (
     <div style={{ minWidth: "500px" }}>

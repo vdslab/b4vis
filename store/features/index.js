@@ -54,6 +54,9 @@ export const appSlice = createSlice({
     updateInputSchoolName(state, action) {
       state.inputSchoolName = action.payload;
     },
+    resetInputSchoolName(state) {
+      state.inputSchoolName = "";
+    },
   },
   extraReducers: {
     [fetchAllSchoolData.fulfilled]: (state, action) => {
