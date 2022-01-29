@@ -1,7 +1,7 @@
 import {
   Dialog,
   DialogContent,
-  DialogContentText,
+  Box,
   DialogTitle,
   IconButton,
   DialogActions,
@@ -37,8 +37,9 @@ export function HelpPopup(props) {
             </IconButton>
           </DialogActions>
         </div>
+
         <DialogContent>
-          <DialogContentText>
+          <Box px={{ padding: "0 1rem 1rem rem", height: "100%" }}>
             <div>
               b4visでは吹奏楽コンクールと夏の甲子園で上位大会に進んだ高校を可視化します。
             </div>
@@ -101,7 +102,7 @@ export function HelpPopup(props) {
                 </a>
               </div>
             </div>
-          </DialogContentText>
+          </Box>
         </DialogContent>
       </Dialog>
     </div>
