@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/system";
+import { Box, CircularProgress } from "@mui/material";
 import styles from "./css/Common.module.css";
+import lineStyles from "./css/LinGraph.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNowLoading } from "../store/features/index";
 
@@ -209,21 +210,15 @@ const LineGraph = () => {
         </div>
         <div style={{ heigth: "100%" }}>
           {nowLoading ? (
-            <svg
-              viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
-            >
-              <text
-                x={150}
-                y={25}
-                stroke="none"
-                textAnchor="start"
-                dominantBaseline="central"
-                fontSize={12.5}
-                fill="black"
-              >
-                loading...
-              </text>
-            </svg>
+            <div className={lineStyles.loading_box}>
+              <div className={lineStyles.loading_centering}>
+                <CircularProgress />
+              </div>
+              {/** 高さを揃えるため */}
+              <svg
+                viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
+              ></svg>
+            </div>
           ) : (
             <svg
               viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
