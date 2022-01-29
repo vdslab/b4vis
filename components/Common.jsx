@@ -1,0 +1,8 @@
+export const SchoolLabele = {
+  DOUBLE: 0,
+  BASEBALL: 1,
+  BRASSBAND: 2,
+  DOUBLE_PRIVATE: 3,
+  BASEBALL_PRIVATE: 4,
+  BRASSBAND_PRIVATE: 5,
+};

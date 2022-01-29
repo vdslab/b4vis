@@ -104,8 +104,6 @@ export async function getStaticProps() {
   const brassbandResult = await client.query(brassbandQuery);
   await client.end();
 
-  const DOUBLE = 0;
-  const BASEBALL = 1;
   const BRASSBAND = 2;
   const DOUBLE_PRIVATE = 3;
   const BASEBALL_PRIVATE = 4;
@@ -174,20 +172,24 @@ export async function getStaticProps() {
         // 重複が無いようにsetで持っておく
         if (item["last"] === "都道府県" && item["prize"] !== "金賞") continue;
         selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-          isPrivateSchool ? BRASSBAND_PRIVATE : BRASSBAND;
+          isPrivateSchool
+            ? SCHOOLLABELE.BRASSBAND_PRIVATE
+            : SchoolLabele.BRASSBAND;
       } else if (item["prefecture"].slice(-2) === "地区") {
         //北海道
         if (item["last"] === "都道府県") continue;
         if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
         selectedData["北海道"][item["name"]] = isPrivateSchool
-          ? BRASSBAND_PRIVATE
-          : BRASSBAND;
+          ? SCHOOLLABELE.BRASSBAND_PRIVATE
+          : SchoolLabele.BRASSBAND;
       } else if (item["prefecture"] === "東京都") {
         if (item["last"] === "都道府県") continue;
         if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
         // 重複が無いようにsetで持っておく
         selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-          isPrivateSchool ? BRASSBAND_PRIVATE : BRASSBAND;
+          isPrivateSchool
+            ? SCHOOLLABELE.BRASSBAND_PRIVATE
+            : SchoolLabele.BRASSBAND;
       }
     }
   }
@@ -208,50 +210,53 @@ export async function getStaticProps() {
     ) {
       if (selectedData[prefecture].hasOwnProperty(item["name"])) {
         if (
-          selectedData[prefecture][item["name"]] === BRASSBAND ||
-          selectedData[prefecture][item["name"]] === BRASSBAND_PRIVATE
+          selectedData[prefecture][item["name"]] === SchoolLabele.BRASSBAND ||
+          selectedData[prefecture][item["name"]] ===
+            SCHOOLLABELE.BRASSBAND_PRIVATE
         ) {
           selectedData[prefecture][item["name"]] = isPrivateSchool
-            ? DOUBLE_PRIVATE
-            : DOUBLE;
+            ? SCHOOLLABELE.DOUBLE_PRIVATE
+            : SchoolLabele.DOUBLE;
         }
       } else {
         selectedData[prefecture][item["name"]] = isPrivateSchool
-          ? BASEBALL_PRIVATE
-          : BASEBALL;
+          ? SCHOOLLABELE.BASEBALL_PRIVATE
+          : SchoolLabele.BASEBALL;
       }
     } else if (prefecture === "北北海道" || prefecture === "南北海道") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["北海道"].hasOwnProperty(item["name"])) {
           if (
-            selectedData["北海道"][item["name"]] === BRASSBAND ||
-            selectedData["北海道"][item["name"]] === BRASSBAND_PRIVATE
+            selectedData["北海道"][item["name"]] === SchoolLabele.BRASSBAND ||
+            selectedData["北海道"][item["name"]] ===
+              SCHOOLLABELE.BRASSBAND_PRIVATE
           ) {
             selectedData["北海道"][item["name"]] = isPrivateSchool
-              ? DOUBLE_PRIVATE
-              : DOUBLE;
+              ? SCHOOLLABELE.DOUBLE_PRIVATE
+              : SchoolLabele.DOUBLE;
           }
         } else {
           selectedData["北海道"][item["name"]] = isPrivateSchool
-            ? BASEBALL_PRIVATE
-            : BASEBALL;
+            ? SCHOOLLABELE.BASEBALL_PRIVATE
+            : SchoolLabele.BASEBALL;
         }
       }
     } else if (prefecture === "東東京" || prefecture === "西東京") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["東京"].hasOwnProperty(item["name"])) {
           if (
-            selectedData["東京"][item["name"]] === BRASSBAND ||
-            selectedData["東京"][item["name"]] === BRASSBAND_PRIVATE
+            selectedData["東京"][item["name"]] === SchoolLabele.BRASSBAND ||
+            selectedData["東京"][item["name"]] ===
+              SCHOOLLABELE.BRASSBAND_PRIVATE
           ) {
             selectedData["東京"][item["name"]] = isPrivateSchool
-              ? DOUBLE_PRIVATE
-              : DOUBLE;
+              ? SCHOOLLABELE.DOUBLE_PRIVATE
+              : SchoolLabele.DOUBLE;
           }
         } else {
           selectedData["東京"][item["name"]] = isPrivateSchool
-            ? BASEBALL_PRIVATE
-            : BASEBALL;
+            ? SCHOOLLABELE.BASEBALL_PRIVATE
+            : SchoolLabele.BASEBALL;
         }
       }
     }
@@ -326,22 +331,22 @@ export async function getStaticProps() {
     }
     schoolCountData[prefecture] = {
       //鳥取のブラスバンドのデータがないため
-      brassband: count[BRASSBAND],
-      brassbandPrivate: count[BRASSBAND_PRIVATE],
-      baseball: count[BASEBALL],
-      baseballPrivate: count[BASEBALL_PRIVATE],
-      double: count[DOUBLE],
-      doublePrivate: count[DOUBLE_PRIVATE],
+      brassband: count[SchoolLabele.BRASSBAND],
+      brassbandPrivate: count[SCHOOLLABELE.BRASSBAND_PRIVATE],
+      baseball: count[SchoolLabele.BASEBALL],
+      baseballPrivate: count[SCHOOLLABELE.BASEBALL_PRIVATE],
+      double: count[SchoolLabele.DOUBLE],
+      doublePrivate: count[SCHOOLLABELE.DOUBLE_PRIVATE],
     };
   }
 
   schoolCountData["全国"] = {
-    brassband: allSchoolCount[BRASSBAND],
-    brassbandPrivate: allSchoolCount[BRASSBAND_PRIVATE],
-    baseball: allSchoolCount[BASEBALL],
-    baseballPrivate: allSchoolCount[BASEBALL_PRIVATE],
-    double: allSchoolCount[DOUBLE],
-    doublePrivate: allSchoolCount[DOUBLE_PRIVATE],
+    brassband: allSchoolCount[SchoolLabele.BRASSBAND],
+    brassbandPrivate: allSchoolCount[SCHOOLLABELE.BRASSBAND_PRIVATE],
+    baseball: allSchoolCount[SchoolLabele.BASEBALL],
+    baseballPrivate: allSchoolCount[SCHOOLLABELE.BASEBALL_PRIVATE],
+    double: allSchoolCount[SchoolLabele.DOUBLE],
+    doublePrivate: allSchoolCount[SCHOOLLABELE.DOUBLE_PRIVATE],
   };
 
   return {

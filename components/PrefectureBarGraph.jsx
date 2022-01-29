@@ -13,6 +13,7 @@ import styles from "./css/Common.module.css";
 import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
 import { useDispatch, useSelector } from "react-redux";
 import { appSlice, updateNowLoading } from "../store/features";
+import { SchoolLabele } from "./Common";
 
 const PrefectureBarGraph = () => {
   const dispatch = useDispatch();
@@ -37,10 +38,6 @@ const PrefectureBarGraph = () => {
   const changeNowLoading = (isLoading) => {
     dispatch(updateNowLoading(isLoading));
   };
-
-  const DOUBLE = 0;
-  const BASEBALL = 1;
-  const BRASSBAND = 2;
 
   const ARRANGEMENT = ["default", "昇順", "降順"];
 
@@ -126,18 +123,18 @@ const PrefectureBarGraph = () => {
               continue;
             // 重複が無いようにsetで持っておく
             selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-              BRASSBAND;
+              SchoolLabele.BRASSBAND;
           } else if (item["prefecture"].slice(-2) === "地区") {
             //北海道
             if (item["last"] === "都道府県") continue;
             if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
-            selectedData["北海道"][item["name"]] = BRASSBAND;
+            selectedData["北海道"][item["name"]] = SchoolLabele.BRASSBAND;
           } else if (item["prefecture"] === "東京都") {
             if (item["last"] === "都道府県") continue;
             if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
             // 重複が無いようにsetで持っておく
             selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-              BRASSBAND;
+              SchoolLabele.BRASSBAND;
           }
         }
       }
@@ -156,27 +153,27 @@ const PrefectureBarGraph = () => {
           prefecture !== "西東京"
         ) {
           if (selectedData[prefecture].hasOwnProperty(item["name"])) {
-            if (selectedData[prefecture][item["name"]] === BRASSBAND)
-              selectedData[prefecture][item["name"]] = DOUBLE;
+            if (selectedData[prefecture][item["name"]] === SchoolLabele.BRASSBAND)
+              selectedData[prefecture][item["name"]] = SchoolLabele.DOUBLE;
           } else {
-            selectedData[prefecture][item["name"]] = BASEBALL;
+            selectedData[prefecture][item["name"]] = SchoolLabele.BASEBALL;
           }
         } else if (prefecture === "北北海道" || prefecture === "南北海道") {
           if (Number(item["regionalbest"]) <= 4) {
             if (selectedData["北海道"].hasOwnProperty(item["name"])) {
-              if (selectedData["北海道"][item["name"]] === BRASSBAND)
-                selectedData["北海道"][item["name"]] = DOUBLE;
+              if (selectedData["北海道"][item["name"]] === SchoolLabele.BRASSBAND)
+                selectedData["北海道"][item["name"]] = SchoolLabele.DOUBLE;
             } else {
-              selectedData["北海道"][item["name"]] = BASEBALL;
+              selectedData["北海道"][item["name"]] = SchoolLabele.BASEBALL;
             }
           }
         } else if (prefecture === "東東京" || prefecture === "西東京") {
           if (Number(item["regionalbest"]) <= 4) {
             if (selectedData["東京"].hasOwnProperty(item["name"])) {
-              if (selectedData["東京"][item["name"]] === BRASSBAND)
-                selectedData["東京"][item["name"]] = DOUBLE;
+              if (selectedData["東京"][item["name"]] === SchoolLabele.BRASSBAND)
+                selectedData["東京"][item["name"]] = SchoolLabele.DOUBLE;
             } else {
-              selectedData["東京"][item["name"]] = BASEBALL;
+              selectedData["東京"][item["name"]] = SchoolLabele.BASEBALL;
             }
           }
         }

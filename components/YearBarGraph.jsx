@@ -12,8 +12,9 @@ import {
 import styles from "./css/Common.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { appSlice, updateNowLoading } from "../store/features";
+import { SchoolLabele } from "./Common";
 
-const YearBarGraph = (props) => {
+const YearBarGraph = () => {
   const dispatch = useDispatch();
 
   const [hoverSchool, setHoverSchool] = useState(null);
@@ -36,10 +37,6 @@ const YearBarGraph = (props) => {
   const changeNowLoading = (isLoading) => {
     dispatch(updateNowLoading(isLoading));
   };
-
-  const DOUBLE = 0;
-  const BASEBALL = 1;
-  const BRASSBAND = 2;
 
   const color = ["#ba70ff", "#70ffff", "#ff70ff"];
 
@@ -107,7 +104,7 @@ const YearBarGraph = (props) => {
               prefecture: item["prefecture"],
               prize: item["prize"],
               year: item["year"],
-              club: BRASSBAND,
+              club: SchoolLabele.BRASSBAND,
             };
 
             selectedData[item["year"]].push(copyItem);
@@ -125,7 +122,7 @@ const YearBarGraph = (props) => {
             for (const showItem of selectedData[item["year"]]) {
               //吹奏楽のデータがすでにある場合
               if (showItem["name"] === item["name"]) {
-                showItem["club"] = DOUBLE;
+                showItem["club"] = SchoolLabele.DOUBLE;
                 find = true;
                 break;
               }
@@ -133,7 +130,7 @@ const YearBarGraph = (props) => {
             if (!find) {
               const data = {
                 name: item["name"],
-                club: BASEBALL,
+                club: SchoolLabele.BASEBALL,
               };
               selectedData[item["year"]].push(data);
             }
