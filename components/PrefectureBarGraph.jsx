@@ -237,7 +237,7 @@ const PrefectureBarGraph = () => {
 
   if (!showData) {
     return (
-      <Box className={styles.centering} px={{ padding: "0.5rem", height: "245px" }}>
+      <Box className={styles.centering} px={{ padding: "0.5rem", height: "100%" }}>
         <CircularProgress />
       </Box>
     );
