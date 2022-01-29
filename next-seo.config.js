@@ -20,7 +20,7 @@ export default {
     site_name: "b4vis",
     images: [
       {
-        url: "./images/sample.png",
+        url: "https://vdslab-b4vis.vercel.app/images/ogp.png",
         width: 800,
         height: 600,
       },
