@@ -24,6 +24,7 @@ const PrefectureBarGraph = (props) => {
   const [arrangementPrefecture, setArrangementPrefecture] = useState([]);
 
   const selectedSchool = useSelector((state) => state.app.selectedSchool);
+  const allSchoolData = useSelector((state) => state.app.allSchoolData);
   
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
@@ -54,9 +55,9 @@ const PrefectureBarGraph = (props) => {
   const svgHeight = margin.top + margin.bottom + contentHeight;
 
   useEffect(() => {
-    setBrassbandData(props.data?.brassbandData);
-    setBaseballData(props.data?.baseballData);
-  }, [props.data]);
+    setBrassbandData(allSchoolData?.brassbandData);
+    setBaseballData(allSchoolData?.baseballData);
+  }, [allSchoolData]);
 
   useEffect(() => {
     if (baseballData && brassbandData) {

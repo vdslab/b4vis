@@ -11,13 +11,12 @@ import { useMediaQuery } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { appSlice } from "../store/features/index";
+import { fetchAllSchoolData } from "../store/features";
 
 function Home(props) {
   const dispatch = useDispatch();
 
   const allSchoolCountData = props.allSchoolCountData;
-  const [data, setData] = useState(null);
-  const [inputSchoolName, setInputSchoolName] = useState("");
   const [nowLoading, setNowLoading] = useState(false);
 
   const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
@@ -26,21 +25,9 @@ function Home(props) {
     setNowLoading(nowLoading);
   };
 
-  // TODO DBからデータ取ってきてgetStaticProps使う
   useEffect(() => {
-    (async () => {
-      const brassbandData = await fetch("../api/brassBand/getAllSchool").then(
-        (res) => res.json()
-      );
-      const baseballData = await fetch("../api/baseball/getAllSchool").then(
-        (res) => res.json()
-      );
-      setData({
-        brassbandData: brassbandData.data,
-        baseballData: baseballData.data,
-      });
-    })();
-  }, []);
+    dispatch(fetchAllSchoolData());
+  }, [dispatch]);
 
   return (
     <div style={{ minWidth: "500px" }}>
@@ -50,14 +37,13 @@ function Home(props) {
           {showSearchBar && (
             <Grid item xs={12} md={2}>
               <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
-                <SearchSchool data={data} inputSchoolName={inputSchoolName} />
+                <SearchSchool />
               </Paper>
             </Grid>
           )}
           <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
               <PrefectureBarGraph
-                data={data}
                 changeNowLoading={changeNowLoading}
                 allSchoolCountData={allSchoolCountData}
               />
@@ -83,10 +69,7 @@ function Home(props) {
                 >
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <YearBarGraph
-                        data={data}
-                        changeNowLoading={changeNowLoading}
-                      />
+                      <YearBarGraph changeNowLoading={changeNowLoading} />
                     </Paper>
                   </Grid>
                   <Grid item xs={6} md={12}>
@@ -99,7 +82,6 @@ function Home(props) {
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
                   <LineGraph
-                    data={data}
                     nowLoading={nowLoading}
                     changeNowLoading={changeNowLoading}
                   />

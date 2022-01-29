@@ -15,6 +15,7 @@ const SearchSchool = (props) => {
   const dispatch = useDispatch();
   const inputEl = useRef("");
   const inputSchoolName = useSelector((state) => state.app.inputSchoolName);
+  const allSchoolData = useSelector((state) => state.app.allSchoolData);
 
   const [schoolList, setSchoolList] = useState([]);
 
@@ -32,7 +33,7 @@ const SearchSchool = (props) => {
 
   useEffect(() => {
     if (inputSchoolName) {
-      const { baseballData, brassbandData } = props.data;
+      const { baseballData, brassbandData } = allSchoolData;
       const res = {};
       for (const item of brassbandData) {
         if (item.name.includes(inputSchoolName)) {
@@ -73,7 +74,9 @@ const SearchSchool = (props) => {
       }
       setSchoolList(res);
     }
-  }, [inputSchoolName,props.data]);
+  }, [inputSchoolName, allSchoolData]);
+  
+  // redux導入後値の保存がきいて、おかしくなる
 
   return (
     <>

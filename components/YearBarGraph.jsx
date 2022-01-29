@@ -15,13 +15,12 @@ import { appSlice } from "../store/features";
 const YearBarGraph = (props) => {
   const dispatch = useDispatch();
 
-  const [brassbandData, setBrassbandData] = useState(null);
-  const [baseballData, setBaseballData] = useState(null);
   const [hoverSchool, setHoverSchool] = useState(null);
   const [showData, setShowData] = useState(null);
 
   const selectedPrefecture = useSelector((state) => state.app.selectedPrefecture);
   const preSelectedSchool = useSelector((state) => state.app.selectedSchool);
+  const allSchoolData = useSelector((state) => state.app.allSchoolData);
   
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
@@ -52,11 +51,7 @@ const YearBarGraph = (props) => {
   const len = svgWidth / 16;
 
   useEffect(() => {
-    setBrassbandData(props.data?.brassbandData);
-    setBaseballData(props.data?.baseballData);
-  }, [props]);
-
-  useEffect(() => {
+    const { baseballData, brassbandData } = allSchoolData;
     if (baseballData && brassbandData) {
       const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
 
@@ -90,8 +85,17 @@ const YearBarGraph = (props) => {
           } else {
             continue;
           }
-          item["club"] = BRASSBAND;
-          selectedData[item["year"]].push(item);
+          
+          const copyItem = {
+            last: item["last"],
+            name: item["name"],
+            prefecture: item["prefecture"],
+            prize: item["prize"],
+            year: item["year"],
+            club: BRASSBAND
+          }
+        
+          selectedData[item["year"]].push(copyItem);
         }
       }
 
@@ -128,7 +132,7 @@ const YearBarGraph = (props) => {
 
       setShowData(selectedData);
     }
-  }, [selectedPrefecture, baseballData, brassbandData]);
+  }, [selectedPrefecture, allSchoolData]);
 
   if (!showData) {
     return (
