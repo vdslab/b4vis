@@ -42,7 +42,7 @@ export function SearchSchoolPopup(props) {
           </DialogActions>
         </div>
         <DialogContent>
-          <SearchSchool />
+          <SearchSchool clickAndClose={true} handleClose={props.handleClose}/>
         </DialogContent>
       </Dialog>
     </div>

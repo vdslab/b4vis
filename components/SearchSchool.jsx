@@ -121,6 +121,9 @@ const SearchSchool = (props) => {
               onClick={() => {
                 changePrefecture(prefecture);
                 changeSchool(name);
+                if (props.clickAndClose) {
+                  props.handleClose();
+                }
               }}
             >
               <ListItemText primary={name} />
@@ -138,5 +141,9 @@ const SearchSchool = (props) => {
     </>
   );
 };
+
+SearchSchool.defaultProps = {
+  clickAndClose :false,
+}
 
 export default SearchSchool;
