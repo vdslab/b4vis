@@ -16,6 +16,11 @@ export function SearchSchoolPopup(props) {
         onClose={props.handleClose}
         fullWidth={true}
         maxWidth={"lg"}
+        PaperProps={{
+          style: {
+           height:"70vh"
+          },
+        }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <DialogTitle style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
@@ -37,9 +42,7 @@ export function SearchSchoolPopup(props) {
           </DialogActions>
         </div>
         <DialogContent>
-
-          <SearchSchool />
-          
+          <SearchSchool clickAndClose={true} handleClose={props.handleClose}/>
         </DialogContent>
       </Dialog>
     </div>

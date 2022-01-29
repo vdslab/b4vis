@@ -8,48 +8,25 @@ import { Grid, Paper } from "@mui/material";
 import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
 import { useMediaQuery } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {
+  fetchAllSchoolData,
+  updateAllSchoolCountData,
+  appSlice,
+} from "../store/features/index";
 
 function Home(props) {
-  const allSchoolCountData = props.allSchoolCountData;
-  const [data, setData] = useState(null);
-  const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
-  const [selectedSchool, setSelectedSchool] = useState("");
-  const [inputSchoolName, setInputSchoolName] = useState("");
-  const [nowLoading, setNowLoading] = useState(false);
-  const inputEl = useRef("");
+  const dispatch = useDispatch();
   const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
 
-  const changePrefecture = (prefecture) => {
-    setSelectedPretecture(prefecture);
-  };
-
-  const changeSchool = (school) => {
-    setSelectedSchool(school);
-  };
-
-  const changeNowLoading = (nowLoading) => {
-    setNowLoading(nowLoading);
-  };
-
-  const changeSchoolName = () => {
-    setInputSchoolName(inputEl.current.value);
-  };
-
-  // TODO DBからデータ取ってきてgetStaticProps使う
   useEffect(() => {
-    (async () => {
-      const brassbandData = await fetch("../api/brassBand/getAllSchool").then(
-        (res) => res.json()
-      );
-      const baseballData = await fetch("../api/baseball/getAllSchool").then(
-        (res) => res.json()
-      );
-      setData({
-        brassbandData: brassbandData.data,
-        baseballData: baseballData.data,
-      });
-    })();
-  }, []);
+    dispatch(fetchAllSchoolData());
+    dispatch(updateAllSchoolCountData(props.allSchoolCountData));
+  }, [dispatch, props.allSchoolCountData]);
+
+  useEffect(() => {
+    dispatch(appSlice.actions.resetInputSchoolName());
+  }, [dispatch, showSearchBar]);
 
   return (
     <div style={{ minWidth: "500px" }}>
@@ -59,28 +36,13 @@ function Home(props) {
           {showSearchBar && (
             <Grid item xs={12} md={2}>
               <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
-                <SearchSchool
-                  data={data}
-                  inputSchoolName={inputSchoolName}
-                  changePrefecture={changePrefecture}
-                  changeSchoolName={changeSchoolName}
-                  changeSchool={changeSchool}
-                  inputEl={inputEl}
-                />
+                <SearchSchool />
               </Paper>
             </Grid>
           )}
           <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
-              <PrefectureBarGraph
-                data={data}
-                changePrefecture={changePrefecture}
-                selectedPrefecture={selectedPrefecture}
-                changeSchool={changeSchool}
-                selectedSchool={selectedSchool}
-                changeNowLoading={changeNowLoading}
-                allSchoolCountData={allSchoolCountData}
-              />
+              <PrefectureBarGraph />
             </Paper>
           </Grid>
           <Grid item xs={12} md={showSearchBar ? 4 : 5}>
@@ -103,40 +65,19 @@ function Home(props) {
                 >
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <YearBarGraph
-                        data={data}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
-                        changeNowLoading={changeNowLoading}
-                      />
+                      <YearBarGraph />
                     </Paper>
                   </Grid>
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <SunburstGraph
-                        data={allSchoolCountData}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
-                        changeNowLoading={changeNowLoading}
-                        nowLoading={nowLoading}
-                      />
+                      <SunburstGraph />
                     </Paper>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
-                  <LineGraph
-                    data={data}
-                    changeSchool={changeSchool}
-                    selectedSchool={selectedSchool}
-                    nowLoading={nowLoading}
-                    changeNowLoading={changeNowLoading}
-                  />
+                  <LineGraph />
                 </Paper>
               </Grid>
             </Grid>
@@ -403,8 +344,6 @@ export async function getStaticProps() {
     double: allSchoolCount[DOUBLE],
     doublePrivate: allSchoolCount[DOUBLE_PRIVATE],
   };
-
-  console.log(schoolCountData);
 
   return {
     props: {

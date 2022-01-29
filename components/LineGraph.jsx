@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import styles from "./css/Common.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { updateNowLoading } from "../store/features/index";
 
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
@@ -15,9 +17,13 @@ const prizeColor = {
 };
 
 const LineGraph = (props) => {
+  const dispatch = useDispatch();
   const [brassBandData, setBrasbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [sameRankYear, setSameYear] = useState(null);
+  const selectedSchool = useSelector((state) => state.app.selectedSchool);
+  const nowLoading = useSelector((state) => state.app.nowLoading);
+
   const margin = {
     top: 40,
     bottom: 10,
@@ -34,13 +40,13 @@ const LineGraph = (props) => {
     (async () => {
       const brassBandRequest = await fetch(`../api/brassBand/school`, {
         method: "POST",
-        body: JSON.stringify(props.selectedSchool),
+        body: JSON.stringify(selectedSchool),
       });
       const brassBandData = await brassBandRequest.json();
 
       const baseballRequest = await fetch(`../api/baseball/school`, {
         method: "POST",
-        body: JSON.stringify(props.selectedSchool),
+        body: JSON.stringify(selectedSchool),
       });
       const baseballData = await baseballRequest.json();
 
@@ -56,7 +62,7 @@ const LineGraph = (props) => {
         for (let year of YEAR_LIST) {
           let find = false;
           for (let item of brassBandData.data) {
-            if (item.year === year && item.name === props.selectedSchool) {
+            if (item.year === year && item.name === selectedSchool) {
               item.rank = brassBandRank[item.last];
               selectedBrassBandData.push(item);
               brassBandYear[item.year] = { rank: item.rank };
@@ -78,7 +84,7 @@ const LineGraph = (props) => {
           let find = false;
           for (let item of baseballData.data) {
             if (item.year === year) {
-              if (item.name === props.selectedSchool) {
+              if (item.name === selectedSchool) {
                 if (item.nationalbest !== null) {
                   item.rank = 3;
                 } else if (item.regionalbest <= 8) {
@@ -129,15 +135,15 @@ const LineGraph = (props) => {
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
       setSameYear(sameYear);
-      props.changeNowLoading(false);
+      dispatch(updateNowLoading(false));
     })();
-  }, [props]);
+  }, [selectedSchool, dispatch]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
   //console.log("year", sameRankYear);
 
-  // if (props.nowLoading) {
+  // if (nowLoading) {
   //   return (
   //     <Box px={{ padding: "0.5rem", height: "100%" }}>
   //       <div style={{ fontSize: "0.75rem", heigth:"100%" }}>
@@ -213,10 +219,10 @@ const LineGraph = (props) => {
             padding: "0 0 0 0.5rem",
           }}
         >
-          {props.selectedSchool}
+          {selectedSchool}
         </div>
         <div style={{ heigth: "100%" }}>
-          {props.nowLoading ? (
+          {nowLoading ? (
             <svg
               viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
             >
@@ -538,7 +544,7 @@ const LineGraph = (props) => {
                         stroke={"black"}
                         strokeWidth={0.5}
                         fill={
-                          sameRankYear.find((year) => year === result.year)
+                          sameRankYear?.find((year) => year === result.year)
                             ? "none"
                             : "white"
                         }
