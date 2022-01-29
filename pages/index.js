@@ -29,7 +29,7 @@ function Home(props) {
   }, [dispatch, showSearchBar]);
 
   return (
-    <div style={{ minWidth: "500px" }}>
+    <div style={{ minWidth: "575px" }}>
       <Header />
       <div style={{ margin: 10 }}>
         <Grid container rowSpacing={2} columnSpacing={2}>

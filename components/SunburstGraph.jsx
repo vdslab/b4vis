@@ -17,6 +17,8 @@ function SunburstGraph() {
     (state) => state.app.allSchoolCountData
   );
 
+  console.log(allSchoolCountData);
+
   useEffect(() => {
     if(allSchoolCountData && selectedPrefecture!==""){
       const dividedData = allSchoolCountData[selectedPrefecture];
@@ -86,7 +88,7 @@ function SunburstGraph() {
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <div className={styles.centering_brock}>
+      <div className={styles.centering_space_evenly}>
         <div
           style={{
             fontSize: "1rem",

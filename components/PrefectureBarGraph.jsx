@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   Box,
+  CircularProgress
 } from "@mui/material";
 import styles from "./css/Common.module.css";
 import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
@@ -237,23 +238,17 @@ const PrefectureBarGraph = (props) => {
     }
   }, [baseballData, brassbandData, arrangement]);
 
-  // useEffect(() => {
-  //   if (showData) console.log(showData);
-  // }, [arrangement]);
-
   if (!showData) {
     return (
-      <Box px={{ padding: "0.5rem", height: "245px" }}>
-        <div style={{ fontSize: "0.75rem" }}>
-          <div>loading...</div>
-        </div>
+      <Box className={styles.centering} px={{ padding: "0.5rem", height: "245px" }}>
+        <CircularProgress />
       </Box>
     );
   }
 
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
-      <div className={styles.centering_brock}>
+      <div className={styles.centering_space_evenly}>
         <div style={{ display: "flex" }}>
           <div
             style={{

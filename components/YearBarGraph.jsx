@@ -7,6 +7,7 @@ import {
   MenuItem,
   Box,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import styles from "./css/Common.module.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -151,17 +152,18 @@ const YearBarGraph = (props) => {
 
   if (!showData) {
     return (
-      <Box px={{ padding: "0.5rem", height: "100%" }}>
-        <div style={{ fontSize: "0.75rem" }}>
-          <div>loading...</div>
-        </div>
+      <Box
+        className={styles.centering}
+        px={{ padding: "0.5rem", height: "245px" }}
+      >
+        <CircularProgress />
       </Box>
     );
   }
 
   return (
     <Box px={{ padding: "0.5rem", maxWidth: "375px", height: "100%" }}>
-      <div className={styles.centering_brock}>
+      <div className={styles.centering_space_evenly}>
         <div style={{ display: "flex" }}>
           <FormControl variant="outlined" sx={{ m: 1, minWidth: 90 }}>
             <InputLabel id="prefecture-select-label" sx={{ fontSize: 12 }}>

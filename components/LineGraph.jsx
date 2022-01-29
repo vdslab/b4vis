@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/system";
+import { Box, CircularProgress } from "@mui/system";
 import styles from "./css/Common.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNowLoading } from "../store/features/index";
@@ -139,20 +139,6 @@ const LineGraph = (props) => {
     })();
   }, [selectedSchool, dispatch]);
 
-  // console.log(baseballData);
-  // console.log(brassBandData);
-  //console.log("year", sameRankYear);
-
-  // if (nowLoading) {
-  //   return (
-  //     <Box px={{ padding: "0.5rem", height: "100%" }}>
-  //       <div style={{ fontSize: "0.75rem", heigth:"100%" }}>
-  //         <div>now loading...</div>
-  //       </div>
-  //     </Box>
-  //   );
-  // }
-
   if (
     (baseballData === null && brassBandData === null) ||
     (baseballData?.length === 0 && brassBandData?.length === 0)
@@ -209,7 +195,7 @@ const LineGraph = (props) => {
   return (
     <Box px={{ padding: "0.5rem", height: "100%" }}>
       <div
-        className={styles.centering_brock}
+        className={styles.centering_space_evenly}
         style={{ justifyContent: "space-around" }}
       >
         <div
