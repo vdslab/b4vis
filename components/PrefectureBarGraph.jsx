@@ -274,7 +274,7 @@ const PrefectureBarGraph = (props) => {
             style={{ display: "flex", width: "100%", justifyContent: "center" }}
           >
             <Box>
-              <ZenkokuSunburstGraph />
+              {/* <ZenkokuSunburstGraph /> */}
             </Box>
           </div>
         </div>

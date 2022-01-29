@@ -1,9 +1,8 @@
-import { UpdateSharp } from "@mui/icons-material";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   selectedSchool: "",
-  selectedPrefecture: "",
+  selectedPrefecture: "東京",
   allSchoolData: null,
   allSchoolCountData: null,
   inputSchoolName: "",

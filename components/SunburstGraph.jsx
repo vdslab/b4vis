@@ -18,8 +18,8 @@ function SunburstGraph() {
   );
 
   useEffect(() => {
-    if(allSchoolCountData){
-    const dividedData = allSchoolCountData[selectedPrefecture];
+    if(allSchoolCountData && selectedPrefecture!==""){
+      const dividedData = allSchoolCountData[selectedPrefecture];
       if (dividedData) {
         const data = {
           name: "b4vis",
@@ -97,7 +97,9 @@ function SunburstGraph() {
           {selectedPrefecture}の私立・公立校の内訳
         </div>
         <div>
-          <MyResponsiveSunburst data={schoolCount} />
+          {schoolCount &&
+            <MyResponsiveSunburst data={schoolCount} />
+          }
         </div>
       </div>
     </Box>
