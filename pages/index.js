@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import PrefectureBarGraph from "../components/PrefectureBarGraph";
 import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
 const { Client } = require("pg");
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, useMediaQuery } from "@mui/material";
 import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
-import { useMediaQuery } from "@mui/material";
 import { useDispatch } from "react-redux";
 import {
   fetchAllSchoolData,

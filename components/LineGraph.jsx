@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, CircularProgress } from "@mui/system";
+import { Box } from "@mui/system";
 import styles from "./css/Common.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNowLoading } from "../store/features/index";
@@ -16,7 +16,7 @@ const prizeColor = {
   不明: "#f2d5f2",
 };
 
-const LineGraph = (props) => {
+const LineGraph = () => {
   const dispatch = useDispatch();
   const [brassBandData, setBrasbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);

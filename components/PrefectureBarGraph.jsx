@@ -14,7 +14,7 @@ import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
 import { useDispatch, useSelector } from "react-redux";
 import { appSlice, updateNowLoading } from "../store/features";
 
-const PrefectureBarGraph = (props) => {
+const PrefectureBarGraph = () => {
   const dispatch = useDispatch();
 
   const [brassbandData, setBrassbandData] = useState(null);
