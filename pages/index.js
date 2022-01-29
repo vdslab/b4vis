@@ -1,88 +1,51 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import PrefectureBarGraph from "../components/PrefectureBarGraph";
 import YearBarGraph from "../components/YearBarGraph";
 import LineGraph from "../components/LineGraph";
 import Header from "../components/Header";
 const { Client } = require("pg");
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, useMediaQuery } from "@mui/material";
 import SearchSchool from "../components/SearchSchool";
 import SunburstGraph from "../components/SunburstGraph";
+import { useDispatch } from "react-redux";
+import {
+  fetchAllSchoolData,
+  updateAllSchoolCountData,
+  appSlice,
+} from "../store/features/index";
+import { SchoolLabel } from "../components/Common";
 
 function Home(props) {
-  // const data = {
-  //   baseballData: props.baseballData,
-  //   brassbandData: props.brassbandData,
-  // };
-  const allSchoolCountData = props.allSchoolCountData;
-  const [data, setData] = useState(null);
-  const [selectedPrefecture, setSelectedPretecture] = useState("神奈川");
-  const [selectedSchool, setSelectedSchool] = useState("");
-  const [inputSchoolName, setInputSchoolName] = useState("");
-  const [nowLoading, setNowLoading] = useState(false);
-  const inputEl = useRef("");
+  const dispatch = useDispatch();
+  const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
 
-  const changePrefecture = (prefecture) => {
-    setSelectedPretecture(prefecture);
-  };
-
-  const changeSchool = (school) => {
-    setSelectedSchool(school);
-  };
-
-  const changeNowLoading = (nowLoading) => {
-    setNowLoading(nowLoading);
-  };
-
-  const changeSchoolName = () => {
-    setInputSchoolName(inputEl.current.value);
-  };
-
-  // TODO DBからデータ取ってきてgetStaticProps使う
   useEffect(() => {
-    (async () => {
-      const brassbandData = await fetch("../api/brassBand/getAllSchool").then(
-        (res) => res.json()
-      );
-      const baseballData = await fetch("../api/baseball/getAllSchool").then(
-        (res) => res.json()
-      );
-      setData({
-        brassbandData: brassbandData.data,
-        baseballData: baseballData.data,
-      });
-    })();
-  }, []);
+    dispatch(fetchAllSchoolData());
+    dispatch(updateAllSchoolCountData(props.allSchoolCountData));
+  }, [dispatch, props.allSchoolCountData]);
+
+  useEffect(() => {
+    dispatch(appSlice.actions.resetInputSchoolName());
+  }, [dispatch, showSearchBar]);
 
   return (
-    <div>
+    <div style={{ minWidth: "575px" }}>
       <Header />
       <div style={{ margin: 10 }}>
         <Grid container rowSpacing={2} columnSpacing={2}>
-          <Grid item xs={12} md={2}>
-            <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
-              <SearchSchool
-                data={data}
-                inputSchoolName={inputSchoolName}
-                changePrefecture={changePrefecture}
-                changeSchoolName={changeSchoolName}
-                changeSchool={changeSchool}
-                inputEl={inputEl}
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
+          {showSearchBar && (
+            <Grid item xs={12} md={2}>
+              <Paper elevation={5} sx={{ height: "100%", p: 2 }}>
+                <SearchSchool />
+              </Paper>
+            </Grid>
+          )}
+          <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
-              <PrefectureBarGraph
-                data={data}
-                changePrefecture={changePrefecture}
-                selectedPrefecture={selectedPrefecture}
-                changeSchool={changeSchool}
-                selectedSchool={selectedSchool}
-                changeNowLoading={changeNowLoading}
-              />
+              <PrefectureBarGraph />
             </Paper>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={showSearchBar ? 4 : 5}>
             <Grid
               container
               rowSpacing={2}
@@ -102,40 +65,19 @@ function Home(props) {
                 >
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <YearBarGraph
-                        data={data}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
-                        changeNowLoading={changeNowLoading}
-                      />
+                      <YearBarGraph />
                     </Paper>
                   </Grid>
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <SunburstGraph
-                        data={allSchoolCountData}
-                        changePrefecture={changePrefecture}
-                        selectedPrefecture={selectedPrefecture}
-                        changeSchool={changeSchool}
-                        selectedSchool={selectedSchool}
-                        changeNowLoading={changeNowLoading}
-                        nowLoading={nowLoading}
-                      />
+                      <SunburstGraph />
                     </Paper>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
-                  <LineGraph
-                    data={data}
-                    changeSchool={changeSchool}
-                    selectedSchool={selectedSchool}
-                    nowLoading={nowLoading}
-                    changeNowLoading={changeNowLoading}
-                  />
+                  <LineGraph />
                 </Paper>
               </Grid>
             </Grid>
@@ -162,13 +104,6 @@ export async function getStaticProps() {
   const baseballResult = await client.query(baseballQuery);
   const brassbandResult = await client.query(brassbandQuery);
   await client.end();
-
-  const DOUBLE = 0;
-  const BASEBALL = 1;
-  const BRASSBAND = 2;
-  const DOUBLE_PRIVATE = 3;
-  const BASEBALL_PRIVATE = 4;
-  const BRASSBAND_PRIVATE = 5;
 
   const notPrivate = /(県立|市立|府立|都立|北海道|県)/g;
 
@@ -233,20 +168,24 @@ export async function getStaticProps() {
         // 重複が無いようにsetで持っておく
         if (item["last"] === "都道府県" && item["prize"] !== "金賞") continue;
         selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-          isPrivateSchool ? BRASSBAND_PRIVATE : BRASSBAND;
+          isPrivateSchool
+            ? SchoolLabel.BRASSBAND_PRIVATE
+            : SchoolLabel.BRASSBAND;
       } else if (item["prefecture"].slice(-2) === "地区") {
         //北海道
         if (item["last"] === "都道府県") continue;
         if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
         selectedData["北海道"][item["name"]] = isPrivateSchool
-          ? BRASSBAND_PRIVATE
-          : BRASSBAND;
+          ? SchoolLabel.BRASSBAND_PRIVATE
+          : SchoolLabel.BRASSBAND;
       } else if (item["prefecture"] === "東京都") {
         if (item["last"] === "都道府県") continue;
         if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
         // 重複が無いようにsetで持っておく
         selectedData[item["prefecture"].slice(0, -1)][item["name"]] =
-          isPrivateSchool ? BRASSBAND_PRIVATE : BRASSBAND;
+          isPrivateSchool
+            ? SchoolLabel.BRASSBAND_PRIVATE
+            : SchoolLabel.BRASSBAND;
       }
     }
   }
@@ -267,50 +206,52 @@ export async function getStaticProps() {
     ) {
       if (selectedData[prefecture].hasOwnProperty(item["name"])) {
         if (
-          selectedData[prefecture][item["name"]] === BRASSBAND ||
-          selectedData[prefecture][item["name"]] === BRASSBAND_PRIVATE
+          selectedData[prefecture][item["name"]] === SchoolLabel.BRASSBAND ||
+          selectedData[prefecture][item["name"]] ===
+            SchoolLabel.BRASSBAND_PRIVATE
         ) {
           selectedData[prefecture][item["name"]] = isPrivateSchool
-            ? DOUBLE_PRIVATE
-            : DOUBLE;
+            ? SchoolLabel.DOUBLE_PRIVATE
+            : SchoolLabel.DOUBLE;
         }
       } else {
         selectedData[prefecture][item["name"]] = isPrivateSchool
-          ? BASEBALL_PRIVATE
-          : BASEBALL;
+          ? SchoolLabel.BASEBALL_PRIVATE
+          : SchoolLabel.BASEBALL;
       }
     } else if (prefecture === "北北海道" || prefecture === "南北海道") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["北海道"].hasOwnProperty(item["name"])) {
           if (
-            selectedData["北海道"][item["name"]] === BRASSBAND ||
-            selectedData["北海道"][item["name"]] === BRASSBAND_PRIVATE
+            selectedData["北海道"][item["name"]] === SchoolLabel.BRASSBAND ||
+            selectedData["北海道"][item["name"]] ===
+              SchoolLabel.BRASSBAND_PRIVATE
           ) {
             selectedData["北海道"][item["name"]] = isPrivateSchool
-              ? DOUBLE_PRIVATE
-              : DOUBLE;
+              ? SchoolLabel.DOUBLE_PRIVATE
+              : SchoolLabel.DOUBLE;
           }
         } else {
           selectedData["北海道"][item["name"]] = isPrivateSchool
-            ? BASEBALL_PRIVATE
-            : BASEBALL;
+            ? SchoolLabel.BASEBALL_PRIVATE
+            : SchoolLabel.BASEBALL;
         }
       }
     } else if (prefecture === "東東京" || prefecture === "西東京") {
       if (Number(item["regionalbest"]) <= 4) {
         if (selectedData["東京"].hasOwnProperty(item["name"])) {
           if (
-            selectedData["東京"][item["name"]] === BRASSBAND ||
-            selectedData["東京"][item["name"]] === BRASSBAND_PRIVATE
+            selectedData["東京"][item["name"]] === SchoolLabel.BRASSBAND ||
+            selectedData["東京"][item["name"]] === SchoolLabel.BRASSBAND_PRIVATE
           ) {
             selectedData["東京"][item["name"]] = isPrivateSchool
-              ? DOUBLE_PRIVATE
-              : DOUBLE;
+              ? SchoolLabel.DOUBLE_PRIVATE
+              : SchoolLabel.DOUBLE;
           }
         } else {
           selectedData["東京"][item["name"]] = isPrivateSchool
-            ? BASEBALL_PRIVATE
-            : BASEBALL;
+            ? SchoolLabel.BASEBALL_PRIVATE
+            : SchoolLabel.BASEBALL;
         }
       }
     }
@@ -385,25 +326,23 @@ export async function getStaticProps() {
     }
     schoolCountData[prefecture] = {
       //鳥取のブラスバンドのデータがないため
-      brassband: count[BRASSBAND],
-      brassbandPrivate: count[BRASSBAND_PRIVATE],
-      baseball: count[BASEBALL],
-      baseballPrivate: count[BASEBALL_PRIVATE],
-      double: count[DOUBLE],
-      doublePrivate: count[DOUBLE_PRIVATE],
+      brassband: count[SchoolLabel.BRASSBAND],
+      brassbandPrivate: count[SchoolLabel.BRASSBAND_PRIVATE],
+      baseball: count[SchoolLabel.BASEBALL],
+      baseballPrivate: count[SchoolLabel.BASEBALL_PRIVATE],
+      double: count[SchoolLabel.DOUBLE],
+      doublePrivate: count[SchoolLabel.DOUBLE_PRIVATE],
     };
   }
 
   schoolCountData["全国"] = {
-    brassband: allSchoolCount[BRASSBAND],
-    brassbandPrivate: allSchoolCount[BRASSBAND_PRIVATE],
-    baseball: allSchoolCount[BASEBALL],
-    baseballPrivate: allSchoolCount[BASEBALL_PRIVATE],
-    double: allSchoolCount[DOUBLE],
-    doublePrivate: allSchoolCount[DOUBLE_PRIVATE],
+    brassband: allSchoolCount[SchoolLabel.BRASSBAND],
+    brassbandPrivate: allSchoolCount[SchoolLabel.BRASSBAND_PRIVATE],
+    baseball: allSchoolCount[SchoolLabel.BASEBALL],
+    baseballPrivate: allSchoolCount[SchoolLabel.BASEBALL_PRIVATE],
+    double: allSchoolCount[SchoolLabel.DOUBLE],
+    doublePrivate: allSchoolCount[SchoolLabel.DOUBLE_PRIVATE],
   };
-
-  console.log(schoolCountData);
 
   return {
     props: {

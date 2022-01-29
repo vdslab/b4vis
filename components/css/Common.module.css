@@ -1,0 +1,13 @@
+.centering_space_evenly {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.centering {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

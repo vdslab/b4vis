@@ -1,7 +1,10 @@
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
-import { HelpPopup } from "./HelpPopup";
+import { AppBar, Box, Toolbar, Typography, useMediaQuery } from "@mui/material";
+import { HelpButton } from "./HelpButton";
+import { MenuButton } from "./MenuButton";
 
 export default function Header() {
+  const showSearchBar = useMediaQuery("(min-width:1175px)", { noSsr: true });
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -9,7 +12,7 @@ export default function Header() {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             b4vis
           </Typography>
-          <HelpPopup />
+          {showSearchBar ? <HelpButton /> : <MenuButton />}
         </Toolbar>
       </AppBar>
     </Box>

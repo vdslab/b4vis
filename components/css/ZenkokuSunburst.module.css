@@ -1,0 +1,14 @@
+.text {
+  font-size: 5px;
+  font-weight: bolder;
+  padding: 0px 0px 0px 0.5rem;
+  position: absolute;
+  top: 85px;
+  left: 60px;
+  z-index: 3;
+  text-align: center;
+}
+
+.box {
+  position: relative;
+}
