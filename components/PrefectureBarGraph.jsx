@@ -10,9 +10,8 @@ import {
 } from "@mui/material";
 import styles from "./css/Common.module.css";
 import ZenkokuSunburstGraph from "./ZenkokuSunburstGraph";
-import { useDispatch,useSelector } from "react-redux";
-import { appSlice } from "../store/features";
-
+import { useDispatch, useSelector } from "react-redux";
+import { appSlice, updateNowLoading } from "../store/features";
 
 const PrefectureBarGraph = (props) => {
   const dispatch = useDispatch();
@@ -25,13 +24,17 @@ const PrefectureBarGraph = (props) => {
 
   const selectedSchool = useSelector((state) => state.app.selectedSchool);
   const allSchoolData = useSelector((state) => state.app.allSchoolData);
-  
+
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
   };
 
   const changeSchool = (school) => {
     dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
+
+  const changeNowLoading = (isLoading) => {
+    dispatch(updateNowLoading(isLoading));
   };
 
   const DOUBLE = 0;
@@ -267,7 +270,9 @@ const PrefectureBarGraph = (props) => {
               <div>上位大会に進んだ高校</div>
             </div>
           </div>
-          <div style={{ display: "flex", width:"100%", justifyContent:"center" }}>
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
             <Box>
               <ZenkokuSunburstGraph data={props.allSchoolCountData} />
             </Box>
@@ -483,7 +488,7 @@ const PrefectureBarGraph = (props) => {
                           fill={color[item.club]}
                           onClick={() => {
                             if (selectedSchool !== item.name) {
-                              props.changeNowLoading(true);
+                              changeNowLoading(true);
                               changeSchool(item.name);
                             }
                           }}
@@ -501,7 +506,7 @@ const PrefectureBarGraph = (props) => {
                             fill={color[item.club]}
                             onClick={() => {
                               if (selectedSchool !== item.name) {
-                                props.changeNowLoading(true);
+                                changeNowLoading(true);
                                 changeSchool(item.name);
                               }
                             }}
@@ -519,7 +524,7 @@ const PrefectureBarGraph = (props) => {
                             fillOpacity={0.5}
                             onClick={() => {
                               if (selectedSchool !== item.name) {
-                                props.changeNowLoading(true);
+                                changeNowLoading(true);
                                 changeSchool(item.name);
                               }
                             }}

@@ -7,6 +7,7 @@ const initialState = {
   allSchoolData: null,
   allSchoolCountData: null,
   inputSchoolName: "",
+  nowLoading: false,
 };
 
 export const fetchAllSchoolData = createAsyncThunk(
@@ -22,8 +23,14 @@ export const fetchAllSchoolData = createAsyncThunk(
       brassbandData: brassbandData.data,
       baseballData: baseballData.data,
     };
-    console.log("getData", data);
     return data;
+  }
+);
+
+export const updateNowLoading = createAsyncThunk(
+  "app/updateNowLoading",
+  async (isLoading) => {
+    return isLoading;
   }
 );
 
@@ -37,9 +44,6 @@ export const appSlice = createSlice({
     updateSelectedPrefecture(state, action) {
       state.selectedPrefecture = action.payload;
     },
-    // updateAllSchoolData(state, action) {
-    //   state.allSchoolData = action.payload;
-    // },
     // updateAllSchoolCountData(state, action) {
     //   state.allSchoolCountData = action.payload;
     // },
@@ -50,6 +54,9 @@ export const appSlice = createSlice({
   extraReducers: {
     [fetchAllSchoolData.fulfilled]: (state, action) => {
       state.allSchoolData = action.payload;
+    },
+    [updateNowLoading.fulfilled]: (state, action) => {
+      state.nowLoading = action.payload;
     },
   },
 });

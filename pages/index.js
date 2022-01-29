@@ -10,7 +10,7 @@ import SunburstGraph from "../components/SunburstGraph";
 import { useMediaQuery } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { appSlice } from "../store/features/index";
+import { appSlice, updateNowLoading } from "../store/features/index";
 import { fetchAllSchoolData } from "../store/features";
 
 function Home(props) {
@@ -43,10 +43,7 @@ function Home(props) {
           )}
           <Grid item xs={12} md={showSearchBar ? 6 : 7}>
             <Paper elevation={5} sx={{ height: "100%" }}>
-              <PrefectureBarGraph
-                changeNowLoading={changeNowLoading}
-                allSchoolCountData={allSchoolCountData}
-              />
+              <PrefectureBarGraph allSchoolCountData={allSchoolCountData} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={showSearchBar ? 4 : 5}>
@@ -69,7 +66,7 @@ function Home(props) {
                 >
                   <Grid item xs={6} md={12}>
                     <Paper elevation={5} sx={{ height: "100%" }}>
-                      <YearBarGraph changeNowLoading={changeNowLoading} />
+                      <YearBarGraph />
                     </Paper>
                   </Grid>
                   <Grid item xs={6} md={12}>
@@ -81,10 +78,7 @@ function Home(props) {
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ height: "100%" }}>
-                  <LineGraph
-                    nowLoading={nowLoading}
-                    changeNowLoading={changeNowLoading}
-                  />
+                  <LineGraph nowLoading={nowLoading} />
                 </Paper>
               </Grid>
             </Grid>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import styles from "./css/Common.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateNowLoading } from "../store/features/index";
 
 const YEAR = 5;
 const YEAR_LIST = [2013, 2014, 2015, 2016, 2017];
@@ -16,10 +17,12 @@ const prizeColor = {
 };
 
 const LineGraph = (props) => {
+  const dispatch = useDispatch();
   const [brassBandData, setBrasbandData] = useState(null);
   const [baseballData, setBaseballData] = useState(null);
   const [sameRankYear, setSameYear] = useState(null);
   const selectedSchool = useSelector((state) => state.app.selectedSchool);
+  const nowLoading = useSelector((state) => state.app.nowLoading);
 
   const margin = {
     top: 40,
@@ -132,15 +135,15 @@ const LineGraph = (props) => {
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
       setSameYear(sameYear);
-      props.changeNowLoading(false);
+      dispatch(updateNowLoading(false));
     })();
-  }, [selectedSchool, props]);
+  }, [selectedSchool, dispatch]);
 
   // console.log(baseballData);
   // console.log(brassBandData);
   //console.log("year", sameRankYear);
 
-  // if (props.nowLoading) {
+  // if (nowLoading) {
   //   return (
   //     <Box px={{ padding: "0.5rem", height: "100%" }}>
   //       <div style={{ fontSize: "0.75rem", heigth:"100%" }}>
@@ -219,7 +222,7 @@ const LineGraph = (props) => {
           {selectedSchool}
         </div>
         <div style={{ heigth: "100%" }}>
-          {props.nowLoading ? (
+          {nowLoading ? (
             <svg
               viewBox={`${-margin.left} ${-margin.top} ${svgWidth} ${svgHeight}`}
             >

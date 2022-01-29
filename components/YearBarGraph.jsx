@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import styles from "./css/Common.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { appSlice } from "../store/features";
+import { appSlice, updateNowLoading } from "../store/features";
 
 const YearBarGraph = (props) => {
   const dispatch = useDispatch();
@@ -18,16 +18,22 @@ const YearBarGraph = (props) => {
   const [hoverSchool, setHoverSchool] = useState(null);
   const [showData, setShowData] = useState(null);
 
-  const selectedPrefecture = useSelector((state) => state.app.selectedPrefecture);
+  const selectedPrefecture = useSelector(
+    (state) => state.app.selectedPrefecture
+  );
   const preSelectedSchool = useSelector((state) => state.app.selectedSchool);
   const allSchoolData = useSelector((state) => state.app.allSchoolData);
-  
+
   const changePrefecture = (prefecture) => {
     dispatch(appSlice.actions.updateSelectedPrefecture(prefecture));
   };
 
   const changeSchool = (school) => {
     dispatch(appSlice.actions.updateSelectedSchool(school));
+  };
+
+  const changeNowLoading = (isLoading) => {
+    dispatch(updateNowLoading(isLoading));
   };
 
   const DOUBLE = 0;
@@ -51,86 +57,95 @@ const YearBarGraph = (props) => {
   const len = svgWidth / 16;
 
   useEffect(() => {
-    const { baseballData, brassbandData } = allSchoolData;
-    if (baseballData && brassbandData) {
-      const selectedData = { 2013: [], 2014: [], 2015: [], 2016: [], 2017: [] };
+    if (allSchoolData) {
+      const { baseballData, brassbandData } = allSchoolData;
+      if (baseballData && brassbandData) {
+        const selectedData = {
+          2013: [],
+          2014: [],
+          2015: [],
+          2016: [],
+          2017: [],
+        };
 
-      //吹奏楽
-      for (const item of brassbandData) {
-        // 地区大会は除外
-        if (item["last"] !== "地区") {
-          if (item["prefecture"].slice(0, -1) === selectedPrefecture) {
-            // 北海道以外
-            if (selectedPrefecture !== "東京") {
-              // 東京以外
-              // 都道府県でも銀賞以下は除外
-              if (item["last"] === "都道府県" && item["prize"] !== "金賞")
-                continue;
-            } else {
-              // 東京
+        //吹奏楽
+        for (const item of brassbandData) {
+          // 地区大会は除外
+          if (item["last"] !== "地区") {
+            if (item["prefecture"].slice(0, -1) === selectedPrefecture) {
+              // 北海道以外
+              if (selectedPrefecture !== "東京") {
+                // 東京以外
+                // 都道府県でも銀賞以下は除外
+                if (item["last"] === "都道府県" && item["prize"] !== "金賞")
+                  continue;
+              } else {
+                // 東京
+                // 都道府県大会(他でいう地区大会)は除外
+                if (item["last"] === "都道府県") continue;
+                // 支部でも銀賞以下は除外
+                if (item["last"] === "支部" && item["prize"] !== "金賞")
+                  continue;
+              }
+            } else if (
+              item["prefecture"].slice(-2) === "地区" &&
+              selectedPrefecture === "北海道"
+            ) {
+              // 北海道
               // 都道府県大会(他でいう地区大会)は除外
               if (item["last"] === "都道府県") continue;
               // 支部でも銀賞以下は除外
               if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
+            } else {
+              continue;
             }
-          } else if (
-            item["prefecture"].slice(-2) === "地区" &&
-            selectedPrefecture === "北海道"
-          ) {
-            // 北海道
-            // 都道府県大会(他でいう地区大会)は除外
-            if (item["last"] === "都道府県") continue;
-            // 支部でも銀賞以下は除外
-            if (item["last"] === "支部" && item["prize"] !== "金賞") continue;
-          } else {
-            continue;
-          }
-          
-          const copyItem = {
-            last: item["last"],
-            name: item["name"],
-            prefecture: item["prefecture"],
-            prize: item["prize"],
-            year: item["year"],
-            club: BRASSBAND
-          }
-        
-          selectedData[item["year"]].push(copyItem);
-        }
-      }
 
-      //野球
-      for (const item of baseballData) {
-        if (
-          item["prefecture"].slice(0, -1) === selectedPrefecture ||
-          (selectedPrefecture === item["prefecture"].slice(1) &&
-            item["regionalbest"] <= 4)
-        ) {
-          let find = false;
-          for (const showItem of selectedData[item["year"]]) {
-            //吹奏楽のデータがすでにある場合
-            if (showItem["name"] === item["name"]) {
-              showItem["club"] = DOUBLE;
-              find = true;
-              break;
-            }
-          }
-          if (!find) {
-            const data = {
+            const copyItem = {
+              last: item["last"],
               name: item["name"],
-              club: BASEBALL,
+              prefecture: item["prefecture"],
+              prize: item["prize"],
+              year: item["year"],
+              club: BRASSBAND,
             };
-            selectedData[item["year"]].push(data);
+
+            selectedData[item["year"]].push(copyItem);
           }
         }
-      }
 
-      //並び替え(野球/両方/吹奏楽)
-      for (const year of Object.keys(selectedData)) {
-        selectedData[year].sort((a, b) => a.club - b.club);
-      }
+        //野球
+        for (const item of baseballData) {
+          if (
+            item["prefecture"].slice(0, -1) === selectedPrefecture ||
+            (selectedPrefecture === item["prefecture"].slice(1) &&
+              item["regionalbest"] <= 4)
+          ) {
+            let find = false;
+            for (const showItem of selectedData[item["year"]]) {
+              //吹奏楽のデータがすでにある場合
+              if (showItem["name"] === item["name"]) {
+                showItem["club"] = DOUBLE;
+                find = true;
+                break;
+              }
+            }
+            if (!find) {
+              const data = {
+                name: item["name"],
+                club: BASEBALL,
+              };
+              selectedData[item["year"]].push(data);
+            }
+          }
+        }
 
-      setShowData(selectedData);
+        //並び替え(野球/両方/吹奏楽)
+        for (const year of Object.keys(selectedData)) {
+          selectedData[year].sort((a, b) => a.club - b.club);
+        }
+
+        setShowData(selectedData);
+      }
     }
   }, [selectedPrefecture, allSchoolData]);
 
@@ -171,11 +186,15 @@ const YearBarGraph = (props) => {
             </Select>
           </FormControl>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{
-            fontSize: "1rem",
-            fontWeight: "bolder",
-            padding: "0 0 0 0.5rem",
-          }}>の2013〜2017年の結果</div>
+            <div
+              style={{
+                fontSize: "1rem",
+                fontWeight: "bolder",
+                padding: "0 0 0 0.5rem",
+              }}
+            >
+              の2013〜2017年の結果
+            </div>
           </div>
         </div>
 
@@ -220,7 +239,7 @@ const YearBarGraph = (props) => {
                             }
                             onClick={() => {
                               if (preSelectedSchool !== item.name) {
-                                props.changeNowLoading(true);
+                                changeNowLoading(true);
                                 changeSchool(item.name);
                               }
                             }}
@@ -246,7 +265,7 @@ const YearBarGraph = (props) => {
                               }
                               onClick={() => {
                                 if (preSelectedSchool !== item.name) {
-                                  props.changeNowLoading(true);
+                                  changeNowLoading(true);
                                   changeSchool(item.name);
                                 }
                               }}
@@ -264,7 +283,7 @@ const YearBarGraph = (props) => {
                               fillOpacity={0.75}
                               onClick={() => {
                                 if (preSelectedSchool !== item.name) {
-                                  props.changeNowLoading(true);
+                                  changeNowLoading(true);
                                   changeSchool(item.name);
                                 }
                               }}
