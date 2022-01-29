@@ -1,4 +1,4 @@
-export const SchoolLabele = {
+export const SchoolLabel = {
   DOUBLE: 0,
   BASEBALL: 1,
   BRASSBAND: 2,

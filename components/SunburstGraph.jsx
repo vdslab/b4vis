@@ -17,8 +17,6 @@ function SunburstGraph() {
     (state) => state.app.allSchoolCountData
   );
 
-  console.log(allSchoolCountData);
-
   useEffect(() => {
     if(allSchoolCountData && selectedPrefecture!==""){
       const dividedData = allSchoolCountData[selectedPrefecture];

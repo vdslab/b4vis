@@ -12,7 +12,7 @@ import {
 import styles from "./css/Common.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { appSlice, updateNowLoading } from "../store/features";
-import { SchoolLabele } from "./Common";
+import { SchoolLabel } from "./Common";
 
 const YearBarGraph = () => {
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ const YearBarGraph = () => {
               prefecture: item["prefecture"],
               prize: item["prize"],
               year: item["year"],
-              club: SchoolLabele.BRASSBAND,
+              club: SchoolLabel.BRASSBAND,
             };
 
             selectedData[item["year"]].push(copyItem);
@@ -122,7 +122,7 @@ const YearBarGraph = () => {
             for (const showItem of selectedData[item["year"]]) {
               //吹奏楽のデータがすでにある場合
               if (showItem["name"] === item["name"]) {
-                showItem["club"] = SchoolLabele.DOUBLE;
+                showItem["club"] = SchoolLabel.DOUBLE;
                 find = true;
                 break;
               }
@@ -130,7 +130,7 @@ const YearBarGraph = () => {
             if (!find) {
               const data = {
                 name: item["name"],
-                club: SchoolLabele.BASEBALL,
+                club: SchoolLabel.BASEBALL,
               };
               selectedData[item["year"]].push(data);
             }
