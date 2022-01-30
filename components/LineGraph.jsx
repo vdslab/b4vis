@@ -15,6 +15,7 @@ const prizeColor = {
   銀賞: "#B2BABA",
   銅賞: "#b59064",
   不明: "#f2d5f2",
+  失格:"#444444"
 };
 
 const LineGraph = () => {
@@ -135,10 +136,13 @@ const LineGraph = () => {
 
       setBrasbandData(selectedBrassBandData);
       setBaseballData(selectedBaseballData);
+      console.log(selectedBrassBandData);
       setSameYear(sameYear);
       dispatch(updateNowLoading(false));
     })();
   }, [selectedSchool, dispatch]);
+
+  console.log("here")
 
   if (
     (baseballData === null && brassBandData === null) ||
