@@ -11,12 +11,14 @@ function MyApp({ Component, pageProps }) {
   const persistor = persistStore(store);
 
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <DefaultSeo {...SEO} />
-        <Component {...pageProps} />
-      </PersistGate>
-    </Provider>
+    <div>
+      <DefaultSeo {...SEO} />
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <Component {...pageProps} />
+        </PersistGate>
+      </Provider>
+    </div>
   );
 }
 
